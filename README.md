@@ -1,4 +1,4 @@
-SparkFun Si4703 Arduino Library
+Si4703 Arduino Library
 ========================================
 
 <table class="table table-hover table-striped table-bordered">
