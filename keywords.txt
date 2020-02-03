@@ -5,14 +5,14 @@
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-Si4703_Breakout	KEYWORD1
+Si4703  KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-powerOn	KEYWORD2
+powerOn	    KEYWORD2
 setChannel	KEYWORD2
-seekUp	KEYWORD2
+seekUp	    KEYWORD2
 seekDown	KEYWORD2
 setVolume	KEYWORD2
-readRDS	KEYWORD2
+readRDS	    KEYWORD2
