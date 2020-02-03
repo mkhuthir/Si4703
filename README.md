@@ -1,4 +1,4 @@
-Si4703 Arduino Library
+Silicon Labs Si4703 Arduino Library
 ========================================
 
 <table class="table table-hover table-striped table-bordered">
