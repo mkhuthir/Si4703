@@ -2,7 +2,7 @@
 
 Library Modified by Muthanna Alwahash 2020
 
-This is a library wrapper and a few extras to the excellent code produced by Nathan Seidle from Sparkfun and Simon Monk.
+This is a library based on the code produced by Nathan Seidle from Sparkfun and Simon Monk.
 
 Remarks:
 
@@ -23,15 +23,16 @@ class Si4703
     Si4703(	int resetPin, 
 			int sdioPin,
 			int sclkPin,
-			int stcIntPin
-	);
+			int stcIntPin);
     void	powerOn();					// call in setup
-	void	setChannel(int channel);  	// 3 digit channel number
-	int 	seekUp(); 					// returns the tuned channel or 0
-	int 	seekDown(); 				// returns the tuned channel or 0
-	void	setVolume(int volume); 		// 0 to 15
-	void	readRDS(char* message,		// message should be at least 9 chars, result will be null terminated.
+	void	setChannel(int channel);  	// Set 3 digit channel number
+	int 	getChannel();				// Get 3 digit channel number
+	int 	seekUp(); 					// Seeks up and returns the tuned channel or 0
+	int 	seekDown(); 				// Seeks down and returns the tuned channel or 0
+	void	setVolume(int volume); 		// Sets volume value 0 to 15
+	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds
+	
 //------------------------------------------------------------------------------------------------------------
   private:
     int  	_resetPin;
@@ -43,7 +44,7 @@ class Si4703
 	void 	readRegisters();
 	byte 	updateRegisters();
 	int 	seek(byte seekDirection);
-	int 	getChannel();
+	
 
 	uint16_t 				si4703_registers[16]; 	// There are 16 registers, each 16 bits large
 	static const uint16_t  	FAIL 		= 0;

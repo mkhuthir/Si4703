@@ -22,12 +22,13 @@ void Si4703::readRegisters(){
   Wire.requestFrom(SI4703, 32); //We want to read the entire register set from 0x0A to 0x09 = 32 bytes.
 
   // Remember, register 0x0A comes in first so we have to shuffle the array around a bit
-  for(int x = 0x0A ; ; x++) { //Read in these 32 bytes
-    if(x == 0x10) x = 0; //Loop back to zero
-    si4703_registers[x] = Wire.read() << 8;
-    si4703_registers[x] |= Wire.read();
-    if(x == 0x09) break; //We're done!
-  }
+  for(int x = 0x0A ; ; x++) 
+    {                       //Read in these 32 bytes
+      if(x == 0x10) x = 0;  //Loop back to zero
+      si4703_registers[x] = Wire.read() << 8;
+      si4703_registers[x] |= Wire.read();
+      if(x == 0x09) break; 
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -65,26 +66,29 @@ byte Si4703::updateRegisters() {
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::si4703_init() 
 {
-  pinMode(_resetPin, OUTPUT);
-  pinMode(_sdioPin, OUTPUT);        // SDIO is connected to A4 for I2C
+  pinMode(_resetPin , OUTPUT);      // Reset pin
+  pinMode(_sdioPin  , OUTPUT);      // SDIO is connected to A4 for I2C
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
-  digitalWrite(_sdioPin, LOW);      // A low SDIO indicates a 2-wire interface
-  digitalWrite(_resetPin, LOW);     // Put Si4703 into reset
-  digitalWrite(_stcIntPin, HIGH);   // STC goes low on interrupt
-  delay(1);                         //Some delays while we allow pins to settle
-  digitalWrite(_resetPin, HIGH);    //Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
-  delay(1);                         //Allow Si4703 to come out of reset
 
-  Wire.begin();                     //Now that the unit is reset and I2C inteface mode, we need to begin I2C
+  digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
+  digitalWrite(_resetPin  , LOW);   // Put Si4703 into reset
+  digitalWrite(_stcIntPin , HIGH);  // STC goes low on interrupt
+  delay(1);                         // Some delays while we allow pins to settle
 
-  readRegisters();                  //Read the current register set
-  si4703_registers[0x07] = 0x8100;  //Enable the oscillator, from AN230 page 9, rev 0.61 (works)
-  si4703_registers[0x04] |= 0x2000; //Set bit 14 to high to enable STC Interrupt on GPIO2
-  updateRegisters();                //Update
+  digitalWrite(_resetPin  , HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
+  delay(1);                         // Allow Si4703 to come out of reset
+
+  Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
+
+  readRegisters();                  // Read the current register set
+  si4703_registers[0x07] = 0x8100;  // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
+  si4703_registers[0x04] |= 0x2000; // Set bit 14 to high to enable STC Interrupt on GPIO2
+  updateRegisters();                // Update
 
   delay(500);                       //Wait for clock to settle - from AN230 page 9
 
   readRegisters();                  //Read the current register set
+  
   si4703_registers[POWERCFG] = 0x4001; //Enable the IC
   //  si4703_registers[POWERCFG] |= (1<<SMUTE) | (1<<DMUTE); //Disable Mute, disable softmute
   si4703_registers[SYSCONFIG1] |= (1<<RDS);     //Enable RDS
@@ -92,6 +96,7 @@ void Si4703::si4703_init()
   si4703_registers[SYSCONFIG2] |= (1<<SPACE0);  //100kHz channel spacing for Europe
   si4703_registers[SYSCONFIG2] &= 0xFFF0;       //Clear volume bits
   si4703_registers[SYSCONFIG2] |= 0x0001;       //Set volume to lowest
+
   updateRegisters();                            //Update
   delay(110);                                   //Max power up time, from datasheet page 13
 }
@@ -109,13 +114,11 @@ void Si4703::powerOn()
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::setChannel(int channel)
 {
-  //Freq(MHz) = 0.100(in Europe) * Channel + 87.5MHz
-  //Freq(MHz) = 0.200(in USA   ) * Channel + 87.5MHz
+  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
+  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
   
-  int newChannel = channel * 10;      // 973 * 10 = 9730
-      newChannel -= 8750;             // 9730 - 8750 = 980
-      newChannel /= 10;               // 980 / 10 = 98
-
+  int newChannel = channel - 875;
+      
   //These steps come from AN230 page 20 rev 0.5
   readRegisters();
   si4703_registers[CHANNEL] &= 0xFE00;      //Clear out the channel bits
@@ -145,9 +148,9 @@ void Si4703::setChannel(int channel)
 int Si4703::getChannel() {
   readRegisters();
 
-  //Freq(MHz) = 0.100(in Europe) * Channel + 87.5MHz
-  //Freq(MHz) = 0.200(in USA   ) * Channel + 87.5MHz
-
+  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
+  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
+  
   int channel = si4703_registers[READCHAN] & 0x03FF;  // Mask out everything but the lower 10 bits
       channel += 875;                                 //98 + 875 = 973
 
@@ -163,6 +166,7 @@ int Si4703::seek(byte seekDirection){
   readRegisters();
   // Set seek mode wrap bit
   si4703_registers[POWERCFG] |= (1<<SKMODE); //Allow wrap
+
   // si4703_registers[POWERCFG] &= ~(1<<SKMODE); //Disallow wrap - if you disallow wrap, you may want to tune to 87.5 first
   if(seekDirection == SEEK_DOWN) si4703_registers[POWERCFG] &= ~(1<<SEEKUP); //Seek down is the default upon reset
   else si4703_registers[POWERCFG] |= 1<<SEEKUP; //Set the bit to seek up
