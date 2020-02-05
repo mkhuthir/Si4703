@@ -19,7 +19,7 @@ Si4703::Si4703(int resetPin, int sdioPin, int sclkPin, int stcIntPin)
 void Si4703::readRegisters(){
 
   // Si4703 begins reading from register upper register of 0x0A and reads to 0x0F, then loops to 0x00.
-  Wire.requestFrom(SI4703, 32); //We want to read the entire register set from 0x0A to 0x09 = 32 bytes.
+  Wire.requestFrom(I2C_ADDR, 32); //We want to read the entire register set from 0x0A to 0x09 = 32 bytes.
 
   // Remember, register 0x0A comes in first so we have to shuffle the array around a bit
   for(int x = 0x0A ; ; x++) 
@@ -38,7 +38,7 @@ void Si4703::readRegisters(){
 //-----------------------------------------------------------------------------------------------------------------------------------
 byte Si4703::updateRegisters() {
 
-  Wire.beginTransmission(SI4703);
+  Wire.beginTransmission(I2C_ADDR);
   // A write command automatically begins with register 0x02 so no need to send a write-to address
   // First we send the 0x02 to 0x07 control registers
   // In general, we should not write to registers 0x08 and 0x09

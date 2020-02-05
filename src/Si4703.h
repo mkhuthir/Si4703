@@ -47,12 +47,12 @@ class Si4703
 	
 
 	uint16_t 				si4703_registers[16]; 	// There are 16 registers, each 16 bits large
-	static const uint16_t  	FAIL 		= 0;
-	static const uint16_t  	SUCCESS 	= 1;
-	static const int  		SI4703 		= 0x10; 	// 0b._001.0000 = I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
-	static const uint16_t  	I2C_FAIL_MAX = 10; 		// This is the number of attempts we will try to contact the device before erroring out
-	static const uint16_t  	SEEK_DOWN 	= 0; 		// Direction used for seeking. Default is down
-	static const uint16_t  	SEEK_UP 	= 1;
+	static const uint16_t  	FAIL 			= 0;
+	static const uint16_t  	SUCCESS 		= 1;
+	static const int  		I2C_ADDR		= 0x10; 	// I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
+	static const uint16_t  	I2C_FAIL_MAX 	= 10; 		// This is the number of attempts we will try to contact the device before erroring out
+	static const uint16_t  	SEEK_DOWN 		= 0; 		// Direction used for seeking. Default is down
+	static const uint16_t  	SEEK_UP 		= 1;
 
 	//Define the register names
 	static const uint16_t  DEVICEID 	= 0x00;
