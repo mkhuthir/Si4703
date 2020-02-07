@@ -2,7 +2,7 @@
 
 Library Modified by Muthanna Alwahash 2020
 
-This is a library based on the code produced by Nathan Seidle from Sparkfun and Simon Monk.
+This library based on the code produced by Nathan Seidle from Sparkfun and Simon Monk.
 
 Remarks:
 

@@ -16,3 +16,8 @@ seekUp	    KEYWORD2
 seekDown	KEYWORD2
 setVolume	KEYWORD2
 readRDS	    KEYWORD2
+
+######################################
+# Constants (LITERAL1)
+#######################################
+KEY_NONE	LITERAL1
