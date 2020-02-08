@@ -1,3 +1,6 @@
+
+![img](../img/Si4702-03-BD.jpeg)
+
 Silicon Labs Si4703 Arduino Library
 ========================================
 
