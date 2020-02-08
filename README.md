@@ -12,6 +12,8 @@ Repository Contents
 * **keywords.txt** - Keywords from this library that will be highlighted in the Arduino IDE. 
 * **library.properties** - General library properties for the Arduino package manager. 
 
+For information on installing Arduino libraries, see: http://www.arduino.cc/en/Guide/Libraries
+
 License Information
 -------------------
 
