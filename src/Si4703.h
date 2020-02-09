@@ -32,7 +32,7 @@ class Si4703
 	void	setVolume(int volume); 		// Sets volume value 0 to 15
 	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds
-	void	writeGPIO(int GPIO, int Val);
+	void	writeGPIO(int GPIO, int val);
 //------------------------------------------------------------------------------------------------------------
   private:
     int  	_resetPin;

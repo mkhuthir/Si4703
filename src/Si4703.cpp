@@ -276,13 +276,26 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Writes GPIO1-3
 //-----------------------------------------------------------------------------------------------------------------------------------
-	void	Si4703::writeGPIO(int GPIO, int Val)
+	void	Si4703::writeGPIO(int GPIO, int val)
 {
   readRegisters();                        // Read the current register set
 
-  if val=GPIO_LOW  si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
-  if val=GPIO_HIGH si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
-  
-  si4703_registers[SYSCONFIG1] |= Val;    // Set new GPIO bits
+  if (val==GPIO_Z)
+  {
+    si4703_registers[SYSCONFIG1] &= ~GPIO; // Clear GPIO bits
+  }
+  else if (val==GPIO_I)
+  {
+
+  }
+  else if (val==GPIO_Low)
+  {
+
+  }
+  else if (val==GPIO_High)
+  {
+    si4703_registers[SYSCONFIG1] |= GPIO; // Set GPIO bits
+  }
+
   updateRegisters();
 }
