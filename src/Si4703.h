@@ -33,6 +33,26 @@ class Si4703
 	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds
 	void	writeGPIO(int GPIO, int val);
+
+	// BAND (0x05.7:6)—FM Band Select
+	static const uint16_t  BAND_USEU	= 0;	// 87.5–108 MHz (US / Europe, Default)
+	static const uint16_t  BAND_JPW		= 1;	// 76–108 MHz (Japan wide band)
+	static const uint16_t  BAND_JP		= 2;	// 76–90 MHz (Japan)
+
+	// SPACE (0x05.5:4)—FM Channel Spacing
+	static const uint16_t  SPACE_200KHz	= 0;	// 200 kHz (US / Australia, Default)
+	static const uint16_t  SPACE_100KHz = 1;	// 100 kHz (Europe / Japan)
+	static const uint16_t  SPACE_50KHz  = 2;	//  50 kHz (Other)
+
+	// GPIO1-3 Possible Values
+	static const uint16_t GPIO_Z	= 0;		// High impedance (default)
+	static const uint16_t GPIO_I	= 1;	 	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
+	static const uint16_t GPIO_Low	= 2;		// Low output (GND level)
+	static const uint16_t GPIO_High	= 3;		// High output (VIO level)
+
+	static const uint16_t  GPIO1		= 0x0003;
+	static const uint16_t  GPIO2		= 0x00C0;
+	static const uint16_t  GPIO3		= 0x0300;
 //------------------------------------------------------------------------------------------------------------
   private:
     int  	_resetPin;
@@ -85,9 +105,7 @@ class Si4703
 	// Register 0x04 - SYSCONFIG1
 	static const uint16_t  RDS 			= 12;
 	static const uint16_t  DE 			= 11;
-	static const uint16_t  GPIO1		= 0x0003
-	static const uint16_t  GPIO2		= 0x00C0
-	static const uint16_t  GPIO3		= 0x0300
+
 
 	// Register 0x05 - SYSCONFIG2
 	static const uint16_t  SPACE1 		= 5;
@@ -101,21 +119,7 @@ class Si4703
 	static const uint16_t  RDSS 		= 11;
 	static const uint16_t  STEREO 		= 8;
 
-	// BAND (0x05.7:6)—FM Band Select
-	static const uint16_t  BAND_USEU	= 0		// 87.5–108 MHz (US / Europe, Default)
-	static const uint16_t  BAND_JPW		= 1		// 76–108 MHz (Japan wide band)
-	static const uint16_t  BAND_JP		= 2		// 76–90 MHz (Japan)
 
-	// SPACE (0x05.5:4)—FM Channel Spacing
-	static const uint16_t  SPACE_200KHz	= 0		// 200 kHz (US / Australia, Default)
-	static const uint16_t  SPACE_100KHz = 1		// 100 kHz (Europe / Japan)
-	static const uint16_t  SPACE_50KHz  = 2		//  50 kHz (Other)
-
-	// GPIO1-3 Possible Values
-	static const uint16_t GPIO_Z	// High impedance (default)
-	static const uint16_t GPIO_I 	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
-	static const uint16_t GPIO_Low	// Low output (GND level)
-	static const uint16_t GPIO_High	// High output (VIO level)
 };
 
 #endif
