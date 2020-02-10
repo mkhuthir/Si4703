@@ -13,7 +13,7 @@ char rdsBuffer[10];
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("\n\nSi4703_Breakout Test Sketch");
   Serial.println("===========================");  
   Serial.println("a b     Favourite stations");
