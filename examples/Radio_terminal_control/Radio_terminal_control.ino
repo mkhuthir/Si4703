@@ -1,7 +1,7 @@
 #include <Si4703.h>
 #include <Wire.h>
 
-int resetPin  = 2;
+int resetPin  = 4;
 int SDIO      = A4;
 int SCLK      = A5;
 int STC       = 3;
