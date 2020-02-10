@@ -43,7 +43,7 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int resetPin, 
+    Si4703(	int resetPin, 				// class init
 			int sdioPin,
 			int sclkPin,
 			int stcIntPin);
@@ -55,7 +55,8 @@ class Si4703
 	void	setVolume(int volume); 		// Sets volume value 0 to 15
 	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds
-	void	writeGPIO(int GPIO, int val);
+	void	writeGPIO(int GPIO, 		// Write to GPIO1,GPIO2, and GPIO3
+					  int val); 		// values can be GPIO_Z, GPIO_I, GPIO_Low, and GPIO_High
 
 //------------------------------------------------------------------------------------------------------------
   private:
