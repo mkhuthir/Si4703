@@ -67,7 +67,7 @@ byte Si4703::updateRegisters() {
 void Si4703::si4703_init() 
 {
   pinMode(_resetPin , OUTPUT);      // Reset pin
-  pinMode(_sdioPin  , OUTPUT);      // SDIO is connected to A4 for I2C
+  pinMode(_sdioPin  , OUTPUT);      // I2C data io pin
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
 
   digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
@@ -273,29 +273,46 @@ void Si4703::readRDS(char* buffer, long timeout)
 
   buffer[8] = '\0';
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Writes GPIO1-3
 //-----------------------------------------------------------------------------------------------------------------------------------
 	void	Si4703::writeGPIO(int GPIO, int val)
 {
-  readRegisters();                        // Read the current register set
+  readRegisters();                          // Read the current register set
 
-  if (val==GPIO_Z)
-  {
-    si4703_registers[SYSCONFIG1] &= ~GPIO; // Clear GPIO bits
-  }
-  else if (val==GPIO_I)
-  {
+  if (val==GPIO_Z) {
 
-  }
-  else if (val==GPIO_Low)
-  {
-
-  }
-  else if (val==GPIO_High)
-  {
-    si4703_registers[SYSCONFIG1] |= GPIO; // Set GPIO bits
+    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits (00)
   }
 
+  else if (val==GPIO_I) {
+
+    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
+    GPIO &= 0b00010101;
+    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits to (01)
+  }
+
+  else if (val==GPIO_Low) {
+
+    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
+    GPIO &= 0b00101010;
+    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits to (10)
+  }
+
+  else if (val==GPIO_High) {
+
+    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits (11)
+  }
+
+  else {
+    
+    Serial.println("Error undefined GPIO value!");
+  }
+  
   updateRegisters();
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------------------------------------------------

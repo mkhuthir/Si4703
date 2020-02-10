@@ -28,9 +28,9 @@ static const uint16_t  	SPACE_100KHz 	= 1;	// 100 kHz (Europe / Japan)
 static const uint16_t  	SPACE_50KHz  	= 2;	//  50 kHz (Other)
 
 // GPIO1-3 Pins
-static const uint16_t  	GPIO1			= 0x0003;
-static const uint16_t  	GPIO2			= 0x00C0;
-static const uint16_t  	GPIO3			= 0x0300;
+static const uint16_t  	GPIO1			= 0x0003;	// SYSCONFIG1.D0:D1
+static const uint16_t  	GPIO2			= 0x00C0;	// SYSCONFIG1.D3:D4
+static const uint16_t  	GPIO3			= 0x0300;	// SYSCONFIG1.D5:D6
 
 // GPIO1-3 Possible Values
 static const uint16_t 	GPIO_Z			= 0;	// High impedance (default)
@@ -43,10 +43,10 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int resetPin, 				// class init
-			int sdioPin,
-			int sclkPin,
-			int stcIntPin);
+    Si4703(	int resetPin, 				// Reset pin
+			int sdioPin,				// I2C Data IO Pin
+			int sclkPin,				// I2C Clock Pin
+			int stcIntPin);				// Seek/Tune Complete Pin
     void	powerOn();					// call in setup
 	void	setChannel(int channel);  	// Set 3 digit channel number
 	int 	getChannel();				// Get 3 digit channel number
@@ -60,22 +60,26 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_resetPin;
-	int  	_sdioPin;
-	int  	_sclkPin;
-	int  	_stcIntPin;
+    int  	_resetPin;					// Reset pin
+	int  	_sdioPin;					// I2C Data IO Pin
+	int  	_sclkPin;					// I2C Clock Pin
+	int  	_stcIntPin;					// Seek/Tune Complete Pin
 
-	void 	si4703_init();
-	void 	readRegisters();
-	byte 	updateRegisters();
+	void 	si4703_init();				// init class
+	void 	readRegisters();			// Read registers to shadow 
+	byte 	updateRegisters();			// Write registers from shadow
 	int 	seek(byte seekDirection);
 	
-
+	// Registers shadow
 	uint16_t 				si4703_registers[16]; 	// There are 16 registers, each 16 bits large
-	static const uint16_t  	FAIL 			= 0;
-	static const uint16_t  	SUCCESS 		= 1;
+
+	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
 	static const uint16_t  	I2C_FAIL_MAX 	= 10; 	// This is the number of attempts we will try to contact the device before erroring out
+
+	static const uint16_t  	FAIL 			= 0;
+	static const uint16_t  	SUCCESS 		= 1;
+
 	static const uint16_t  	SEEK_DOWN 		= 0; 	// Direction used for seeking. Default is down
 	static const uint16_t  	SEEK_UP 		= 1;
 
