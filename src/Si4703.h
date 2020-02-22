@@ -2,7 +2,7 @@
 
 Library Modified by Muthanna Alwahash 2020
 
-This library based on the code produced by Nathan Seidle from Sparkfun and Simon Monk.
+This library based on the code produced by Nathan Seidle and Simon Monk.
 
 Remarks:
 
@@ -47,14 +47,23 @@ class Si4703
 			int sdioPin,				// I2C Data IO Pin
 			int sclkPin,				// I2C Clock Pin
 			int stcIntPin);				// Seek/Tune Complete Pin
+
+	int 	getDeviceID();
+	int		getChipID();
+	
     void	powerOn();					// call in setup
+
 	void	setChannel(int channel);  	// Set 3 digit channel number
 	int 	getChannel();				// Get 3 digit channel number
+
 	int 	seekUp(); 					// Seeks up and returns the tuned channel or 0
 	int 	seekDown(); 				// Seeks down and returns the tuned channel or 0
+
 	void	setVolume(int volume); 		// Sets volume value 0 to 15
+
 	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds
+
 	void	writeGPIO(int GPIO, 		// Write to GPIO1,GPIO2, and GPIO3
 					  int val); 		// values can be GPIO_Z, GPIO_I, GPIO_Low, and GPIO_High
 
@@ -104,21 +113,30 @@ class Si4703
 	// Register 0x02 - POWERCFG
 	static const uint16_t  SMUTE 		= 15;
 	static const uint16_t  DMUTE 		= 14;
+	static const uint16_t  MONO			= 13;
+	static const uint16_t  RDSM			= 11;
 	static const uint16_t  SKMODE 		= 10;
 	static const uint16_t  SEEKUP 		= 9;
 	static const uint16_t  SEEK 		= 8;
+	static const uint16_t  DISABLE		= 6;
+	static const uint16_t  ENABLE 		= 0;
 
 	// Register 0x03 - CHANNEL
 	static const uint16_t  TUNE 		= 15;
 
 	// Register 0x04 - SYSCONFIG1
+	static const uint16_t  RDSIEN		= 15;
+	static const uint16_t  STCIEN		= 14;
 	static const uint16_t  RDS 			= 12;
 	static const uint16_t  DE 			= 11;
-
 
 	// Register 0x05 - SYSCONFIG2
 	static const uint16_t  SPACE1 		= 5;
 	static const uint16_t  SPACE0 		= 4;
+
+	// Register 0x07 - TEST1
+	static const uint16_t  XOSCEN		= 15;
+	static const uint16_t  AHIZEN		= 14;
 
 	// Register 0x0A - STATUSRSSI
 	static const uint16_t  RDSR 		= 15;

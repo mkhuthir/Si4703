@@ -81,24 +81,27 @@ void Si4703::si4703_init()
   Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
   readRegisters();                  // Read the current register set
-  si4703_registers[0x07] = 0x8100;  // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
-  si4703_registers[0x04] |= 0x2000; // Set bit 14 to high to enable STC Interrupt on GPIO2
+  si4703_registers[TEST1] = (1<<XOSCEN) | 0x0100; // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
   updateRegisters();                // Update
-
   delay(500);                       //Wait for clock to settle - from AN230 page 9
 
   readRegisters();                  //Read the current register set
   
-  si4703_registers[POWERCFG] = 0x4001; //Enable the IC
-  //  si4703_registers[POWERCFG] |= (1<<SMUTE) | (1<<DMUTE); //Disable Mute, disable softmute
-  si4703_registers[SYSCONFIG1] |= (1<<RDS);     //Enable RDS
-  si4703_registers[SYSCONFIG1] |= (1<<DE);      //50kHz Europe setup
-  si4703_registers[SYSCONFIG2] |= (1<<SPACE0);  //100kHz channel spacing for Europe
-  si4703_registers[SYSCONFIG2] &= 0xFFF0;       //Clear volume bits
-  si4703_registers[SYSCONFIG2] |= 0x0001;       //Set volume to lowest
+  si4703_registers[POWERCFG]     = (1<<ENABLE); // Enable the IC
+  si4703_registers[POWERCFG]    |= (1<<MONO);   // Force MONO
+  si4703_registers[POWERCFG]    |= (1<<SMUTE);  // Disable Softmute
+  si4703_registers[POWERCFG]    |= (1<<DMUTE);  // Disable Mute
 
-  updateRegisters();                            //Update
-  delay(110);                                   //Max power up time, from datasheet page 13
+  si4703_registers[SYSCONFIG1]  |= (1<<STCIEN); // Enable STC Interrupt on GPIO2
+  si4703_registers[SYSCONFIG1]  |= (1<<RDS);    // Enable RDS
+  si4703_registers[SYSCONFIG1]  |= (1<<DE);     // 50kHz Europe setup
+
+  si4703_registers[SYSCONFIG2]  |= (1<<SPACE0); // 100kHz channel spacing for Europe
+  si4703_registers[SYSCONFIG2]  &= 0xFFF0;      // Clear volume bits
+  si4703_registers[SYSCONFIG2]  |= 0x0001;      // Set volume to lowest
+
+  updateRegisters();                            // Update
+  delay(110);                                   // Max power up time, from datasheet page 13
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -316,3 +319,17 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------------------------------------------------
+	int 	Si4703::getDeviceID()
+  {
+  readRegisters();  // Read the current register set
+  return si4703_registers[DEVICEID];
+  }
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------------------------------------------------
+	int		Si4703::getChipID()
+  {
+  readRegisters();  // Read the current register set
+  return si4703_registers[CHIPID];
+  }
