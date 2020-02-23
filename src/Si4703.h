@@ -38,6 +38,59 @@ static const uint16_t 	GPIO_I			= 1;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GP
 static const uint16_t 	GPIO_Low		= 2;	// Low output (GND level)
 static const uint16_t 	GPIO_High		= 3;	// High output (VIO level)
 
+//------------------------------------------------------------------------------------------------------------
+union deviceID_t
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	MFGID	:12;
+		uint16_t 	PN		:4;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union chipID_t
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	FIRMWARE:6;
+		uint16_t 	DEV		:4;
+		uint16_t 	REV		:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union shadow_t
+{
+	uint16_t	si4703_registers[16];
+
+	struct bytes
+	{
+
+		STATUSRSSI_t	STATUSRSSI;	// Register 0x0A
+		READCHAN_t		READCHAN;	// Register 0x0B
+		RDSA_t	// Register 0x0C
+		RDSB_t	// Register 0x0D
+		RDSC_t	// Register 0x0E
+		RDSD_t	// Register 0x0F
+		DEVICEID_t 		DEVICEID;	// Register 0x00
+		CHIPID_t		CHIPID;		// Register 0x01
+		POWERCFG_t 		POWERCFG;	// Register 0x02
+		CHANNEL_t		CHANNEL;	// Register 0x03
+		SYSCONFIG1_t	SYSCONFIG1;	// Register 0x04
+		SYSCONFIG2_t	SYSCONFIG2;	// Register 0x05
+		SYSCONFIG3_T	SYSCONFIG3;	// Register 0x06
+		TEST1_t			TEST1;		// Register 0x07
+		TEST2_t			TEST2;		// Register 0x08
+		BOOTCONFIG_t	BOOTCONFIG;	// Register 0x09
+
+
+	} bytes;
+
+};
+//------------------------------------------------------------------------------------------------------------
 
 class Si4703
 {
@@ -48,7 +101,8 @@ class Si4703
 			int sclkPin,				// I2C Clock Pin
 			int stcIntPin);				// Seek/Tune Complete Pin
 
-	int 	getDeviceID();
+	deviceID_t 	getDeviceID();
+
 	int		getChipID();
 	
     void	powerOn();					// call in setup
@@ -92,6 +146,9 @@ class Si4703
 	static const uint16_t  	SEEK_DOWN 		= 0; 	// Direction used for seeking. Default is down
 	static const uint16_t  	SEEK_UP 		= 1;
 
+
+	
+
 	// Register names
 	static const uint16_t  DEVICEID 	= 0x00;
 	static const uint16_t  CHIPID 		= 0x01;
@@ -103,6 +160,7 @@ class Si4703
 	static const uint16_t  TEST1 		= 0x07;
 	static const uint16_t  TEST2 		= 0x08;
 	static const uint16_t  BOOTCONFIG	= 0x09;
+
 	static const uint16_t  STATUSRSSI 	= 0x0A;
 	static const uint16_t  READCHAN 	= 0x0B;
 	static const uint16_t  RDSA 		= 0x0C;

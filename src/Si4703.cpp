@@ -319,10 +319,15 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------------------------------------------------
-	int 	Si4703::getDeviceID()
+	deviceID_t 	Si4703::getDeviceID()
   {
-  readRegisters();  // Read the current register set
-  return si4703_registers[DEVICEID];
+    deviceID_t temp;    
+
+    readRegisters();  // Read the current register set
+    
+    temp.bytes = si4703_registers[DEVICEID];
+
+    return temp;
   }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -330,6 +335,6 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 	int		Si4703::getChipID()
   {
-  readRegisters();  // Read the current register set
-  return si4703_registers[CHIPID];
+    readRegisters();  // Read the current register set
+    return si4703_registers[CHIPID];
   }
