@@ -10,8 +10,6 @@ Si4703 radio(resetPin, SDIO, SCLK, STC);
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("\nWelcome");
   radio.powerOn();
   radio.setChannel(944);
   radio.setVolume(15);
@@ -19,15 +17,11 @@ void setup()
 
 void loop()
 {
-  if (Serial.available())
-  {
-    char ch = Serial.read();
-    Serial.println(":");
-   
-    if (ch == '1') 
-    {
 
-    } 
-   
-  }
+radio.writeGPIO(GPIO1, GPIO_High);  // turn LED2 ON
+delay(300);
+
+radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+delay(300);
+
 }
