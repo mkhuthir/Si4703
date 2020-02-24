@@ -16,6 +16,7 @@ Remarks:
 
 #include "Arduino.h"
 
+//------------------------------------------------------------------------------------------------------------
 
 // BAND (0x05.7:6)—FM Band Select
 static const uint16_t  	BAND_USEU		= 0;	// 87.5–108 MHz (US / Europe, Default)
@@ -45,8 +46,8 @@ union DEVICEID_t	// Register 0x00
 
 	struct bits
 	{
-		uint16_t	MFGID	:12;
-		uint16_t 	PN		:4;
+		uint16_t	MFGID	:12;	// Part Number
+		uint16_t 	PN		:4;		// Manufacturer ID
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -56,9 +57,9 @@ union CHIPID_t		// Register 0x01
 
 	struct bits
 	{
-		uint16_t	FIRMWARE:6;
-		uint16_t 	DEV		:4;
-		uint16_t 	REV		:6;
+		uint16_t	FIRMWARE:6;		// Firmware Version
+		uint16_t 	DEV		:4;		// Device
+		uint16_t 	REV		:6;		// Chip Version
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -68,7 +69,19 @@ union POWERCFG_t	// Register 0x02
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	ENABLE	:1;		// Powerup Enable
+		uint16_t			:5;		// Reserved
+		uint16_t	DISABLE :1;		// Powerup Disable
+		uint16_t			:1;		// Reserved
+		uint16_t	SEEK	:1;		// Seek Disable/Enable
+		uint16_t	SEEKUP	:1;		// Seek Direction Down/Up
+		uint16_t	SKMODE	:1;		// Seek Mode Wrap/Stop
+		uint16_t	RDSM	:1;		// RDS Mode Standard/Verbose
+		uint16_t			:1;		// Reserved
+		uint16_t	MONO	:1;		// Mono Select Stereo/Mono
+		uint16_t	DMUTE	:1;		// Mute Disable Enable/Disable
+		uint16_t	DSMUTE	:1;		// Softmute Disable Enable/Disable
+
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -78,7 +91,9 @@ union CHANNEL_t		// Register 0x03
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	CHAN	:10;	// Channel Select (FreqMHz = SpacingMHZ x Channel + (87.5MHZ or 76MHz))
+		uint16_t			:5;		// Reserved
+		uint16_t	TUNE	:1;		// Tune Disable/Enable
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -204,7 +219,7 @@ union RDSD_t		// Register 0x0F
 //------------------------------------------------------------------------------------------------------------
 union shadow_t
 {
-	uint16_t	si4703_registers[16];
+	uint16_t	si4703_registers[16];	// 32 bytes = 16 x 16 bits Registers
 
 	struct bytes
 	{
@@ -242,7 +257,7 @@ class Si4703
 			int sclkPin,				// I2C Clock Pin
 			int stcIntPin);				// Seek/Tune Complete Pin
 
-	deviceID_t 	getDeviceID();
+	DEVICEID_t 	getDeviceID();
 
 	int		getChipID();
 	
