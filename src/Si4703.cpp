@@ -319,9 +319,9 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------------------------------------------------
-	deviceID_t 	Si4703::getDeviceID()
+	DEVICEID_t 	Si4703::getDeviceID()
   {
-    deviceID_t temp;    
+    DEVICEID_t temp;    
 
     readRegisters();  // Read the current register set
     

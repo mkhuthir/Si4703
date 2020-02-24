@@ -39,7 +39,7 @@ static const uint16_t 	GPIO_Low		= 2;	// Low output (GND level)
 static const uint16_t 	GPIO_High		= 3;	// High output (VIO level)
 
 //------------------------------------------------------------------------------------------------------------
-union deviceID_t
+union DEVICEID_t	// Register 0x00
 {
 	uint16_t 	bytes;
 
@@ -50,7 +50,7 @@ union deviceID_t
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
-union chipID_t
+union CHIPID_t		// Register 0x01
 {
 	uint16_t 	bytes;
 
@@ -59,6 +59,146 @@ union chipID_t
 		uint16_t	FIRMWARE:6;
 		uint16_t 	DEV		:4;
 		uint16_t 	REV		:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union POWERCFG_t	// Register 0x02
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union CHANNEL_t		// Register 0x03 
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union SYSCONFIG1_t	// Register 0x04
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union SYSCONFIG2_t	// Register 0x05
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union SYSCONFIG3_t	// Register 0x06
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union TEST1_t		// Register 0x07
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union TEST2_t		// Register 0x08
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union BOOTCONFIG_t	// Register 0x09
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union STATUSRSSI_t	// Register 0x0A
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union READCHAN_t	// Register 0x0B
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union RDSA_t		// Register 0x0C
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union RDSB_t		// Register 0x0D
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union RDSC_t		// Register 0x0E
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
+	} 			bits;
+};
+//------------------------------------------------------------------------------------------------------------
+union RDSD_t		// Register 0x0F
+{
+	uint16_t 	bytes;
+
+	struct bits
+	{
+		uint16_t	X:6;
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -71,17 +211,18 @@ union shadow_t
 
 		STATUSRSSI_t	STATUSRSSI;	// Register 0x0A
 		READCHAN_t		READCHAN;	// Register 0x0B
-		RDSA_t	// Register 0x0C
-		RDSB_t	// Register 0x0D
-		RDSC_t	// Register 0x0E
-		RDSD_t	// Register 0x0F
+		RDSA_t			RDSA;		// Register 0x0C
+		RDSB_t			RDSB;		// Register 0x0D
+		RDSC_t			RDSC;		// Register 0x0E
+		RDSD_t			RDSD;		// Register 0x0F
+
 		DEVICEID_t 		DEVICEID;	// Register 0x00
 		CHIPID_t		CHIPID;		// Register 0x01
 		POWERCFG_t 		POWERCFG;	// Register 0x02
 		CHANNEL_t		CHANNEL;	// Register 0x03
 		SYSCONFIG1_t	SYSCONFIG1;	// Register 0x04
 		SYSCONFIG2_t	SYSCONFIG2;	// Register 0x05
-		SYSCONFIG3_T	SYSCONFIG3;	// Register 0x06
+		SYSCONFIG3_t	SYSCONFIG3;	// Register 0x06
 		TEST1_t			TEST1;		// Register 0x07
 		TEST2_t			TEST2;		// Register 0x08
 		BOOTCONFIG_t	BOOTCONFIG;	// Register 0x09
