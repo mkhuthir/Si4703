@@ -103,7 +103,17 @@ union SYSCONFIG1_t	// Register 0x04
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	GPIO1	:2;		// General Purpose I/O 1
+		uint16_t	GPIO2	:2;		// General Purpose I/O 2
+		uint16_t	GPIO3	:2;		// General Purpose I/O 3
+		uint16_t	BLNDADJ	:2;		// Stereo/Mono Blend Level Adjustment
+		uint16_t			:2;		// Reserved
+		uint16_t	AGCD	:1;		// AGC Disable Enable/Disable
+		uint16_t	DE		:1;		// De-emphasis	75us/50us
+		uint16_t	RDS		:1;		// RDS Enable Disable/Enable
+		uint16_t			:1;		// Reserved
+		uint16_t	STCIEN 	:1;		// Seek/Tune Complete Interrupt Enable Disable/Enable
+		uint16_t	RDSIEN	:1;		// RDS Interrupt Enable Disable/Enable
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -113,7 +123,10 @@ union SYSCONFIG2_t	// Register 0x05
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	VOLUME	:4;		// Volume 0-15 (-30dBFS with VOLEXT)
+		uint16_t	SPACE	:2;		// Channel Spacing 200/100/50 Khz
+		uint16_t	BAND	:2;		// Band Select US/JPW/JP
+		uint16_t	SEEKTH	:8;		// RSSI Seek Threshold 0x00-0x7F
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -123,7 +136,12 @@ union SYSCONFIG3_t	// Register 0x06
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	SKCNT	:4;		// Seek FM Impulse Detection Threshold
+		uint16_t	SKSNR	:4;		// Seek SNR Threshold
+		uint16_t	VOLEXT	:1;		// Extended Volume Range Disable/Enable
+		uint16_t			:3:		// Reserved
+		uint16_t	SMUTEA	:2;		// Softmute Attenuation
+		uint16_t	SMUTER	:2;		// Softmute Attack/Recover Rate
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -133,7 +151,9 @@ union TEST1_t		// Register 0x07
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t			:14;	// Reserved
+		uint16_t	AHIZEN	:1;		// Audio High-Z Enable Disable/Enable
+		uint16_t	XOSCEN	:1;		// Crystal Oscillator Enable Disable/Enable
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -143,7 +163,7 @@ union TEST2_t		// Register 0x08
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t			:16;	// Reserved
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -153,7 +173,7 @@ union BOOTCONFIG_t	// Register 0x09
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t			:16;	// Reserved
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -163,7 +183,14 @@ union STATUSRSSI_t	// Register 0x0A
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	RSSI 	:8;		// RSSI (Received Signal Strength Indicator)
+		uint16_t	ST		:1;		// Stereo Indicator. Mono/Stereo
+		uint16_t	BLERA 	:2;		// RDS Block A Errors.
+		uint16_t	RDSS 	:1;		// RDS Synchronized
+		uint16_t	AFCRL	:1;		// AFC Rail.
+		uint16_t	SFBL 	:1;		// Seek Fail/Band Limit.
+		uint16_t	STC 	:1;		// Seek/Tune Complete.
+		uint16_t	RDSR 	:1;		// RDS Ready.
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -173,7 +200,10 @@ union READCHAN_t	// Register 0x0B
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	READCHAN :10;	// Read Channel
+		uint16_t	BLERD 	:2;		// RDS Block D Errors.
+		uint16_t	BLERC 	:2;		// RDS Block C Errors.
+		uint16_t	BLERB	:2;		// RDS Block B Errors.
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -183,7 +213,7 @@ union RDSA_t		// Register 0x0C
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	RDSA 	:16;	// RDSA
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -193,7 +223,7 @@ union RDSB_t		// Register 0x0D
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	RDSB 	:16;	// RDSB
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -203,7 +233,7 @@ union RDSC_t		// Register 0x0E
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	RDSC 	:16;	// RDSC
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
@@ -213,7 +243,7 @@ union RDSD_t		// Register 0x0F
 
 	struct bits
 	{
-		uint16_t	X:6;
+		uint16_t	RDSD 	:16;	// RDSD
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
