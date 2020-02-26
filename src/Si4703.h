@@ -139,7 +139,7 @@ union SYSCONFIG3_t	// Register 0x06
 		uint16_t	SKCNT	:4;		// Seek FM Impulse Detection Threshold
 		uint16_t	SKSNR	:4;		// Seek SNR Threshold
 		uint16_t	VOLEXT	:1;		// Extended Volume Range Disable/Enable
-		uint16_t			:3:		// Reserved
+		uint16_t			:3;		// Reserved
 		uint16_t	SMUTEA	:2;		// Softmute Attenuation
 		uint16_t	SMUTER	:2;		// Softmute Attack/Recover Rate
 	} 			bits;
