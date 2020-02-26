@@ -321,6 +321,7 @@ class Si4703
 	
 	// Registers shadow
 	uint16_t 				si4703_registers[16]; 	// There are 16 registers, each 16 bits large
+	shadow_t				si4703_reg;				// There are 16 registers, each 16 bits large
 
 	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
