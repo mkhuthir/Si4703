@@ -17,16 +17,19 @@ Si4703::Si4703(int resetPin, int sdioPin, int sclkPin, int stcIntPin)
 // Read the entire register control set from 0x00 to 0x0F
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::readRegisters(){
+  
+  Wire.requestFrom(I2C_ADDR, 32); // Read registers 0x0A,0x0B,...,0x0F,0x00,0x01,...,0x09 = 16 Words = 32 bytes.
 
-  // Si4703 begins reading from register upper register of 0x0A and reads to 0x0F, then loops to 0x00.
-  Wire.requestFrom(I2C_ADDR, 32); //We want to read the entire register set from 0x0A to 0x09 = 32 bytes.
-
-  // Remember, register 0x0A comes in first so we have to shuffle the array around a bit
+  uint8_t   i=0;
+  
   for(int x = 0x0A ; ; x++) 
-    {                       //Read in these 32 bytes
-      if(x == 0x10) x = 0;  //Loop back to zero
-      si4703_registers[x] = Wire.read() << 8;
-      si4703_registers[x] |= Wire.read();
+    {                       
+      if(x == 0x10) x = 0;
+      
+      si4703_registers[x] = (Wire.read()<<8) | Wire.read();
+      shadow.word[i] = si4703_registers[x];
+      
+      i++;
       if(x == 0x09) break; 
     }
   
@@ -83,6 +86,10 @@ void Si4703::si4703_init()
 
   readRegisters();                  // Read the current register set
   si4703_registers[TEST1] = (1<<XOSCEN) | 0x0100; // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
+  
+  shadow.reg.TEST1.bits.XOSCEN = 1;
+  shadow.reg.TEST1.word |= 0x0100;
+
   updateRegisters();                // Update
   delay(500);                       //Wait for clock to settle - from AN230 page 9
 
@@ -326,7 +333,7 @@ void Si4703::readRDS(char* buffer, long timeout)
 
     readRegisters();  // Read the current register set
     
-    temp.bytes = si4703_registers[DEVICEID];
+    temp.word = si4703_registers[DEVICEID];
 
     return temp;
   }

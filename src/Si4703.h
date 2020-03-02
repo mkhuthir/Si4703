@@ -42,7 +42,7 @@ static const uint16_t 	GPIO_High		= 3;	// High output (VIO level)
 //------------------------------------------------------------------------------------------------------------
 union DEVICEID_t	// Register 0x00
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -53,7 +53,7 @@ union DEVICEID_t	// Register 0x00
 //------------------------------------------------------------------------------------------------------------
 union CHIPID_t		// Register 0x01
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -65,7 +65,7 @@ union CHIPID_t		// Register 0x01
 //------------------------------------------------------------------------------------------------------------
 union POWERCFG_t	// Register 0x02
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -87,7 +87,7 @@ union POWERCFG_t	// Register 0x02
 //------------------------------------------------------------------------------------------------------------
 union CHANNEL_t		// Register 0x03 
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -99,7 +99,7 @@ union CHANNEL_t		// Register 0x03
 //------------------------------------------------------------------------------------------------------------
 union SYSCONFIG1_t	// Register 0x04
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -119,7 +119,7 @@ union SYSCONFIG1_t	// Register 0x04
 //------------------------------------------------------------------------------------------------------------
 union SYSCONFIG2_t	// Register 0x05
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -132,7 +132,7 @@ union SYSCONFIG2_t	// Register 0x05
 //------------------------------------------------------------------------------------------------------------
 union SYSCONFIG3_t	// Register 0x06
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -147,7 +147,7 @@ union SYSCONFIG3_t	// Register 0x06
 //------------------------------------------------------------------------------------------------------------
 union TEST1_t		// Register 0x07
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -159,7 +159,7 @@ union TEST1_t		// Register 0x07
 //------------------------------------------------------------------------------------------------------------
 union TEST2_t		// Register 0x08
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -169,7 +169,7 @@ union TEST2_t		// Register 0x08
 //------------------------------------------------------------------------------------------------------------
 union BOOTCONFIG_t	// Register 0x09
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -179,7 +179,7 @@ union BOOTCONFIG_t	// Register 0x09
 //------------------------------------------------------------------------------------------------------------
 union STATUSRSSI_t	// Register 0x0A
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -196,7 +196,7 @@ union STATUSRSSI_t	// Register 0x0A
 //------------------------------------------------------------------------------------------------------------
 union READCHAN_t	// Register 0x0B
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -209,7 +209,7 @@ union READCHAN_t	// Register 0x0B
 //------------------------------------------------------------------------------------------------------------
 union RDSA_t		// Register 0x0C
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -219,7 +219,7 @@ union RDSA_t		// Register 0x0C
 //------------------------------------------------------------------------------------------------------------
 union RDSB_t		// Register 0x0D
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -229,7 +229,7 @@ union RDSB_t		// Register 0x0D
 //------------------------------------------------------------------------------------------------------------
 union RDSC_t		// Register 0x0E
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -239,7 +239,7 @@ union RDSC_t		// Register 0x0E
 //------------------------------------------------------------------------------------------------------------
 union RDSD_t		// Register 0x0F
 {
-	uint16_t 	bytes;
+	uint16_t 	word;
 
 	struct bits
 	{
@@ -249,31 +249,31 @@ union RDSD_t		// Register 0x0F
 //------------------------------------------------------------------------------------------------------------
 union shadow_t
 {
-	uint16_t	si4703_registers[16];	// 32 bytes = 16 x 16 bits Registers
+	uint16_t	word[16];	// 32 bytes = 16 x 16 bits Registers
 
-	struct bytes
+	struct reg
 	{
 
-		STATUSRSSI_t	STATUSRSSI;	// Register 0x0A
-		READCHAN_t		READCHAN;	// Register 0x0B
-		RDSA_t			RDSA;		// Register 0x0C
-		RDSB_t			RDSB;		// Register 0x0D
-		RDSC_t			RDSC;		// Register 0x0E
-		RDSD_t			RDSD;		// Register 0x0F
+		STATUSRSSI_t	STATUSRSSI;	// Register 0x0A - 00
+		READCHAN_t		READCHAN;	// Register 0x0B - 01
+		RDSA_t			RDSA;		// Register 0x0C - 02
+		RDSB_t			RDSB;		// Register 0x0D - 03
+		RDSC_t			RDSC;		// Register 0x0E - 04
+		RDSD_t			RDSD;		// Register 0x0F - 05
 
-		DEVICEID_t 		DEVICEID;	// Register 0x00
-		CHIPID_t		CHIPID;		// Register 0x01
-		POWERCFG_t 		POWERCFG;	// Register 0x02
-		CHANNEL_t		CHANNEL;	// Register 0x03
-		SYSCONFIG1_t	SYSCONFIG1;	// Register 0x04
-		SYSCONFIG2_t	SYSCONFIG2;	// Register 0x05
-		SYSCONFIG3_t	SYSCONFIG3;	// Register 0x06
-		TEST1_t			TEST1;		// Register 0x07
-		TEST2_t			TEST2;		// Register 0x08
-		BOOTCONFIG_t	BOOTCONFIG;	// Register 0x09
+		DEVICEID_t 		DEVICEID;	// Register 0x00 - 06
+		CHIPID_t		CHIPID;		// Register 0x01 - 07
+		POWERCFG_t 		POWERCFG;	// Register 0x02 - 08
+		CHANNEL_t		CHANNEL;	// Register 0x03 - 09
+		SYSCONFIG1_t	SYSCONFIG1;	// Register 0x04 - 10
+		SYSCONFIG2_t	SYSCONFIG2;	// Register 0x05 - 11
+		SYSCONFIG3_t	SYSCONFIG3;	// Register 0x06 - 12
+		TEST1_t			TEST1;		// Register 0x07 - 13
+		TEST2_t			TEST2;		// Register 0x08 - 14
+		BOOTCONFIG_t	BOOTCONFIG;	// Register 0x09 - 15
 
 
-	} 			bytes;
+	} 			reg;
 
 };
 //------------------------------------------------------------------------------------------------------------
@@ -321,7 +321,7 @@ class Si4703
 	
 	// Registers shadow
 	uint16_t 				si4703_registers[16]; 	// There are 16 registers, each 16 bits large
-	shadow_t				si4703_reg;				// There are 16 registers, each 16 bits large
+	shadow_t				shadow;					// There are 16 registers, each 16 bits large
 
 	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
