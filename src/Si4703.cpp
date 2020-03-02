@@ -87,8 +87,8 @@ void Si4703::si4703_init()
   readRegisters();                  // Read the current register set
   si4703_registers[TEST1] = (1<<XOSCEN) | 0x0100; // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
   
-  shadow.reg.TEST1.bits.XOSCEN = 1;
-  shadow.reg.TEST1.word |= 0x0100;
+  shadow.reg.TEST1.bits.XOSCEN = 1;   // Enable the oscillator
+  shadow.reg.TEST1.word |= 0x0100;    // 
 
   updateRegisters();                // Update
   delay(500);                       //Wait for clock to settle - from AN230 page 9
