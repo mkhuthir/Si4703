@@ -106,7 +106,7 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;
   shadow.reg.SYSCONFIG1.bits.DE     = 1;
   shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz;
-  shadow.reg.SYSCONFIG2.bits        = 1;            // Set volume to lowest
+  shadow.reg.SYSCONFIG2.bits.VOLUME = 1;            // Set volume to lowest
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
 }
