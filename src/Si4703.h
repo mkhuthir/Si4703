@@ -315,8 +315,13 @@ class Si4703
 	int  	_stcIntPin;					// Seek/Tune Complete Pin
 
 	void 	si4703_init();				// init class
+
+	void	getShadow();				// Read registers to shadow 
+	byte 	putShadow();				// Write shadow to registers
+
 	void 	readRegisters();			// Read registers to shadow 
 	byte 	updateRegisters();			// Write registers from shadow
+
 	int 	seek(byte seekDirection);
 	
 	// Registers shadow
@@ -327,14 +332,8 @@ class Si4703
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
 	static const uint16_t  	I2C_FAIL_MAX 	= 10; 	// This is the number of attempts we will try to contact the device before erroring out
 
-	static const uint16_t  	FAIL 			= 0;
-	static const uint16_t  	SUCCESS 		= 1;
-
 	static const uint16_t  	SEEK_DOWN 		= 0; 	// Direction used for seeking. Default is down
 	static const uint16_t  	SEEK_UP 		= 1;
-
-
-	
 
 	// Register names
 	static const uint16_t  DEVICEID 	= 0x00;

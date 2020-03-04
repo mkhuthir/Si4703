@@ -3,7 +3,7 @@
 #include "Wire.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Radio Initialization 
+// Si4703 Class Initialization
 //-----------------------------------------------------------------------------------------------------------------------------------
 Si4703::Si4703(int resetPin, int sdioPin, int sclkPin, int stcIntPin)
 {
@@ -14,53 +14,57 @@ Si4703::Si4703(int resetPin, int sdioPin, int sclkPin, int stcIntPin)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Read the entire register control set from 0x00 to 0x0F
+// Read the entire register set (0x00 - 0x0F) to Shadow
+// Reading is in following register address sequence 0A,0B,0C,0D,0E,0F,00,01,02,03,04,05,06,07,08,09 = 16 Words = 32 bytes.
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::readRegisters(){
-  
-  Wire.requestFrom(I2C_ADDR, 32); // Read registers 0x0A,0x0B,...,0x0F,0x00,0x01,...,0x09 = 16 Words = 32 bytes.
+void	Si4703::getShadow(){
 
-  uint8_t   i=0;
-  
-  for(int x = 0x0A ; ; x++) 
-    {                       
-      if(x == 0x10) x = 0;
-      
-      si4703_registers[x] = (Wire.read()<<8) | Wire.read();
-      shadow.word[i] = si4703_registers[x];
-      
-      i++;
-      if(x == 0x09) break; 
-    }
-  
+  Wire.requestFrom(I2C_ADDR, 32); 
+  for(int i = 0 ; i<16; i++) {
+    shadow.word[i] = (Wire.read()<<8) | Wire.read();
+  }
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Write the current 9 control registers (0x02 to 0x07) to the Si4703
-// It's a little weird, you don't write an I2C addres
 // The Si4703 assumes you are writing to 0x02 first, then increments
+//-----------------------------------------------------------------------------------------------------------------------------------
+byte 	Si4703::putShadow(){
+
+  Wire.beginTransmission(I2C_ADDR);
+  for(int i = 8 ; i<14; i++) {              // i=8-13 >> Reg=0x02-0x07
+    Wire.write(shadow.word[i] >> 8);        // Upper byte
+    Wire.write(shadow.word[i] & 0x00FF);    // Lower byte
+  }
+  return Wire.endTransmission();            // End this transmission
+
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::readRegisters(){
+  
+  Wire.requestFrom(I2C_ADDR, 32);
+  for(int x = 0x0A ; ; x++) {                       
+      if(x == 0x10) x = 0;
+      si4703_registers[x] = (Wire.read()<<8) | Wire.read();
+      if(x == 0x09) break; 
+    }
+}
 //-----------------------------------------------------------------------------------------------------------------------------------
 byte Si4703::updateRegisters() {
 
   Wire.beginTransmission(I2C_ADDR);
-  // A write command automatically begins with register 0x02 so no need to send a write-to address
-  // First we send the 0x02 to 0x07 control registers
-  // In general, we should not write to registers 0x08 and 0x09
   for(int regSpot = 0x02 ; regSpot < 0x08 ; regSpot++) {
     byte high_byte = si4703_registers[regSpot] >> 8;
     byte low_byte = si4703_registers[regSpot] & 0x00FF;
 
-    Wire.write(high_byte); //Upper 8 bits
-    Wire.write(low_byte); //Lower 8 bits
+    Wire.write(high_byte);  //Upper 8 bits
+    Wire.write(low_byte);   //Lower 8 bits
   }
 
-  // End this transmission
-  byte ack = Wire.endTransmission();
-  if(ack != 0) { //We have a problem! 
-    return(FAIL);
-  }
-
-  return(SUCCESS);
+  return Wire.endTransmission(); // End this transmission
+  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -70,31 +74,28 @@ byte Si4703::updateRegisters() {
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::si4703_init() 
 {
+  // Set IO pins directions
   pinMode(_resetPin , OUTPUT);      // Reset pin
-  pinMode(_sdioPin  , OUTPUT);      // I2C data io pin
+  pinMode(_sdioPin  , OUTPUT);      // I2C data IO pin
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
 
+  // Set communcation mode to 2-Wire
   digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
   digitalWrite(_resetPin  , LOW);   // Put Si4703 into reset
   digitalWrite(_stcIntPin , HIGH);  // STC goes low on interrupt
   delay(1);                         // Some delays while we allow pins to settle
-
   digitalWrite(_resetPin  , HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                         // Allow Si4703 to come out of reset
 
+  // Enable Oscillator
   Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
+  getShadow();                      // Read the current register set
+  shadow.reg.TEST1.bits.XOSCEN = 1; // Enable the oscillator
+  putShadow();                      // Write to registers
+  delay(500);                       // Wait for oscillator to settle
 
-  readRegisters();                  // Read the current register set
-  si4703_registers[TEST1] = (1<<XOSCEN) | 0x0100; // Enable the oscillator, from AN230 page 9, rev 0.61 (works)
-  
-  shadow.reg.TEST1.bits.XOSCEN = 1;   // Enable the oscillator
-  shadow.reg.TEST1.word |= 0x0100;    // 
-
-  updateRegisters();                // Update
-  delay(500);                       //Wait for clock to settle - from AN230 page 9
 
   readRegisters();                  //Read the current register set
-  
   si4703_registers[POWERCFG]     = (1<<ENABLE); // Enable the IC
   si4703_registers[POWERCFG]    |= (1<<MONO);   // Force MONO
   si4703_registers[POWERCFG]    |= (1<<SMUTE);  // Disable Softmute
