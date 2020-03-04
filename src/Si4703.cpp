@@ -94,23 +94,21 @@ void Si4703::si4703_init()
   putShadow();                      // Write to registers
   delay(500);                       // Wait for oscillator to settle
 
+  // Power On Configuration
+  getShadow();                                      // Read the current register set
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;
+  shadow.reg.POWERCFG.bits.MONO     = 1;
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;
 
-  readRegisters();                  //Read the current register set
-  si4703_registers[POWERCFG]     = (1<<ENABLE); // Enable the IC
-  si4703_registers[POWERCFG]    |= (1<<MONO);   // Force MONO
-  si4703_registers[POWERCFG]    |= (1<<SMUTE);  // Disable Softmute
-  si4703_registers[POWERCFG]    |= (1<<DMUTE);  // Disable Mute
-
-  si4703_registers[SYSCONFIG1]  |= (1<<STCIEN); // Enable STC Interrupt on GPIO2
-  si4703_registers[SYSCONFIG1]  |= (1<<RDS);    // Enable RDS
-  si4703_registers[SYSCONFIG1]  |= (1<<DE);     // 50kHz Europe setup
-
-  si4703_registers[SYSCONFIG2]  |= (1<<SPACE0); // 100kHz channel spacing for Europe
-  si4703_registers[SYSCONFIG2]  &= 0xFFF0;      // Clear volume bits
-  si4703_registers[SYSCONFIG2]  |= 0x0001;      // Set volume to lowest
-
-  updateRegisters();                            // Update
-  delay(110);                                   // Max power up time, from datasheet page 13
+  // System Configuration
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;
+  shadow.reg.SYSCONFIG1.bits.DE     = 1;
+  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz;
+  shadow.reg.SYSCONFIG2.bits        = 1;            // Set volume to lowest
+  putShadow();                                      // Write to registers
+  delay(110);                                       // wait for max power up time
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -261,12 +259,7 @@ void Si4703::readRDS(char* buffer, long timeout)
         char Dl = (si4703_registers[RDSD] & 0x00FF);
         buffer[index * 2]     = Dh;
         buffer[index * 2 +1]  = Dl;
-
-        // Serial.print(si4703_registers[RDSD]); Serial.print(" ");
-        // Serial.print(index);Serial.print(" ");
-        // Serial.write(Dh);
-        // Serial.write(Dl);
-        // Serial.println();
+       
       }
 
       delay(40); //Wait for the RDS bit to clear
