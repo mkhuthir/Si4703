@@ -94,17 +94,19 @@ void Si4703::si4703_init()
   putShadow();                      // Write to registers
   delay(500);                       // Wait for oscillator to settle
 
-  // Power On Configuration
+  // PowerOn Configuration
   getShadow();                                      // Read the current register set
   shadow.reg.POWERCFG.bits.ENABLE   = 1;
   shadow.reg.POWERCFG.bits.MONO     = 1;
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;
   shadow.reg.POWERCFG.bits.DMUTE    = 1;
 
-  // System Configuration
+  // System Configuration 1
   shadow.reg.SYSCONFIG1.bits.STCIEN = 1;
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;
   shadow.reg.SYSCONFIG1.bits.DE     = 1;
+
+  // System Configuration 2
   shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz;
   shadow.reg.SYSCONFIG2.bits.VOLUME = 1;            // Set volume to lowest
   putShadow();                                      // Write to registers
