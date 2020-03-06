@@ -5,12 +5,17 @@
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Si4703 Class Initialization
 //-----------------------------------------------------------------------------------------------------------------------------------
-Si4703::Si4703(int resetPin, int sdioPin, int sclkPin, int stcIntPin)
+Si4703::Si4703( int rstPIN, 
+                int sdioPin,
+                int sclkPin,
+                int stcIntPin
+              )
 {
-  _resetPin   = resetPin;   // Reset pin
+  _rstPin     = rstPIN;   // Reset Pin
   _sdioPin    = sdioPin;    // I2C Data IO Pin
   _sclkPin    = sclkPin;    // I2C Clock Pin
   _stcIntPin  = stcIntPin;  // Seek/Tune Complete Pin
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -75,16 +80,16 @@ byte Si4703::updateRegisters() {
 void Si4703::si4703_init() 
 {
   // Set IO pins directions
-  pinMode(_resetPin , OUTPUT);      // Reset pin
+  pinMode(_rstPin , OUTPUT);      // Reset pin
   pinMode(_sdioPin  , OUTPUT);      // I2C data IO pin
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
 
   // Set communcation mode to 2-Wire
   digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
-  digitalWrite(_resetPin  , LOW);   // Put Si4703 into reset
+  digitalWrite(_rstPin  , LOW);   // Put Si4703 into reset
   digitalWrite(_stcIntPin , HIGH);  // STC goes low on interrupt
   delay(1);                         // Some delays while we allow pins to settle
-  digitalWrite(_resetPin  , HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
+  digitalWrite(_rstPin  , HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                         // Allow Si4703 to come out of reset
 
   // Enable Oscillator
@@ -96,19 +101,19 @@ void Si4703::si4703_init()
 
   // PowerOn Configuration
   getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;
-  shadow.reg.POWERCFG.bits.MONO     = 1;
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;
-  shadow.reg.POWERCFG.bits.DMUTE    = 1;
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Enable chip
+  shadow.reg.POWERCFG.bits.MONO     = 1;            // Stereo Mode
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Dynamic Mute
 
   // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;
-  shadow.reg.SYSCONFIG1.bits.DE     = 1;
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;            //  Enable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            //  Enable RDS
+  shadow.reg.SYSCONFIG1.bits.DE     = 1;            //  
 
   // System Configuration 2
-  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz;
-  shadow.reg.SYSCONFIG2.bits.VOLUME = 1;            // Set volume to lowest
+  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
+  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
 }
@@ -119,6 +124,18 @@ void Si4703::si4703_init()
 void Si4703::powerOn()
 {
     si4703_init();
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Set Volume
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::setVolume(int volume)
+{
+  getShadow();                                // Read the current register set
+  if (volume < 0 ) volume = 0;                // Accepted Volume value 0-15
+  if (volume > 15) volume = 15;               // Accepted Volume value 0-15
+  shadow.reg.SYSCONFIG2.bits.VOLUME = volume; // Set volume to 0
+  putShadow();                                // Write to registers
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -137,8 +154,6 @@ void Si4703::setChannel(int channel)
   si4703_registers[CHANNEL] |= newChannel;  //Mask in the new channel
   si4703_registers[CHANNEL] |= (1<<TUNE);   //Set the TUNE bit to start
   updateRegisters();
-
-  //delay(60); //Wait 60ms - you can use or skip this delay
 
   while(_stcIntPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
 
@@ -221,18 +236,7 @@ int Si4703::seekDown()
 	return seek(SEEK_DOWN);
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Set Volume
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::setVolume(int volume)
-{
-  readRegisters();                        // Read the current register set
-  if (volume < 0 ) volume = 0;            // Accepted Volume value 0-15
-  if (volume > 15) volume = 15;           // Accepted Volume value 0-15
-  si4703_registers[SYSCONFIG2] &= 0xFFF0; // Clear volume bits
-  si4703_registers[SYSCONFIG2] |= volume; // Set new volume
-  updateRegisters();                      // Update
-}
+
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read RDS
@@ -325,13 +329,6 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 	DEVICEID_t 	Si4703::getDeviceID()
   {
-    DEVICEID_t temp;    
-
-    readRegisters();  // Read the current register set
-    
-    temp.word = si4703_registers[DEVICEID];
-
-    return temp;
   }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -339,6 +336,4 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 	int		Si4703::getChipID()
   {
-    readRegisters();  // Read the current register set
-    return si4703_registers[CHIPID];
   }

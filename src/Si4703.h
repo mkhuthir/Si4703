@@ -309,7 +309,7 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_resetPin;					// Reset pin
+    int  	_rstPin;					// Reset pin
 	int  	_sdioPin;					// I2C Data IO Pin
 	int  	_sclkPin;					// I2C Clock Pin
 	int  	_stcIntPin;					// Seek/Tune Complete Pin
