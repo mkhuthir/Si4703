@@ -17,35 +17,30 @@ Si4703::Si4703( int rstPIN,
   _stcIntPin  = stcIntPin;  // Seek/Tune Complete Pin
 
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read the entire register set (0x00 - 0x0F) to Shadow
 // Reading is in following register address sequence 0A,0B,0C,0D,0E,0F,00,01,02,03,04,05,06,07,08,09 = 16 Words = 32 bytes.
 //-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::getShadow(){
-
+void	Si4703::getShadow()
+{
   Wire.requestFrom(I2C_ADDR, 32); 
   for(int i = 0 ; i<16; i++) {
     shadow.word[i] = (Wire.read()<<8) | Wire.read();
   }
-
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Write the current 9 control registers (0x02 to 0x07) to the Si4703
 // The Si4703 assumes you are writing to 0x02 first, then increments
 //-----------------------------------------------------------------------------------------------------------------------------------
-byte 	Si4703::putShadow(){
-
+byte 	Si4703::putShadow()
+{
   Wire.beginTransmission(I2C_ADDR);
   for(int i = 8 ; i<14; i++) {              // i=8-13 >> Reg=0x02-0x07
     Wire.write(shadow.word[i] >> 8);        // Upper byte
     Wire.write(shadow.word[i] & 0x00FF);    // Lower byte
   }
   return Wire.endTransmission();            // End this transmission
-
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::readRegisters(){
   
@@ -71,7 +66,6 @@ byte Si4703::updateRegisters() {
   return Wire.endTransmission(); // End this transmission
   
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
 // The breakout board has SEN pulled high, but also has SDIO pulled high. Therefore, after a normal power up
@@ -117,7 +111,6 @@ void Si4703::si4703_init()
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Power On 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -125,7 +118,6 @@ void Si4703::powerOn()
 {
     si4703_init();
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set Volume
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -142,32 +134,19 @@ void Si4703::setVolume(int volume)
 // Reads the current channel from READCHAN
 // Returns a number like 974 for 97.4MHz
 //-----------------------------------------------------------------------------------------------------------------------------------
-int Si4703::getChannel() {
-  //readRegisters();
+int Si4703::getChannel()
+{
   getShadow();                                // Read the current register set
-  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
-  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
-
   return (shadow.reg.READCHAN.bits.READCHAN + 875);
-
-  //int channel = si4703_registers[READCHAN] & 0x03FF;  // Mask out everything but the lower 10 bits
-      channel += 875;                                 //98 + 875 = 973
-
-  //return(channel);
 }
-
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set Channel
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::setChannel(int channel)
 {
-  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
-  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
-  
   int newChannel = channel - 875;
-      
-  //These steps come from AN230 page 20 rev 0.5
+
   readRegisters();
   si4703_registers[CHANNEL] &= 0xFE00;      //Clear out the channel bits
   si4703_registers[CHANNEL] |= newChannel;  //Mask in the new channel
