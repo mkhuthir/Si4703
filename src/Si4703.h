@@ -34,10 +34,10 @@ static const uint16_t  	GPIO2			= 0x00C0;	// SYSCONFIG1.D3:D4
 static const uint16_t  	GPIO3			= 0x0300;	// SYSCONFIG1.D5:D6
 
 // GPIO1-3 Possible Values
-static const uint16_t 	GPIO_Z			= 0;	// High impedance (default)
-static const uint16_t 	GPIO_I			= 1;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
-static const uint16_t 	GPIO_Low		= 2;	// Low output (GND level)
-static const uint16_t 	GPIO_High		= 3;	// High output (VIO level)
+static const uint16_t 	GPIO_Z			= 0x00;	// High impedance (default)
+static const uint16_t 	GPIO_I			= 0x01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
+static const uint16_t 	GPIO_Low		= 0x10;	// Low output (GND level)
+static const uint16_t 	GPIO_High		= 0x11;	// High output (VIO level)
 
 //------------------------------------------------------------------------------------------------------------
 union DEVICEID_t	// Register 0x00

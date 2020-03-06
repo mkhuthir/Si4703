@@ -139,6 +139,25 @@ void Si4703::setVolume(int volume)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
+// Reads the current channel from READCHAN
+// Returns a number like 974 for 97.4MHz
+//-----------------------------------------------------------------------------------------------------------------------------------
+int Si4703::getChannel() {
+  //readRegisters();
+  getShadow();                                // Read the current register set
+  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
+  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
+
+  return (shadow.reg.READCHAN.bits.READCHAN + 875);
+
+  //int channel = si4703_registers[READCHAN] & 0x03FF;  // Mask out everything but the lower 10 bits
+      channel += 875;                                 //98 + 875 = 973
+
+  //return(channel);
+}
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------
 // Set Channel
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::setChannel(int channel)
@@ -166,22 +185,6 @@ void Si4703::setChannel(int channel)
     readRegisters();
     if( (si4703_registers[STATUSRSSI] & (1<<STC)) == 0) break; //Tuning complete!
   }
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Reads the current channel from READCHAN
-// Returns a number like 973 for 97.3MHz
-//-----------------------------------------------------------------------------------------------------------------------------------
-int Si4703::getChannel() {
-  readRegisters();
-
-  // Europe Freq MHz = 0.100 MHz * Channel + 87.5 MHz
-  // US     Freq MHz = 0.200 MHz * Channel + 87.5 MHz
-  
-  int channel = si4703_registers[READCHAN] & 0x03FF;  // Mask out everything but the lower 10 bits
-      channel += 875;                                 //98 + 875 = 973
-
-  return(channel);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
