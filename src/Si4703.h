@@ -18,15 +18,24 @@ Remarks:
 
 //------------------------------------------------------------------------------------------------------------
 
-// BAND (0x05.7:6)—FM Band Select
-static const uint16_t  	BAND_USEU		= 0;	// 87.5–108 MHz (US / Europe, Default)
-static const uint16_t  	BAND_JPW		= 1;	// 76–108 MHz (Japan wide band)
-static const uint16_t  	BAND_JP			= 2;	// 76–90 MHz (Japan)
+// Enable/Disable
+static const uint8_t  	DISABLE			= 0x0;	// Disable
+static const uint8_t  	ENABLE			= 0x1;	// Enable
 
-// SPACE (0x05.5:4)—FM Channel Spacing
-static const uint16_t  	SPACE_200KHz	= 0;	// 200 kHz (US / Australia, Default)
-static const uint16_t  	SPACE_100KHz 	= 1;	// 100 kHz (Europe / Japan)
-static const uint16_t  	SPACE_50KHz  	= 2;	//  50 kHz (Other)
+
+// Band Select
+static const uint8_t  	BAND_USEU		= 0x00;	// 87.5–108 MHz (US / Europe, Default)
+static const uint8_t  	BAND_JPW		= 0x01;	// 76–108 MHz (Japan wide band)
+static const uint8_t  	BAND_JP			= 0x10;	// 76–90 MHz (Japan)
+
+// De-emphasis
+static const uint8_t	DE_75us			= 0x0;	// De-emphasis 75 μs. Used in USA (default)
+static const uint8_t	DE_50us			= 0x1;	// De-emphasis 50 μs. Used in Europe, Australia, Japan.
+
+// Channel Spacing
+static const uint8_t  	SPACE_200KHz	= 0x00;	// 200 kHz (US / Australia, Default)
+static const uint8_t  	SPACE_100KHz 	= 0x01;	// 100 kHz (Europe / Japan)
+static const uint8_t  	SPACE_50KHz  	= 0x10;	//  50 kHz (Other)
 
 // GPIO1-3 Pins
 static const uint16_t  	GPIO1			= 0x0003;	// SYSCONFIG1.D0:D1
@@ -34,10 +43,10 @@ static const uint16_t  	GPIO2			= 0x00C0;	// SYSCONFIG1.D3:D4
 static const uint16_t  	GPIO3			= 0x0300;	// SYSCONFIG1.D5:D6
 
 // GPIO1-3 Possible Values
-static const uint16_t 	GPIO_Z			= 0x00;	// High impedance (default)
-static const uint16_t 	GPIO_I			= 0x01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
-static const uint16_t 	GPIO_Low		= 0x10;	// Low output (GND level)
-static const uint16_t 	GPIO_High		= 0x11;	// High output (VIO level)
+static const uint8_t 	GPIO_Z			= 0x00;	// High impedance (default)
+static const uint8_t 	GPIO_I			= 0x01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
+static const uint8_t 	GPIO_Low		= 0x10;	// Low output (GND level)
+static const uint8_t 	GPIO_High		= 0x11;	// High output (VIO level)
 
 //------------------------------------------------------------------------------------------------------------
 union DEVICEID_t	// Register 0x00

@@ -95,15 +95,15 @@ void Si4703::si4703_init()
 
   // PowerOn Configuration
   getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Enable chip
-  shadow.reg.POWERCFG.bits.MONO     = 1;            // Stereo Mode
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
-  shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Dynamic Mute
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;       // Enable chip
+  shadow.reg.POWERCFG.bits.MONO     = 1;       // Disable MONO Mode
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;       // Disable Softmute
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;       // Disable Mute
 
   // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;            //  Enable Seek/Tune Complete Interrupt
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            //  Enable RDS
-  shadow.reg.SYSCONFIG1.bits.DE     = 1;            //  
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;       // Enable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;       // Enable RDS
+  shadow.reg.SYSCONFIG1.bits.DE     = 0;      // De-emphasis=75 μs. Used in USA (default)
 
   // System Configuration 2
   shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
