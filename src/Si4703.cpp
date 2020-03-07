@@ -95,19 +95,22 @@ void Si4703::si4703_init()
 
   // PowerOn Configuration
   getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;       // Enable chip
-  shadow.reg.POWERCFG.bits.MONO     = 1;       // Disable MONO Mode
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;       // Disable Softmute
-  shadow.reg.POWERCFG.bits.DMUTE    = 1;       // Disable Mute
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Enable chip
+  shadow.reg.POWERCFG.bits.MONO     = 1;            // Disable MONO Mode
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Mute
 
   // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;       // Enable Seek/Tune Complete Interrupt
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;       // Enable RDS
-  shadow.reg.SYSCONFIG1.bits.DE     = 0;      // De-emphasis=75 μs. Used in USA (default)
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;            // Enable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
+  shadow.reg.SYSCONFIG1.bits.DE     = 0;            // De-emphasis=75 μs. Used in USA (default)
 
   // System Configuration 2
-  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
+  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
+  shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default).
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 
+  
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
 }

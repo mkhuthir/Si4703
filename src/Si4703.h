@@ -18,13 +18,8 @@ Remarks:
 
 //------------------------------------------------------------------------------------------------------------
 
-// Enable/Disable
-static const uint8_t  	DISABLE			= 0x0;	// Disable
-static const uint8_t  	ENABLE			= 0x1;	// Enable
-
-
 // Band Select
-static const uint8_t  	BAND_USEU		= 0x00;	// 87.5–108 MHz (US / Europe, Default)
+static const uint8_t  	BAND_US_EU		= 0x00;	// 87.5–108 MHz (US / Europe, Default)
 static const uint8_t  	BAND_JPW		= 0x01;	// 76–108 MHz (Japan wide band)
 static const uint8_t  	BAND_JP			= 0x10;	// 76–90 MHz (Japan)
 
@@ -56,7 +51,7 @@ union DEVICEID_t	// Register 0x00
 	struct bits
 	{
 		uint16_t	MFGID	:12;	// Part Number
-		uint16_t 	PN		:4;		// Manufacturer ID
+		uint8_t 	PN		:4;		// Manufacturer ID
 	} 			bits;
 };
 //------------------------------------------------------------------------------------------------------------
