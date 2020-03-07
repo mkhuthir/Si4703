@@ -108,8 +108,8 @@ void Si4703::si4703_init()
   // System Configuration 2
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
   shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
-  shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default).
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 
+  shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default)
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
   
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
