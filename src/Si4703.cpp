@@ -122,7 +122,11 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
   
   // System Configuration 3
-
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
+  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
 
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time

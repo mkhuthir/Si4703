@@ -33,15 +33,37 @@ static const uint8_t  	SPACE_100KHz 	= 0x01;	// 100 kHz (Europe / Japan)
 static const uint8_t  	SPACE_50KHz  	= 0x10;	//  50 kHz (Other)
 
 // GPIO1-3 Pins
-static const uint16_t  	GPIO1			= 0x0003;	// SYSCONFIG1.D0:D1
-static const uint16_t  	GPIO2			= 0x00C0;	// SYSCONFIG1.D3:D4
-static const uint16_t  	GPIO3			= 0x0300;	// SYSCONFIG1.D5:D6
+static const uint8_t  	GPIO1			= 1;	// GPIO1
+static const uint8_t  	GPIO2			= 2;	// GPIO2
+static const uint8_t  	GPIO3			= 3;	// GPIO3
 
 // GPIO1-3 Possible Values
 static const uint8_t 	GPIO_Z			= 0x00;	// High impedance (default)
 static const uint8_t 	GPIO_I			= 0x01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
 static const uint8_t 	GPIO_Low		= 0x10;	// Low output (GND level)
 static const uint8_t 	GPIO_High		= 0x11;	// High output (VIO level)
+
+// Seek FM Impulse Detection Threshold
+static const uint8_t 	SKCNT_DIS		= 0x0000; // disabled (default)
+static const uint8_t 	SKCNT_MAX		= 0x0001; // max (most stops)
+static const uint8_t 	SKCNT_MIN		= 0x1111; // min (fewest stops)
+
+// Seek SNR Threshold
+static const uint8_t 	SKSNR_DIS		= 0x0000; // disabled (default)
+static const uint8_t 	SKSNR_MIN		= 0x0001; // min (most stops)
+static const uint8_t 	SKSNR_MAX		= 0x1111; // max (fewest stops)
+
+// Softmute Attenuation
+static const uint8_t 	SMA_16dB		=0x00;	// Softmute Attenuation 16dB (default)
+static const uint8_t 	SMA_14dB		=0x01;	// Softmute Attenuation 14dB
+static const uint8_t 	SMA_12dB		=0x10;	// Softmute Attenuation 12dB
+static const uint8_t 	SMA_10dB		=0x11;	// Softmute Attenuation 10dB
+
+// Softmute Attack/Recover Rate
+static const uint8_t 	SMRR_Fastest	=0x00;	// Softmute Attack/Recover Rate = Fastest
+static const uint8_t 	SMRR_Fast		=0x01;	// Softmute Attack/Recover Rate = Fast
+static const uint8_t 	SMRR_Slow		=0x10;	// Softmute Attack/Recover Rate = Slow
+static const uint8_t 	SMRR_Slowest	=0x11;	// Softmute Attack/Recover Rate = Slowest
 
 //------------------------------------------------------------------------------------------------------------
 union DEVICEID_t	// Register 0x00
