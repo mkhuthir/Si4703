@@ -314,6 +314,11 @@ class Si4703
 	int  	_sclkPin;					// I2C Clock Pin
 	int  	_stcIntPin;					// Seek/Tune Complete Pin
 
+	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
+
+	int		bottomOfBand 	= 875;		// Bottom of Band (MHz)
+	int		spacing			= 100;		// Spacing (KHz)
+
 	void 	si4703_init();				// init class
 
 	void	getShadow();				// Read registers to shadow 

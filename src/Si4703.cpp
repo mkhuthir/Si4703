@@ -137,7 +137,9 @@ void Si4703::setVolume(int volume)
 int Si4703::getChannel()
 {
   getShadow();                                // Read the current register set
-  return (shadow.reg.READCHAN.bits.READCHAN + 875);
+  
+  // Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
+  return (spacing * shadow.reg.READCHAN.bits.READCHAN + bottomOfBand);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -272,38 +274,9 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 	void	Si4703::writeGPIO(int GPIO, int val)
 {
-  readRegisters();                          // Read the current register set
-
-  if (val==GPIO_Z) {
-
-    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits (00)
-  }
-
-  else if (val==GPIO_I) {
-
-    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
-    GPIO &= 0b00010101;
-    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits to (01)
-  }
-
-  else if (val==GPIO_Low) {
-
-    si4703_registers[SYSCONFIG1] &= ~GPIO;  // Clear GPIO bits
-    GPIO &= 0b00101010;
-    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits to (10)
-  }
-
-  else if (val==GPIO_High) {
-
-    si4703_registers[SYSCONFIG1] |= GPIO;   // Set GPIO bits (11)
-  }
-
-  else {
-    
-    Serial.println("Error undefined GPIO value!");
-  }
-  
-  updateRegisters();
+  getShadow();                                // Read the current register set
+  shadow.reg.SYSCONFIG1.bits.GPIO1 = val;
+  putShadow();                                // Write to registers
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
