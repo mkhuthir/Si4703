@@ -342,8 +342,9 @@ class Si4703
 
 	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
 
-	int		bottomOfBand 	= 875;		// Bottom of Band (MHz)
-	int		spacing			= 100;		// Spacing (KHz)
+	int		bandStart 	= 875;			// Bottom of Band (MHz)
+	int		bandEnd		= 1080;			// Top of Band (MHz)
+	int		bandSpacing	= 100;			// Band Spacing (kHz)
 
 	void 	si4703_init();				// init class
 

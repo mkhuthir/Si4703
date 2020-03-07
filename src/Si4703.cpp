@@ -93,8 +93,10 @@ void Si4703::si4703_init()
   putShadow();                      // Write to registers
   delay(500);                       // Wait for oscillator to settle
 
-  // PowerOn Configuration
+  // Start Configuration
   getShadow();                                      // Read the current register set
+
+  // PowerOn Configuration
   shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Powerup Enable
   shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
   shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
@@ -159,7 +161,7 @@ int Si4703::getChannel()
   getShadow();                                // Read the current register set
   
   // Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
-  return (spacing * shadow.reg.READCHAN.bits.READCHAN + bottomOfBand);  
+  return (bandSpacing * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -295,7 +297,25 @@ void Si4703::readRDS(char* buffer, long timeout)
 	void	Si4703::writeGPIO(int GPIO, int val)
 {
   getShadow();                                // Read the current register set
-  shadow.reg.SYSCONFIG1.bits.GPIO1 = val;
+
+  switch (GPIO)
+  {
+    case GPIO1:
+      shadow.reg.SYSCONFIG1.bits.GPIO1 = val;
+      break;
+
+    case GPIO2:
+      shadow.reg.SYSCONFIG1.bits.GPIO2 = val;
+      break;
+
+    case GPIO3:
+      shadow.reg.SYSCONFIG1.bits.GPIO3 = val;
+      break;
+
+    default:
+      break;
+  }
+  
   putShadow();                                // Write to registers
 }
 
