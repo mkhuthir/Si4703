@@ -74,20 +74,20 @@ byte Si4703::updateRegisters() {
 void Si4703::si4703_init() 
 {
   // Set IO pins directions
-  pinMode(_rstPin , OUTPUT);      // Reset pin
+  pinMode(_rstPin , OUTPUT);        // Reset pin
   pinMode(_sdioPin  , OUTPUT);      // I2C data IO pin
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
 
   // Set communcation mode to 2-Wire
   digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
-  digitalWrite(_rstPin  , LOW);   // Put Si4703 into reset
+  digitalWrite(_rstPin  , LOW);     // Put Si4703 into reset
   digitalWrite(_stcIntPin , HIGH);  // STC goes low on interrupt
   delay(1);                         // Some delays while we allow pins to settle
-  digitalWrite(_rstPin  , HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
+  digitalWrite(_rstPin  , HIGH);    // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                         // Allow Si4703 to come out of reset
+  Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
   // Enable Oscillator
-  Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
   getShadow();                      // Read the current register set
   shadow.reg.TEST1.bits.XOSCEN = 1; // Enable the oscillator
   putShadow();                      // Write to registers
@@ -95,15 +95,25 @@ void Si4703::si4703_init()
 
   // PowerOn Configuration
   getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Enable chip
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Powerup Enable
+  shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
+  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
+  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
+  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
   shadow.reg.POWERCFG.bits.MONO     = 1;            // Disable MONO Mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
   shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Mute
 
   // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 1;            // Enable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
   shadow.reg.SYSCONFIG1.bits.DE     = 0;            // De-emphasis=75 μs. Used in USA (default)
+  shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
+  shadow.reg.SYSCONFIG1.bits.BLNDADJ= 0x00;         // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
 
   // System Configuration 2
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
@@ -111,6 +121,9 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default)
   shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
   
+  // System Configuration 3
+
+
   putShadow();                                      // Write to registers
   delay(110);                                       // wait for max power up time
 }
