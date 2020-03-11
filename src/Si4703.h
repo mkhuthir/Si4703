@@ -319,8 +319,11 @@ class Si4703
 	
     void	powerOn();					// call in setup
 
-	void	setChannel(int channel);  	// Set 3 digit channel number
 	int 	getChannel();				// Get 3 digit channel number
+	int		setChannel(int freq);  		// Set 3 digit channel number
+	int		incChannel(void);			// Increment Channel Frequency one band step
+	int		decChannel(void);			// Decrement Channel Frequency one band step
+	
 
 	int 	seekUp(); 					// Seeks up and returns the tuned channel or 0
 	int 	seekDown(); 				// Seeks down and returns the tuned channel or 0
@@ -344,7 +347,7 @@ class Si4703
 
 	int		bandStart 	= 875;			// Bottom of Band (MHz)
 	int		bandEnd		= 1080;			// Top of Band (MHz)
-	int		bandSpacing	= 100;			// Band Spacing (kHz)
+	int		bandSpacing	= 1;			// Band Spacing (MHz)
 
 	void 	si4703_init();				// init class
 

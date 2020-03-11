@@ -160,22 +160,24 @@ int Si4703::getChannel()
 {
   getShadow();                                // Read the current register set
   
-  // Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
+  // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
   return (bandSpacing * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set Channel
+// Sets Channel frequency
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::setChannel(int channel)
+int Si4703::setChannel(int freq)
 {
-  int newChannel = channel - 875;
 
-  readRegisters();
-  si4703_registers[CHANNEL] &= 0xFE00;      //Clear out the channel bits
-  si4703_registers[CHANNEL] |= newChannel;  //Mask in the new channel
-  si4703_registers[CHANNEL] |= (1<<TUNE);   //Set the TUNE bit to start
-  updateRegisters();
+  getShadow();                              // Read the current register set
+  if (freq > bandEnd)    freq = bandEnd;    // check upper limit
+  if (freq < bandStart)  freq = bandStart;  // check lower limit
+
+  // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
+  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / bandSpacing;
+  shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
+  putShadow();                              // Write to registers
 
   while(_stcIntPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
 
@@ -188,8 +190,24 @@ void Si4703::setChannel(int channel)
     readRegisters();
     if( (si4703_registers[STATUSRSSI] & (1<<STC)) == 0) break; //Tuning complete!
   }
+  return getChannel();
 }
-
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Increment frequency one band step
+//-----------------------------------------------------------------------------------------------------------------------------------
+int Si4703::incChannel(void)
+{
+  setChannel(getChannel()+bandSpacing); // Increment frequency one band step
+  return getChannel();
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Decrement frequency one band step
+//-----------------------------------------------------------------------------------------------------------------------------------
+int Si4703::decChannel(void)
+{
+  setChannel(getChannel()-bandSpacing); // Decrement frequency one band step
+  return getChannel();
+}
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Seeks out the next available station
 // Returns the freq if it made it
