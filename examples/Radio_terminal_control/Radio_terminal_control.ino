@@ -1,5 +1,5 @@
 /*  
- *   Based on FabFm Firmware v11 from Aaron Weiss, SparkFun 2012
+ *   Terminal Controlled Radio using Si7403 Lib
  *   Muthanna Alwahash 2020
  *   license: freeware
  */
