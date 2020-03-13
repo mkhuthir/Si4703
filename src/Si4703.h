@@ -313,9 +313,8 @@ class Si4703
 			int sclkPin,				// I2C Clock Pin
 			int stcIntPin);				// Seek/Tune Complete Pin
 
-	DEVICEID_t 	getDeviceID();
-
-	int		getChipID();
+	int		getDeviceID();				// 
+	int		getChipID();				//
 	
     void	powerOn();					// call in setup
 

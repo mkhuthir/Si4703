@@ -182,15 +182,16 @@ int Si4703::setChannel(int freq)
 
   while(_stcIntPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
 
-  readRegisters();
-  si4703_registers[CHANNEL] &= ~(1<<TUNE); //Clear the tune after a tune has completed
-  updateRegisters();
+  getShadow();                              // Read the current register set
+  shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
+  putShadow();                              // Write to registers
 
   //Wait for the si4703 to clear the STC as well
   while(1) {
-    readRegisters();
-    if( (si4703_registers[STATUSRSSI] & (1<<STC)) == 0) break; //Tuning complete!
+    getShadow();                                    // Read the current register set
+    if(shadow.reg.STATUSRSSI.bits.STC== 0) break; //Tuning complete!
   }
+
   return getChannel();
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -353,7 +354,7 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------------------------------------------------
-	DEVICEID_t 	Si4703::getDeviceID()
+	int 	Si4703::getDeviceID()
   {
   }
 
