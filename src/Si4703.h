@@ -325,6 +325,7 @@ class Si4703
 	int		decChannel(void);			// Decrement Channel Frequency one band step
 	
 
+	void 	setSeekMode();				// Set Seek Mode
 	int 	seekUp(); 					// Seeks up and returns the tuned channel or 0
 	int 	seekDown(); 				// Seeks down and returns the tuned channel or 0
 

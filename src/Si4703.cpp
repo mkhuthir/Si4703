@@ -101,6 +101,7 @@ void Si4703::si4703_init()
   shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
   shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
   shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
+  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
   shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
   shadow.reg.POWERCFG.bits.MONO     = 1;            // Disable MONO Mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
@@ -209,8 +210,22 @@ int Si4703::decChannel(void)
   return getChannel();
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Seeks out the next available station
-// Returns the freq if it made it
+// Set Seek Mode
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::setSeekMode()
+{
+  getShadow();                                      // Read the current register set
+  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
+  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
+  putShadow();                                      // Write to registers
+
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Seeks the next available station
+// Returns freq if success
 // Returns zero if failed
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::seek(byte seekDirection){
@@ -260,8 +275,6 @@ int Si4703::seekDown()
 	return seek(SEEK_DOWN);
 }
 
-
-
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read RDS
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -310,7 +323,7 @@ void Si4703::readRDS(char* buffer, long timeout)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Writes GPIO1-3
+// Writes GPIO1-GPIO3
 //-----------------------------------------------------------------------------------------------------------------------------------
 	void	Si4703::writeGPIO(int GPIO, int val)
 {

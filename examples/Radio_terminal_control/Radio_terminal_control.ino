@@ -10,7 +10,6 @@
 #include <Si4703.h> // library to control Silicon Labs' Si4703 FM Radio Receiver.
 #include <Wire.h>   // Used for I2C interface.
 #include <EEPROM.h> // To save configuration parameters such as channel and volume.
-
 //-------------------------------------------------------------------------------------------------------------
 // Defines
 //-------------------------------------------------------------------------------------------------------------
@@ -20,7 +19,6 @@
 #define eeprom_vol      3
 #define eeprom_fav_1    4
 #define eeprom_fav_2    5
-
 //-------------------------------------------------------------------------------------------------------------
 // Global Constants (defines): these quantities don't change
 //-------------------------------------------------------------------------------------------------------------
@@ -33,7 +31,6 @@ const int rotaryPinA  = 2;  // encoder pin A
 const int rotaryPinB  = 3;  // encoder pin B. Note that rotaryPinC is connected to GND
 const boolean UP      = true;
 const boolean DOWN    = false;
-
 //-------------------------------------------------------------------------------------------------------------
 // Variables
 //-------------------------------------------------------------------------------------------------------------
@@ -108,12 +105,10 @@ void setup()
 //-------------------------------------------------------------------------------------------------------------
 void loop()
 {
-    
+
   if (rotaryUpdated)      updateChannel();  // Interrupt tells us to update the station when updateStation=True
-  if (Serial.available()) processCommand();     // Radio control from serial interface
-  
-  // You can put any additional code here, but keep in mind, the encoder interrupt is running in the background
-  
+  if (Serial.available()) processCommand(); // Radio control from serial interface
+
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -204,7 +199,6 @@ void updateChannel()
 void printWelcome()
 {
   Serial.println("\nWelcome...");
-  
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -216,7 +210,6 @@ void printCurrentSettings()
    Serial.print(float(radio.getChannel())/10,2);
    Serial.print(" MHz sVOL:");
    Serial.println(volume);
-   
 }
 
 //-------------------------------------------------------------------------------------------------------------
