@@ -354,9 +354,6 @@ class Si4703
 	void	getShadow();				// Read registers to shadow 
 	byte 	putShadow();				// Write shadow to registers
 
-	void 	readRegisters();			// Read registers to shadow 
-	byte 	updateRegisters();			// Write registers from shadow
-
 	int 	seek(byte seekDirection);
 	
 	// Registers shadow
@@ -369,62 +366,6 @@ class Si4703
 
 	static const uint16_t  	SEEK_DOWN 		= 0; 	// Direction used for seeking. Default is down
 	static const uint16_t  	SEEK_UP 		= 1;
-
-	// Register names
-	static const uint16_t  DEVICEID 	= 0x00;
-	static const uint16_t  CHIPID 		= 0x01;
-	static const uint16_t  POWERCFG 	= 0x02;
-	static const uint16_t  CHANNEL 		= 0x03;
-	static const uint16_t  SYSCONFIG1 	= 0x04;
-	static const uint16_t  SYSCONFIG2 	= 0x05;
-	static const uint16_t  SYSCONFIG3 	= 0x06;
-	static const uint16_t  TEST1 		= 0x07;
-	static const uint16_t  TEST2 		= 0x08;
-	static const uint16_t  BOOTCONFIG	= 0x09;
-
-	static const uint16_t  STATUSRSSI 	= 0x0A;
-	static const uint16_t  READCHAN 	= 0x0B;
-	static const uint16_t  RDSA 		= 0x0C;
-	static const uint16_t  RDSB 		= 0x0D;
-	static const uint16_t  RDSC 		= 0x0E;
-	static const uint16_t  RDSD 		= 0x0F;
-
-	// Register 0x02 - POWERCFG
-	static const uint16_t  SMUTE 		= 15;
-	static const uint16_t  DMUTE 		= 14;
-	static const uint16_t  MONO			= 13;
-	static const uint16_t  RDSM			= 11;
-	static const uint16_t  SKMODE 		= 10;
-	static const uint16_t  SEEKUP 		= 9;
-	static const uint16_t  SEEK 		= 8;
-	static const uint16_t  DISABLE		= 6;
-	static const uint16_t  ENABLE 		= 0;
-
-	// Register 0x03 - CHANNEL
-	static const uint16_t  TUNE 		= 15;
-
-	// Register 0x04 - SYSCONFIG1
-	static const uint16_t  RDSIEN		= 15;
-	static const uint16_t  STCIEN		= 14;
-	static const uint16_t  RDS 			= 12;
-	static const uint16_t  DE 			= 11;
-
-	// Register 0x05 - SYSCONFIG2
-	static const uint16_t  SPACE1 		= 5;
-	static const uint16_t  SPACE0 		= 4;
-
-	// Register 0x07 - TEST1
-	static const uint16_t  XOSCEN		= 15;
-	static const uint16_t  AHIZEN		= 14;
-
-	// Register 0x0A - STATUSRSSI
-	static const uint16_t  RDSR 		= 15;
-	static const uint16_t  STC 			= 14;
-	static const uint16_t  SFBL 		= 13;
-	static const uint16_t  AFCRL 		= 12;
-	static const uint16_t  RDSS 		= 11;
-	static const uint16_t  STEREO 		= 8;
-
 
 };
 

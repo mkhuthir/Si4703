@@ -42,31 +42,6 @@ byte 	Si4703::putShadow()
   return Wire.endTransmission();            // End this transmission
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::readRegisters(){
-  
-  Wire.requestFrom(I2C_ADDR, 32);
-  for(int x = 0x0A ; ; x++) {                       
-      if(x == 0x10) x = 0;
-      si4703_registers[x] = (Wire.read()<<8) | Wire.read();
-      if(x == 0x09) break; 
-    }
-}
-//-----------------------------------------------------------------------------------------------------------------------------------
-byte Si4703::updateRegisters() {
-
-  Wire.beginTransmission(I2C_ADDR);
-  for(int regSpot = 0x02 ; regSpot < 0x08 ; regSpot++) {
-    byte high_byte = si4703_registers[regSpot] >> 8;
-    byte low_byte = si4703_registers[regSpot] & 0x00FF;
-
-    Wire.write(high_byte);  //Upper 8 bits
-    Wire.write(low_byte);   //Lower 8 bits
-  }
-
-  return Wire.endTransmission(); // End this transmission
-  
-}
-//-----------------------------------------------------------------------------------------------------------------------------------
 // To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
 // The breakout board has SEN pulled high, but also has SDIO pulled high. Therefore, after a normal power up
 // The Si4703 will be in an unknown state. RST must be controlled
@@ -186,9 +161,9 @@ int Si4703::setChannel(int freq)
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
   putShadow();                              // Write to registers
 
-  //Wait for the si4703 to clear the STC as well
+  //Wait for the si4703 to clear the STC
   while(1) {
-    getShadow();                                    // Read the current register set
+    getShadow();                                  // Read the current register set
     if(shadow.reg.STATUSRSSI.bits.STC== 0) break; //Tuning complete!
   }
 
@@ -216,7 +191,6 @@ int Si4703::decChannel(void)
 void Si4703::setSeekMode()
 {
   getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
   shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
   shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
   shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
@@ -230,34 +204,25 @@ void Si4703::setSeekMode()
 // Returns zero if failed
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::seek(byte seekDirection){
-  readRegisters();
-  // Set seek mode wrap bit
-  si4703_registers[POWERCFG] |= (1<<SKMODE); //Allow wrap
 
-  // si4703_registers[POWERCFG] &= ~(1<<SKMODE); //Disallow wrap - if you disallow wrap, you may want to tune to 87.5 first
-  if(seekDirection == SEEK_DOWN) si4703_registers[POWERCFG] &= ~(1<<SEEKUP); //Seek down is the default upon reset
-  else si4703_registers[POWERCFG] |= 1<<SEEKUP; //Set the bit to seek up
+  getShadow();                                    // Read the current register set
+  shadow.reg.POWERCFG.bits.SEEKUP=seekDirection; // Seek direction = UP/Down
+  shadow.reg.POWERCFG.bits.SEEK     =1;           // Start seek
+  putShadow();                                    // Write to registers
 
-  si4703_registers[POWERCFG] |= (1<<SEEK); //Start seek
-  updateRegisters(); // Seeking will now start
-
-  while(_stcIntPin == 1) {} // Wait for interrupt indicating STC (Seek/Tune complete)
-
-  readRegisters();
-  int valueSFBL = si4703_registers[STATUSRSSI] & (1<<SFBL); //Store the value of SFBL
-  si4703_registers[POWERCFG] &= ~(1<<SEEK); // Clear the seek bit after seek has completed
-  updateRegisters();
-
-  //Wait for the si4703 to clear the STC as well
-  while(1) {
-    readRegisters();
-    if( (si4703_registers[STATUSRSSI] & (1<<STC)) == 0) break; // Tuning complete!
+  while(_stcIntPin == 1) {}                       // Wait for interrupt indicating STC (Seek/Tune complete)
+  
+  getShadow();                                    // Read the current register set
+  shadow.reg.CHANNEL.bits.TUNE  =0;               // Clear Tune bit
+  putShadow();                                    // Write to registers
+  
+  while(1) {                                      // Wait for the si4703 to clear the STC
+    getShadow();                                  // Read the current register set
+    if(shadow.reg.STATUSRSSI.bits.STC== 0) break; // Tuning complete!
   }
 
-  if(valueSFBL) { // The bit was set indicating we hit a band limit or failed to find a station
-    return(0);
-  }
-return getChannel();
+  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0); // SFBL is indicating we hit a band limit or failed to find a station
+  return getChannel();                            // return new frequency
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -281,46 +246,7 @@ int Si4703::seekDown()
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::readRDS(char* buffer, long timeout)
 { 
-	long    endTime         = millis() + timeout;
-  boolean completed[]     = {false, false, false, false};
-  int     completedCount  = 0;
 
-  while(completedCount < 4 && millis() < endTime) {
-    
-    readRegisters();
-    
-    if(si4703_registers[STATUSRSSI] & (1<<RDSR)){
-      // ls 2 bits of B determine the 4 letter pairs
-      // once we have a full set return
-      // if you get nothing after 20 readings return with empty string
-      uint16_t b = si4703_registers[RDSB];
-      int index = b & 0x03;
-      if (! completed[index] && b < 500)
-      {
-        completed[index] = true;
-        completedCount   ++;
-        char Dh = (si4703_registers[RDSD] & 0xFF00) >> 8;
-        char Dl = (si4703_registers[RDSD] & 0x00FF);
-        buffer[index * 2]     = Dh;
-        buffer[index * 2 +1]  = Dl;
-       
-      }
-
-      delay(40); //Wait for the RDS bit to clear
-    }
-    
-    else {
-      delay(30); //From AN230, using the polling method 40ms should be sufficient amount of time between checks
-    }
-
-  }
-
-	if (millis() >= endTime) {
-		buffer[0] ='\0';
-		return;
-	}
-
-  buffer[8] = '\0';
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
