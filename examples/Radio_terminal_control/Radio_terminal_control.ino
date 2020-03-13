@@ -21,11 +21,6 @@
 #define eeprom_fav_1    4
 #define eeprom_fav_2    5
 
-// FM Frequency Range
-#define freqMin         875   // FM Frequency Range from 87.5
-#define freqMax         1079  // FM Frequency Range to 107.9 MHz
-#define freqStep        1     // FM Frequency Step
-
 //-------------------------------------------------------------------------------------------------------------
 // Global Constants (defines): these quantities don't change
 //-------------------------------------------------------------------------------------------------------------
