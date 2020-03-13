@@ -11,7 +11,6 @@
 #include <Wire.h>   // Used for I2C interface.
 #include <EEPROM.h> // To save configuration parameters such as channel and volume.
 
-
 //-------------------------------------------------------------------------------------------------------------
 // Defines
 //-------------------------------------------------------------------------------------------------------------
@@ -232,8 +231,8 @@ void printHelp()
 {
   Serial.println("0..9    Favourite stations");
   Serial.println("+ -     Volume (max 15)");
-  Serial.println("n l     Channel Seek next / last");
   Serial.println("u d     Frequency up / down");
+  Serial.println("n l     Channel Seek next / last");
   Serial.println("r       Listen for RDS Data (15 sec timeout)");
   Serial.println("i       Prints current settings");
   Serial.println("f       Prints Favourite stations list");
