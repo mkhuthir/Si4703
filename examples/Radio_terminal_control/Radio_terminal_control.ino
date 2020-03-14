@@ -79,7 +79,7 @@ void setup()
   digitalWrite(LED1, LOW);    // turn LED1 OFF
 
   read_EEPROM();              // load saved settings
-  radio.powerOn();            // turns the module on
+  radio.powerUp();            // turns the module on
   radio.setChannel(channel);  // loads saved channel
   radio.setVolume(volume);    // volume setting
 

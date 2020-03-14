@@ -23,7 +23,7 @@ void setup()
   Serial.println("Send me a command letter.");
   
 
-  radio.powerOn();
+  radio.powerUp();
   radio.setVolume(0);
 }
 

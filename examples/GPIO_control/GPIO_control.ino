@@ -10,7 +10,7 @@ Si4703 radio(resetPin, SDIO, SCLK, STC);
 
 void setup()
 {
-  radio.powerOn();
+  radio.powerUp();
   radio.setChannel(944);
   radio.setVolume(15);
 }

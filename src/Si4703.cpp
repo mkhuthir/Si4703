@@ -54,11 +54,11 @@ void Si4703::si4703_init()
   pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
 
   // Set communcation mode to 2-Wire
-  digitalWrite(_sdioPin   , LOW);   // A low SDIO indicates a 2-wire interface
-  digitalWrite(_rstPin  , LOW);     // Put Si4703 into reset
-  digitalWrite(_stcIntPin , HIGH);  // STC goes low on interrupt
+  digitalWrite(_sdioPin  ,LOW);     // A low SDIO indicates a 2-wire interface
+  digitalWrite(_rstPin   ,LOW);     // Put Si4703 into reset
+  digitalWrite(_stcIntPin,HIGH);    // STC goes low on interrupt
   delay(1);                         // Some delays while we allow pins to settle
-  digitalWrite(_rstPin  , HIGH);    // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
+  digitalWrite(_rstPin   ,HIGH);    // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                         // Allow Si4703 to come out of reset
   Wire.begin();                     // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
@@ -110,11 +110,18 @@ void Si4703::si4703_init()
   delay(110);                                       // wait for max power up time
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Power On 
+// Power Up Device
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::powerOn()
+void Si4703::powerUp()
 {
     si4703_init();
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Power Down
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::powerDown()
+{
+    
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set Volume
