@@ -1,12 +1,12 @@
 
 ![img](img/Si4702-03-BD.jpeg)
 
-Silicon Labs Si4703 Arduino Library
+### Silicon Labs Si4703 Arduino Library
 ========================================
 
 Arduino library to control the Si4703 FM tuner chip. Allows user to tune to different FM stations, read RDS and RBDS information and many other functions.
 
-Repository Contents
+### Repository Contents
 -------------------
 
 * **/examples** - Example sketches for the library (.ino). Run these from the Arduino IDE. 
@@ -18,7 +18,7 @@ Repository Contents
 
 For information on installing Arduino libraries, see: http://www.arduino.cc/en/Guide/Libraries
 
-License Information
+### License Information
 -------------------
 
 This product is _**open source**_! 
@@ -26,7 +26,7 @@ This product is _**open source**_!
 Distributed as-is; no warranty is given.
 
 
-Hardware used:
+### Hardware used:
 -----------------------   
  *   1 x SparkFun Breadboard Power Supply Stick - 5V/3.3V (https://www.sparkfun.com/products/13032)
  *   2 x SparkFun Mono Audio Amp Breakout - TPA2005D1     (https://www.sparkfun.com/products/11044)
@@ -37,46 +37,46 @@ Hardware used:
 
 Connections:
 -----------------------
-Si4703  → 3.3V A.Pro Mini
+### Si4703  → 3.3V A.Pro Mini
 -----------------------
-GND     → GND
-3.3V    → VCC
-SDIO    → A.Pro Mini A4
-SCLK    → A.Pro Mini A5
-SEN     → NC * The breakout board has SEN pulled high
-RST     → A.Pro Mini D4
-GPIO1   → LED2
-GPIO2   → A.Pro Mini D6
+- GND     → GND
+- 3.3V    → VCC
+- SDIO    → A.Pro Mini A4
+- SCLK    → A.Pro Mini A5
+- SEN     → NC * The breakout board has SEN pulled high
+- RST     → A.Pro Mini D4
+- GPIO1   → LED2
+- GPIO2   → A.Pro Mini D6
 
 -----------------------
-3.3V A.Pro Mini
+### 3.3V A.Pro Mini
 -----------------------
-GND     → GND
-VCC     → 3.3V
-A4      → Si4703 SDIO
-A5      → Si4703 SCLK
-D6      → Si4703 GPIO2 
-D2      → Rotary Encoder A
-D3      → Rotary Encoder B
-D4      → Si4703 RST
-D5      → LED1
+- GND     → GND
+- VCC     → 3.3V
+- A4      → Si4703 SDIO
+- A5      → Si4703 SCLK
+- D6      → Si4703 GPIO2 
+- D2      → Rotary Encoder A
+- D3      → Rotary Encoder B
+- D4      → Si4703 RST
+- D5      → LED1
      
 -----------------------
-Rotary Encoder
+### Rotary Encoder
 -----------------------
 A  A.Pro Mini D2
 B  A.Pro Mini D3
 C  GND
 
 -----------------------
-LEDs
+### LEDs
 -----------------------
 - LED1 A      → A.Pro Mini D5 
 - LED1 C      → GND
 - LED2 A      → Si4703 GPIO1
 - LED2 C      → GND
 
-Description:
+### Description:
 -----------------------
 This is example code can work with SparkFun FamFM radio kit and breadboard builds as per above connections. 
 The used controller is Arduino Pro (3.3V, 8MHz) and has an FTDI header to load Arduino sketches.
