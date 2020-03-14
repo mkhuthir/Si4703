@@ -71,14 +71,14 @@ C  GND
 -----------------------
 LEDs
 -----------------------
-LED1 A      → A.Pro Mini D5 
-LED1 C      → GND
-LED2 A      → Si4703 GPIO1
-LED2 C      → GND
+- LED1 A      → A.Pro Mini D5 
+- LED1 C      → GND
+- LED2 A      → Si4703 GPIO1
+- LED2 C      → GND
 
 Description:
 -----------------------
-This is example code can work for the FamFM radio kit and breadboard builds as per above connections. 
+This is example code can work with SparkFun FamFM radio kit and breadboard builds as per above connections. 
 The used controller is Arduino Pro (3.3V, 8MHz) and has an FTDI header to load Arduino sketches.
 The hardware includes the Si4703 FM radio module to find the stations along with audio amps. and speakers for the audio.
 The circuit has a rotary encoder to tune the stations. 
