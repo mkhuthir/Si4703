@@ -12,18 +12,14 @@ int   volume = 5;
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("\n\n Use below keys to control");
-  Serial.println("-----------------------");
-  Serial.println("+ -  Volume +/- (max 15)");
-  Serial.println("u d  Frequency Up/Down  ");
-  Serial.println("-----------------------");
-  Serial.println("Select a key.");
+  Serial.begin(115200);     // Start Terminal Port
   
   radio.powerUp();          // Power Up Device
   radio.setVolume(volume);  // Set initial volume 5
   radio.setChannel(944);    // Set initial frequency 94.4 Mhz
-  displayInfo();
+  
+  displayHelp();            // Show Help Message
+  displayInfo();            // Show current settings info
 
 }
 
@@ -60,7 +56,8 @@ void loop()
     }
     else
     {
-      Serial.print("Unknown Key !!");
+      Serial.println("Unknown Key !!");
+      displayHelp();
     }
     
   }
@@ -70,4 +67,14 @@ void displayInfo()
 {
    Serial.print("Channel:"); Serial.print(radio.getChannel()); 
    Serial.print(" Volume:"); Serial.println(volume); 
+}
+
+void displayHelp()
+{
+  Serial.println("\n\n Use below keys to control");
+  Serial.println("-----------------------");
+  Serial.println("+ -  Volume +/- (max 15)");
+  Serial.println("u d  Frequency Up/Down  ");
+  Serial.println("-----------------------");
+  Serial.println("Select a key.\n");
 }
