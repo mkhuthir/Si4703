@@ -1,7 +1,7 @@
 /*  
  *   Terminal Controlled Radio using Si7403 Lib
  *   Muthanna Alwahash 2020
- *   license: freeware
+ *   
  */
 
 //-------------------------------------------------------------------------------------------------------------

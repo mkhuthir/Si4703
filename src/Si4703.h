@@ -1,15 +1,7 @@
 /* 
-
-Library Modified by Muthanna Alwahash 2020
-
-This library based on the code produced by Nathan Seidle and Simon Monk.
-
-Remarks:
-
-	* The Si4703 ACKs the first byte, and NACKs the 2nd byte of a read.
-	* Don't updateRegisters without first readRegisters.
-
-*/
+ *  Muthanna Alwahash 2020
+ *
+ */
 
 #ifndef Si4703_h
 #define Si4703_h
