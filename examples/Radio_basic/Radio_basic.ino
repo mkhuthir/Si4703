@@ -8,18 +8,14 @@ int STC  = 3;   // Seek/Tune Complete Pin
 
 Si4703 radio(RST, SDIO, SCLK, STC);
 
-int   volume = 5;
-
 void setup()
 {
-  Serial.begin(115200);     // Start Terminal Port
-  
-  radio.powerUp();          // Power Up Device
-  radio.setVolume(volume);  // Set initial volume 5
-  radio.setChannel(944);    // Set initial frequency 94.4 Mhz
-  
-  displayHelp();            // Show Help Message
-  displayInfo();            // Show current settings info
+  Serial.begin(115200);   // Start Terminal Port
+  radio.powerUp();        // Power Up Device
+  radio.setVolume(5);     // Set initial volume 5
+  radio.setChannel(944);  // Set initial frequency 94.4 Mhz
+  displayHelp();          // Show Help Message
+  displayInfo();          // Show current settings info
 
 }
 
@@ -42,16 +38,12 @@ void loop()
     } 
     else if (ch == '+') 
     {
-      volume ++;
-      if (volume == 16) volume = 15;
-      radio.setVolume(volume);
+      radio.incVolume();
       displayInfo();
     } 
     else if (ch == '-') 
     {
-      volume --;
-      if (volume < 0) volume = 0;
-      radio.setVolume(volume);
+      radio.decVolume();
       displayInfo();
     }
     else
@@ -66,7 +58,7 @@ void loop()
 void displayInfo()
 {
    Serial.print("Channel:"); Serial.print(radio.getChannel()); 
-   Serial.print(" Volume:"); Serial.println(volume); 
+   Serial.print(" Volume:"); Serial.println(radio.getVolume()); 
 }
 
 void displayHelp()

@@ -74,17 +74,19 @@ class Si4703
     void	powerUp();					// Power Up Device
 	void	powerDown();				// Power Down Device to save power
 
-	int 	getChannel();				// Get 3 digit channel number
+	int 	getChannel(void);			// Get 3 digit channel number
 	int		setChannel(int freq);  		// Set 3 digit channel number
 	int		incChannel(void);			// Increment Channel Frequency one band step
 	int		decChannel(void);			// Decrement Channel Frequency one band step
 	
+	void 	setSeekMode(void);			// Set Seek Mode
+	int 	seekUp(void); 				// Seeks up and returns the tuned channel or 0
+	int 	seekDown(void); 			// Seeks down and returns the tuned channel or 0
 
-	void 	setSeekMode();				// Set Seek Mode
-	int 	seekUp(); 					// Seeks up and returns the tuned channel or 0
-	int 	seekDown(); 				// Seeks down and returns the tuned channel or 0
-
-	void	setVolume(int volume); 		// Sets volume value 0 to 15
+	int		getVolume(void);			// Get current Volume value
+	int		setVolume(int volume); 		// Sets volume value 0 to 15
+	int		incVolume(void);			// Increment Volume
+	int		decVolume(void);			// Decrement Volume
 
 	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
 					long timeout);		// timeout in milliseconds

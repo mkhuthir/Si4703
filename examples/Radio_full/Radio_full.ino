@@ -17,8 +17,6 @@
 #define eeprom_chn_msb  1
 #define eeprom_chn_lsb  2
 #define eeprom_vol      3
-#define eeprom_fav_1    4
-#define eeprom_fav_2    5
 //-------------------------------------------------------------------------------------------------------------
 // Global Constants (defines): these quantities don't change
 //-------------------------------------------------------------------------------------------------------------
@@ -36,8 +34,6 @@ const boolean DOWN    = false;
 //-------------------------------------------------------------------------------------------------------------
 
 // Settings
-int       channel =944; // channel value
-int       volume  =10;  // volume value 1-15
 int       mute    =0;   // mute value volume=0
 
 // Favourate Channels 0..9
@@ -78,10 +74,8 @@ void setup()
   pinMode(LED1, OUTPUT);      // LED1 pin is output
   digitalWrite(LED1, LOW);    // turn LED1 OFF
 
-  read_EEPROM();              // load saved settings
   radio.powerUp();            // turns the module on
-  radio.setChannel(channel);  // loads saved channel
-  radio.setVolume(volume);    // volume setting
+  read_EEPROM();              // load saved settings
 
   // Enable rotary encoder
   pinMode(rotaryPinA, INPUT_PULLUP);         // pin is input and pulled high
@@ -124,7 +118,7 @@ void write_EEPROM()
   EEPROM.write(eeprom_chn_lsb, lsb);
 
   // Save volume
-  EEPROM.write(eeprom_vol, volume);
+  EEPROM.write(eeprom_vol, radio.getVolume());
   
 }
 
@@ -136,10 +130,10 @@ void read_EEPROM()
   // Read channel value
   int MSB = EEPROM.read(eeprom_chn_msb); // load the msb into one 8-bit register
   int LSB = EEPROM.read(eeprom_chn_lsb); // load the lsb into one 8-bit register
-  channel = (MSB << 8)|LSB;              // concatenate the lsb and msb
+  radio.setChannel((MSB << 8)|LSB);              // concatenate the lsb and msb
   
   // Read Volume
-  volume = EEPROM.read(eeprom_vol);
+  radio.setVolume(EEPROM.read(eeprom_vol));
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -209,7 +203,7 @@ void printCurrentSettings()
    Serial.print("Ch:");
    Serial.print(float(radio.getChannel())/10,2);
    Serial.print(" MHz sVOL:");
-   Serial.println(volume);
+   Serial.println(radio.getVolume());
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -284,13 +278,13 @@ void processCommand()
 {
   
   char ch = Serial.read();
-  Serial.println(ch);
+  Serial.print(" ");
   
   if (ch == 'n') 
   {
     digitalWrite(LED1, LOW);           // turn LED1 OFF
     radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    channel = radio.seekUp();
+    radio.seekUp();
     write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
     digitalWrite(LED1, HIGH);          // When done turn LED1 On
@@ -300,7 +294,7 @@ void processCommand()
   {
     digitalWrite(LED1, LOW);           // turn LED1 OFF
     radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    channel = radio.seekDown();
+    radio.seekDown();
     write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
     digitalWrite(LED1, HIGH);          // When done turn LED1 On
@@ -310,7 +304,7 @@ void processCommand()
   {
     digitalWrite(LED1, LOW);           // turn LED1 OFF
     radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    channel = radio.incChannel();
+    radio.incChannel();
     write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
     digitalWrite(LED1, HIGH);          // When done turn LED1 On
@@ -320,7 +314,7 @@ void processCommand()
   {
     digitalWrite(LED1, LOW);           // turn LED1 OFF
     radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    channel = radio.decChannel();
+    radio.decChannel();
     write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
     digitalWrite(LED1, HIGH);          // When done turn LED1 On
@@ -328,85 +322,71 @@ void processCommand()
   } 
   else if (ch == '+') 
   {
-    volume ++;
-    if (volume == 16) volume = 15;
-    radio.setVolume(volume);
+    radio.incVolume();
     printCurrentSettings();
   } 
   else if (ch == '-') 
   {
-    volume --;
-    if (volume < 0) volume = 0;
-    radio.setVolume(volume);
+    radio.decVolume();
     printCurrentSettings();
   } 
   else if (ch == '0')
   {
-    channel = fav_0; 
-    radio.setChannel(channel);
+    radio.setChannel(fav_0);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '1')
   {
-    channel = fav_1;
-    radio.setChannel(channel);
+    radio.setChannel(fav_1);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '2')
   {
-    channel = fav_2;
-    radio.setChannel(channel);
+    radio.setChannel(fav_2);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '3')
   {
-    channel = fav_3;
-    radio.setChannel(channel);
+    radio.setChannel(fav_3);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '4')
   {
-    channel = fav_4;
-    radio.setChannel(channel);
+    radio.setChannel(fav_4);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '5')
   {
-    channel = fav_5;
-    radio.setChannel(channel);
+    radio.setChannel(fav_5);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '6')
   {
-    channel = fav_6;
-    radio.setChannel(channel);
+    radio.setChannel(fav_6);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '7')
   {
-    channel = fav_7;
-    radio.setChannel(channel);
+    radio.setChannel(fav_7);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '8')
   {
-    channel = fav_8;
-    radio.setChannel(channel);
+    radio.setChannel(fav_8);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
   else if (ch == '9')
   {
-    channel = fav_9;
-    radio.setChannel(channel);
+    radio.setChannel(fav_9);
     write_EEPROM();             // Save channel to EEPROM
     printCurrentSettings();
   }
@@ -427,11 +407,9 @@ void processCommand()
   }
   else if (ch == 'm')
   {
-    int temp  = volume; //Swap values of volume and mute for mute/un-mute
-    volume    = mute;
-    mute      = temp;
-    
-    radio.setVolume(volume);
+    int temp  = radio.getVolume();  // Save the current volume in temp
+    radio.setVolume(mute);          // Set Volume
+    mute      = temp;               // Save last volume in mute
     printCurrentSettings();
   }
   else if (ch == 'h')
