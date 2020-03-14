@@ -88,6 +88,6 @@ Also it saves the station settings on EEPROM and loads it in subsequent power up
 
 Operation:
 -----------------------
--The board must be powered with a switch mode 9V DC wall wart.
--Each click will increase/decrease station by 0.1MHz
--The LED blinks for every step
+- The board must be powered with a switch mode 9V DC wall wart.
+- Each click will increase/decrease station by 0.1MHz or 0.05MHz based in selected FM band range (US/EU, JP Wide, or JP)
+- LEDs blink for every step
