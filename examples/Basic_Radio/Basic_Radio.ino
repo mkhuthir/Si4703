@@ -71,7 +71,7 @@ void displayInfo()
 
 void displayHelp()
 {
-  Serial.println("\n\n Use below keys to control");
+  Serial.println("\nUse below keys to control");
   Serial.println("-----------------------");
   Serial.println("+ -  Volume +/- (max 15)");
   Serial.println("u d  Frequency Up/Down  ");
