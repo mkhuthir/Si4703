@@ -1,30 +1,30 @@
 #include <Si4703.h>
 #include <Wire.h>
 
-int resetPin  = 4;
-int SDIO      = A4;
-int SCLK      = A5;
-int STC       = 3;
+int RST  = 4;   // Reset Pin
+int SDIO = A4;  // Serial Data I/O Pin
+int SCLK = A5;  // Serial Clock Pin
+int STC  = 3;   // Seek/Tune Complete Pin
 
-Si4703 radio(resetPin, SDIO, SCLK, STC);
-int channel;
-int volume;
-char rdsBuffer[10];
+Si4703 radio(RST, SDIO, SCLK, STC);
+
+int   volume = 5;
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("\n\nSi4703_Breakout Test Sketch");
-  Serial.println("===========================");  
-  Serial.println("a b     Favourite stations");
-  Serial.println("+ -     Volume (max 15)");
-  Serial.println("u d     Seek up / down");
-  Serial.println("r       Listen for RDS Data (15 sec timeout)");
-  Serial.println("Send me a command letter.");
+  Serial.println("\n\n Use below keys to control");
+  Serial.println("-----------------------");
+  Serial.println("+ -  Volume +/- (max 15)");
+  Serial.println("u d  Frequency Up/Down  ");
+  Serial.println("-----------------------");
+  Serial.println("Select a key.");
   
+  radio.powerUp();          // Power Up Device
+  radio.setVolume(volume);  // Set initial volume 5
+  radio.setChannel(944);    // Set initial frequency 94.4 Mhz
+  displayInfo();
 
-  radio.powerUp();
-  radio.setVolume(0);
 }
 
 void loop()
@@ -32,14 +32,16 @@ void loop()
   if (Serial.available())
   {
     char ch = Serial.read();
+    Serial.print(" ");
+
     if (ch == 'u') 
     {
-      channel = radio.seekUp();
+      radio.incChannel();
       displayInfo();
     } 
     else if (ch == 'd') 
     {
-      channel = radio.seekDown();
+      radio.decChannel();
       displayInfo();
     } 
     else if (ch == '+') 
@@ -55,31 +57,17 @@ void loop()
       if (volume < 0) volume = 0;
       radio.setVolume(volume);
       displayInfo();
-    } 
-    else if (ch == 'a')
-    {
-      channel = 930;
-      radio.setChannel(channel);
-      displayInfo();
     }
-    else if (ch == 'b')
+    else
     {
-      channel = 974;
-      radio.setChannel(channel);
-      displayInfo();
+      Serial.print("Unknown Key !!");
     }
-    else if (ch == 'r')
-    {
-      Serial.println("RDS listening");
-      radio.readRDS(rdsBuffer, 15000);
-      Serial.print("RDS heard:");
-      Serial.println(rdsBuffer);      
-    }
+    
   }
 }
 
 void displayInfo()
 {
-   Serial.print("Channel:"); Serial.print(channel); 
+   Serial.print("Channel:"); Serial.print(radio.getChannel()); 
    Serial.print(" Volume:"); Serial.println(volume); 
 }

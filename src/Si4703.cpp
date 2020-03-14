@@ -16,7 +16,7 @@ Si4703::Si4703( int rstPIN,
                 int stcIntPin
               )
 {
-  _rstPin     = rstPIN;   // Reset Pin
+  _rstPin     = rstPIN;     // Reset Pin
   _sdioPin    = sdioPin;    // I2C Data IO Pin
   _sclkPin    = sclkPin;    // I2C Clock Pin
   _stcIntPin  = stcIntPin;  // Seek/Tune Complete Pin
@@ -212,8 +212,8 @@ void Si4703::setSeekMode()
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Seeks the next available station
-// Returns freq if success
-// Returns zero if failed
+// Returns freq if seek succeeded
+// Returns zero if seek failed
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::seek(byte seekDirection){
 
