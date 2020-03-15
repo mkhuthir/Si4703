@@ -57,8 +57,10 @@ void loop()
 
 void displayInfo()
 {
-   Serial.print("Channel:"); Serial.print(radio.getChannel()); 
-   Serial.print(" Volume:"); Serial.println(radio.getVolume()); 
+   Serial.print("Ch:");
+   Serial.print(float(radio.getChannel())/10,2);
+   Serial.print(" MHz VOL:");
+   Serial.println(radio.getVolume());
 }
 
 void displayHelp()
