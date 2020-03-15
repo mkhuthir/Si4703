@@ -57,6 +57,9 @@ static const uint8_t 	SMRR_Fast		=0x01;	// Softmute Attack/Recover Rate = Fast
 static const uint8_t 	SMRR_Slow		=0x10;	// Softmute Attack/Recover Rate = Slow
 static const uint8_t 	SMRR_Slowest	=0x11;	// Softmute Attack/Recover Rate = Slowest
 
+// Stereo/Mono Blend Level Adjustment
+
+
 //------------------------------------------------------------------------------------------------------------
 
 class Si4703
@@ -73,6 +76,9 @@ class Si4703
 	
     void	powerUp();					// Power Up Device
 	void	powerDown();				// Power Down Device to save power
+
+	void	bus3Wire(void);				// 3-Wire Control Interface (SCLK, SEN, SDIO)
+	void	bus2Wire(void);				// 2-Wire Control Interface (SCLCK, SDIO)
 
 	int 	getChannel(void);			// Get 3 digit channel number
 	int		setChannel(int freq);  		// Set 3 digit channel number
