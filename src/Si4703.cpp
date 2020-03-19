@@ -111,7 +111,7 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
   shadow.reg.SYSCONFIG1.bits.DE     = 0;            // De-emphasis=75 μs. Used in USA (default)
   shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
-  shadow.reg.SYSCONFIG1.bits.BLNDADJ= 0b00;         // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
+  shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
   shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)

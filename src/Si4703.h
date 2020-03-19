@@ -58,7 +58,10 @@ static const uint8_t 	SMRR_Slow		=0b10;	// Softmute Attack/Recover Rate = Slow
 static const uint8_t 	SMRR_Slowest	=0b11;	// Softmute Attack/Recover Rate = Slowest
 
 // Stereo/Mono Blend Level Adjustment
-
+static const uint8_t 	BLA_31_49		=0b00;	// 31–49 RSSI dBμV (default)
+static const uint8_t 	BLA_37_55		=0b00;	// 37–55 RSSI dBμV (+6 dB)
+static const uint8_t 	BLA_19_37		=0b00;	// 19–37 RSSI dBμV (–12 dB)
+static const uint8_t 	BLA_25_43		=0b00;	// 25–43 RSSI dBμV (–6 dB)
 
 //------------------------------------------------------------------------------------------------------------
 
