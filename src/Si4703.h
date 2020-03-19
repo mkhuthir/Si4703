@@ -83,6 +83,10 @@ class Si4703
 	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
 	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
 
+	void	setRegion(int band,		// Band Range
+					  int space,	// Band Spacing
+					  int de);		// De-Emphasis
+
 	int 	getChannel(void);		// Get 3 digit channel number
 	int		setChannel(int freq);	// Set 3 digit channel number
 	int		incChannel(void);		// Increment Channel Frequency one band step
