@@ -16,9 +16,9 @@ Si4703::Si4703( int rstPin,
                 int intPin
               )
 {
-  _rstPin  = rstPin;     // Reset Pin
-  _sdioPin = sdioPin;    // I2C Data IO Pin
-  _sclkPin = sclkPin;    // I2C Clock Pin
+  _rstPin  = rstPin;  // Reset Pin
+  _sdioPin = sdioPin; // I2C Data IO Pin
+  _sclkPin = sclkPin; // I2C Clock Pin
   _intPin  = intPin;  // Seek/Tune Complete Pin
 
 }
@@ -62,18 +62,18 @@ void	Si4703::bus3Wire(void)
 void	Si4703::bus2Wire(void)		
 {
   // Set IO pins directions
-  pinMode(_rstPin , OUTPUT);      // Reset pin
-  pinMode(_sdioPin, OUTPUT);      // I2C data IO pin
-  pinMode(_intPin , OUTPUT);	    // STC (search/tune complete) interrupt pin
+  pinMode(_rstPin , OUTPUT);    // Reset pin
+  pinMode(_sdioPin, OUTPUT);    // I2C data IO pin
+  pinMode(_intPin , OUTPUT);    // STC (search/tune complete) interrupt pin
 
   // Set communcation mode to 2-Wire
-  digitalWrite(_sdioPin,LOW);     // A low SDIO indicates a 2-wire interface
-  digitalWrite(_rstPin ,LOW);     // Put Si4703 into reset
-  digitalWrite(_intPin ,HIGH);    // STC goes low on interrupt
-  delay(1);                       // Some delays while we allow pins to settle
-  digitalWrite(_rstPin   ,HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
-  delay(1);                       // Allow Si4703 to come out of reset
-  Wire.begin();                   // Now that the unit is reset and I2C inteface mode, we need to begin I2C
+  digitalWrite(_sdioPin,LOW);   // A low SDIO indicates a 2-wire interface
+  digitalWrite(_rstPin ,LOW);   // Put Si4703 into reset
+  digitalWrite(_intPin ,HIGH);  // STC goes low on interrupt
+  delay(1);                     // Some delays while we allow pins to settle
+  digitalWrite(_rstPin ,HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
+  delay(1);                     // Allow Si4703 to come out of reset
+  Wire.begin();                 // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
 }	
 //-----------------------------------------------------------------------------------------------------------------------------------
