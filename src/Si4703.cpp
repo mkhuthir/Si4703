@@ -83,7 +83,7 @@ void	Si4703::bus2Wire(void)
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::si4703_init() 
 {
-  bus2Wire();
+  bus2Wire();                       // 2-Wire Control Interface (SCLCK, SDIO)
 
   // Enable Oscillator
   getShadow();                      // Read the current register set
