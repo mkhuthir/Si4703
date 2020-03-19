@@ -4,9 +4,9 @@
 int RST  = 4;   // Reset Pin
 int SDIO = A4;  // Serial Data I/O Pin
 int SCLK = A5;  // Serial Clock Pin
-int STC  = 3;   // Seek/Tune Complete Pin
+int INT  = 3;   // Interrupt Pin
 
-Si4703 radio(RST, SDIO, SCLK, STC);
+Si4703 radio(RST, SDIO, SCLK, INT);
 
 void setup()
 {

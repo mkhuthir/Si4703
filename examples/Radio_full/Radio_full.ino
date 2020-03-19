@@ -23,7 +23,7 @@
 const int RST         = 4;  // radio reset pin
 const int SDIO        = A4; // radio data pin
 const int SCLK        = A5; // radio clock pin
-const int STC         = 6;  // radio interrupt pin
+const int INT         = 6;  // radio interrupt pin
 const int LED1        = 5;  // LED1 pin
 const int rotaryPinA  = 2;  // encoder pin A
 const int rotaryPinB  = 3;  // encoder pin B. Note that rotaryPinC is connected to GND
@@ -60,7 +60,7 @@ volatile boolean  rotaryUpdated   = false;
 //-------------------------------------------------------------------------------------------------------------
 // create radio instance
 //-------------------------------------------------------------------------------------------------------------
-Si4703 radio(RST, SDIO, SCLK, STC);
+Si4703 radio(RST, SDIO, SCLK, INT);
 
 //-------------------------------------------------------------------------------------------------------------
 // Arduino initial Setup
