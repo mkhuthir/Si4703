@@ -11,18 +11,18 @@
 //------------------------------------------------------------------------------------------------------------
 
 // Band Select
-static const uint8_t  	BAND_US_EU		= 0x00;	// 87.5–108 MHz (US / Europe, Default)
-static const uint8_t  	BAND_JPW		= 0x01;	// 76–108 MHz (Japan wide band)
-static const uint8_t  	BAND_JP			= 0x10;	// 76–90 MHz (Japan)
+static const uint8_t  	BAND_US_EU		= 0b00;	// 87.5–108 MHz (US / Europe, Default)
+static const uint8_t  	BAND_JPW		= 0b01;	// 76–108 MHz (Japan wide band)
+static const uint8_t  	BAND_JP			= 0b10;	// 76–90 MHz (Japan)
 
 // De-emphasis
-static const uint8_t	DE_75us			= 0x0;	// De-emphasis 75 μs. Used in USA (default)
-static const uint8_t	DE_50us			= 0x1;	// De-emphasis 50 μs. Used in Europe, Australia, Japan.
+static const uint8_t	DE_75us			= 0b0;	// De-emphasis 75 μs. Used in USA (default)
+static const uint8_t	DE_50us			= 0b1;	// De-emphasis 50 μs. Used in Europe, Australia, Japan.
 
 // Channel Spacing
-static const uint8_t  	SPACE_200KHz	= 0x00;	// 200 kHz (US / Australia, Default)
-static const uint8_t  	SPACE_100KHz 	= 0x01;	// 100 kHz (Europe / Japan)
-static const uint8_t  	SPACE_50KHz  	= 0x10;	//  50 kHz (Other)
+static const uint8_t  	SPACE_200KHz	= 0b00;	// 200 kHz (US / Australia, Default)
+static const uint8_t  	SPACE_100KHz 	= 0b01;	// 100 kHz (Europe / Japan)
+static const uint8_t  	SPACE_50KHz  	= 0b10;	//  50 kHz (Other)
 
 // GPIO1-3 Pins
 static const uint8_t  	GPIO1			= 1;	// GPIO1
@@ -30,32 +30,32 @@ static const uint8_t  	GPIO2			= 2;	// GPIO2
 static const uint8_t  	GPIO3			= 3;	// GPIO3
 
 // GPIO1-3 Possible Values
-static const uint8_t 	GPIO_Z			= 0x00;	// High impedance (default)
-static const uint8_t 	GPIO_I			= 0x01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
-static const uint8_t 	GPIO_Low		= 0x10;	// Low output (GND level)
-static const uint8_t 	GPIO_High		= 0x11;	// High output (VIO level)
+static const uint8_t 	GPIO_Z			= 0b00;	// High impedance (default)
+static const uint8_t 	GPIO_I			= 0b01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or GPIO3-Mono/Sterio Indicator
+static const uint8_t 	GPIO_Low		= 0b10;	// Low output (GND level)
+static const uint8_t 	GPIO_High		= 0b11;	// High output (VIO level)
 
 // Seek FM Impulse Detection Threshold
-static const uint8_t 	SKCNT_DIS		= 0x0000; // disabled (default)
-static const uint8_t 	SKCNT_MAX		= 0x0001; // max (most stops)
-static const uint8_t 	SKCNT_MIN		= 0x1111; // min (fewest stops)
+static const uint8_t 	SKCNT_DIS		= 0b0000; // disabled (default)
+static const uint8_t 	SKCNT_MAX		= 0b0001; // max (most stops)
+static const uint8_t 	SKCNT_MIN		= 0b1111; // min (fewest stops)
 
 // Seek SNR Threshold
-static const uint8_t 	SKSNR_DIS		= 0x0000; // disabled (default)
-static const uint8_t 	SKSNR_MIN		= 0x0001; // min (most stops)
-static const uint8_t 	SKSNR_MAX		= 0x1111; // max (fewest stops)
+static const uint8_t 	SKSNR_DIS		= 0b0000; // disabled (default)
+static const uint8_t 	SKSNR_MIN		= 0b0001; // min (most stops)
+static const uint8_t 	SKSNR_MAX		= 0b1111; // max (fewest stops)
 
 // Softmute Attenuation
-static const uint8_t 	SMA_16dB		=0x00;	// Softmute Attenuation 16dB (default)
-static const uint8_t 	SMA_14dB		=0x01;	// Softmute Attenuation 14dB
-static const uint8_t 	SMA_12dB		=0x10;	// Softmute Attenuation 12dB
-static const uint8_t 	SMA_10dB		=0x11;	// Softmute Attenuation 10dB
+static const uint8_t 	SMA_16dB		=0b00;	// Softmute Attenuation 16dB (default)
+static const uint8_t 	SMA_14dB		=0b01;	// Softmute Attenuation 14dB
+static const uint8_t 	SMA_12dB		=0b10;	// Softmute Attenuation 12dB
+static const uint8_t 	SMA_10dB		=0b11;	// Softmute Attenuation 10dB
 
 // Softmute Attack/Recover Rate
-static const uint8_t 	SMRR_Fastest	=0x00;	// Softmute Attack/Recover Rate = Fastest
-static const uint8_t 	SMRR_Fast		=0x01;	// Softmute Attack/Recover Rate = Fast
-static const uint8_t 	SMRR_Slow		=0x10;	// Softmute Attack/Recover Rate = Slow
-static const uint8_t 	SMRR_Slowest	=0x11;	// Softmute Attack/Recover Rate = Slowest
+static const uint8_t 	SMRR_Fastest	=0b00;	// Softmute Attack/Recover Rate = Fastest
+static const uint8_t 	SMRR_Fast		=0b01;	// Softmute Attack/Recover Rate = Fast
+static const uint8_t 	SMRR_Slow		=0b10;	// Softmute Attack/Recover Rate = Slow
+static const uint8_t 	SMRR_Slowest	=0b11;	// Softmute Attack/Recover Rate = Slowest
 
 // Stereo/Mono Blend Level Adjustment
 

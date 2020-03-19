@@ -111,7 +111,7 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
   shadow.reg.SYSCONFIG1.bits.DE     = 0;            // De-emphasis=75 μs. Used in USA (default)
   shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
-  shadow.reg.SYSCONFIG1.bits.BLNDADJ= 0x00;         // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
+  shadow.reg.SYSCONFIG1.bits.BLNDADJ= 0b00;         // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
   shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
@@ -120,7 +120,7 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
   shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
   shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default)
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // Min RSSI (default)
   
   // System Configuration 3
   shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
@@ -207,7 +207,7 @@ int Si4703::setChannel(int freq)
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
-  while(_intPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
+  while(_intPin == 1) {}	                  // Wait for interrupt indicating STC (Seek/Tune Complete)
 
   getShadow();                              // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
@@ -258,11 +258,11 @@ void Si4703::setSeekMode()
 int Si4703::seek(byte seekDirection){
 
   getShadow();                                    // Read the current register set
-  shadow.reg.POWERCFG.bits.SEEKUP=seekDirection; // Seek direction = UP/Down
-  shadow.reg.POWERCFG.bits.SEEK     =1;           // Start seek
+  shadow.reg.POWERCFG.bits.SEEKUP =seekDirection; // Seek direction = UP/Down
+  shadow.reg.POWERCFG.bits.SEEK   =1;             // Start seek
   putShadow();                                    // Write to registers
 
-  while(_intPin == 1) {}                       // Wait for interrupt indicating STC (Seek/Tune complete)
+  while(_intPin == 1) {}                          // Wait for interrupt indicating STC (Seek/Tune complete)
   
   getShadow();                                    // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;               // Clear Tune bit
@@ -306,8 +306,7 @@ void Si4703::readRDS(char* buffer, long timeout)
 //-----------------------------------------------------------------------------------------------------------------------------------
 	void	Si4703::writeGPIO(int GPIO, int val)
 {
-  // FIXME:
-  getShadow();                                // Read the current register set
+  getShadow();    // Read the current register set
 
   switch (GPIO)
   {
@@ -327,7 +326,7 @@ void Si4703::readRDS(char* buffer, long timeout)
       break;
   }
   
-  putShadow();                                // Write to registers
+  putShadow();  // Write to registers
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
