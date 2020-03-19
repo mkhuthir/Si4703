@@ -66,39 +66,39 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int resetPin, 				// Reset Pin
-			int sdioPin,				// I2C Data IO Pin
-			int sclkPin,				// I2C Clock Pin
-			int stcIntPin);				// Seek/Tune Complete and RDS interrupt Pin
+    Si4703(	int rstPin, 			// Reset Pin
+			int sdioPin,			// I2C Data IO Pin
+			int sclkPin,			// I2C Clock Pin
+			int intPin);			// Seek/Tune Complete and RDS interrupt Pin
 
-	int		getDeviceID();				// 
-	int		getChipID();				//
+	int		getDeviceID();			// 
+	int		getChipID();			//
 	
-    void	powerUp();					// Power Up Device
-	void	powerDown();				// Power Down Device to save power
+    void	powerUp();				// Power Up Device
+	void	powerDown();			// Power Down Device to save power
 
-	void	bus3Wire(void);				// 3-Wire Control Interface (SCLK, SEN, SDIO)
-	void	bus2Wire(void);				// 2-Wire Control Interface (SCLCK, SDIO)
+	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
+	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
 
-	int 	getChannel(void);			// Get 3 digit channel number
-	int		setChannel(int freq);  		// Set 3 digit channel number
-	int		incChannel(void);			// Increment Channel Frequency one band step
-	int		decChannel(void);			// Decrement Channel Frequency one band step
+	int 	getChannel(void);		// Get 3 digit channel number
+	int		setChannel(int freq);	// Set 3 digit channel number
+	int		incChannel(void);		// Increment Channel Frequency one band step
+	int		decChannel(void);		// Decrement Channel Frequency one band step
 	
-	void 	setSeekMode(void);			// Set Seek Mode
-	int 	seekUp(void); 				// Seeks up and returns the tuned channel or 0
-	int 	seekDown(void); 			// Seeks down and returns the tuned channel or 0
+	void 	setSeekMode(void);		// Set Seek Mode
+	int 	seekUp(void); 			// Seeks up and returns the tuned channel or 0
+	int 	seekDown(void); 		// Seeks down and returns the tuned channel or 0
 
-	int		getVolume(void);			// Get current Volume value
-	int		setVolume(int volume); 		// Sets volume value 0 to 15
-	int		incVolume(void);			// Increment Volume
-	int		decVolume(void);			// Decrement Volume
+	int		getVolume(void);		// Get current Volume value
+	int		setVolume(int volume);	// Sets volume value 0 to 15
+	int		incVolume(void);		// Increment Volume
+	int		decVolume(void);		// Decrement Volume
 
-	void	readRDS(char* message,		// Reads RDS, message should be at least 9 chars, result will be null terminated.
-					long timeout);		// timeout in milliseconds
+	void	readRDS(char* message,	// Reads RDS, message should be at least 9 chars, result will be null terminated.
+					long timeout);	// timeout in milliseconds
 
-	void	writeGPIO(int GPIO, 		// Write to GPIO1,GPIO2, and GPIO3
-					  int val); 		// values can be GPIO_Z, GPIO_I, GPIO_Low, and GPIO_High
+	void	writeGPIO(int GPIO, 	// Write to GPIO1,GPIO2, and GPIO3
+					  int val); 	// values can be GPIO_Z, GPIO_I, GPIO_Low, and GPIO_High
 
 //------------------------------------------------------------------------------------------------------------
   private:
