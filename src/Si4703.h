@@ -66,10 +66,10 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int resetPin, 				// Reset pin
+    Si4703(	int resetPin, 				// Reset Pin
 			int sdioPin,				// I2C Data IO Pin
 			int sclkPin,				// I2C Clock Pin
-			int stcIntPin);				// Seek/Tune Complete Pin
+			int stcIntPin);				// Seek/Tune Complete and RDS interrupt Pin
 
 	int		getDeviceID();				// 
 	int		getChipID();				//
@@ -102,10 +102,10 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_rstPin;					// Reset pin
+    int  	_rstPin;					// Reset Pin
 	int  	_sdioPin;					// I2C Data IO Pin
 	int  	_sclkPin;					// I2C Clock Pin
-	int  	_intPin;					// Seek/Tune Complete Pin
+	int  	_intPin;					// Seek/Tune Complete and RDS interrupt Pin
 
 	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
 
