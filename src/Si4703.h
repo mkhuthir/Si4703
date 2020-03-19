@@ -96,6 +96,10 @@ class Si4703
 	int 	seekUp(void); 			// Seeks up and returns the tuned channel or 0
 	int 	seekDown(void); 		// Seeks down and returns the tuned channel or 0
 
+	void	setMute(bool en);		// Audio Mute
+	void	setMono(bool en);		// Force Mono
+	void	setVolExt(bool en);		// Extended Volume Range
+
 	int		getVolume(void);		// Get current Volume value
 	int		setVolume(int volume);	// Sets volume value 0 to 15
 	int		incVolume(void);		// Increment Volume
