@@ -105,7 +105,7 @@ class Si4703
     int  	_rstPin;					// Reset pin
 	int  	_sdioPin;					// I2C Data IO Pin
 	int  	_sclkPin;					// I2C Clock Pin
-	int  	_stcIntPin;					// Seek/Tune Complete Pin
+	int  	_intPin;					// Seek/Tune Complete Pin
 
 	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
 

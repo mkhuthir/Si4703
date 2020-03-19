@@ -13,13 +13,13 @@
 Si4703::Si4703( int rstPin, 
                 int sdioPin,
                 int sclkPin,
-                int stcIntPin
+                int intPin
               )
 {
-  _rstPin     = rstPin;     // Reset Pin
-  _sdioPin    = sdioPin;    // I2C Data IO Pin
-  _sclkPin    = sclkPin;    // I2C Clock Pin
-  _stcIntPin  = stcIntPin;  // Seek/Tune Complete Pin
+  _rstPin  = rstPin;     // Reset Pin
+  _sdioPin = sdioPin;    // I2C Data IO Pin
+  _sclkPin = sclkPin;    // I2C Clock Pin
+  _intPin  = intPin;  // Seek/Tune Complete Pin
 
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -71,14 +71,14 @@ void	Si4703::bus2Wire(void)
 void Si4703::si4703_init() 
 {
   // Set IO pins directions
-  pinMode(_rstPin , OUTPUT);        // Reset pin
-  pinMode(_sdioPin  , OUTPUT);      // I2C data IO pin
-  pinMode(_stcIntPin, OUTPUT);	    // STC (search/tune complete) interrupt pin
+  pinMode(_rstPin , OUTPUT);      // Reset pin
+  pinMode(_sdioPin, OUTPUT);      // I2C data IO pin
+  pinMode(_intPin , OUTPUT);	    // STC (search/tune complete) interrupt pin
 
   // Set communcation mode to 2-Wire
   digitalWrite(_sdioPin  ,LOW);     // A low SDIO indicates a 2-wire interface
   digitalWrite(_rstPin   ,LOW);     // Put Si4703 into reset
-  digitalWrite(_stcIntPin,HIGH);    // STC goes low on interrupt
+  digitalWrite(_intPin,HIGH);    // STC goes low on interrupt
   delay(1);                         // Some delays while we allow pins to settle
   digitalWrite(_rstPin   ,HIGH);    // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                         // Allow Si4703 to come out of reset
@@ -206,7 +206,7 @@ int Si4703::setChannel(int freq)
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
-  while(_stcIntPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
+  while(_intPin == 1) {}	//Wait for interrupt indicating STC (Seek/Tune Complete)
 
   getShadow();                              // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
@@ -261,7 +261,7 @@ int Si4703::seek(byte seekDirection){
   shadow.reg.POWERCFG.bits.SEEK     =1;           // Start seek
   putShadow();                                    // Write to registers
 
-  while(_stcIntPin == 1) {}                       // Wait for interrupt indicating STC (Seek/Tune complete)
+  while(_intPin == 1) {}                       // Wait for interrupt indicating STC (Seek/Tune complete)
   
   getShadow();                                    // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;               // Clear Tune bit
