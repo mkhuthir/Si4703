@@ -338,7 +338,7 @@ class Si4703
 	//------------------------------------------------------------------------------------------------------------
 	union shadow_t
 	{
-		uint16_t	word[16];	// 32 bytes = 16 x 16 bits Registers
+		uint16_t	word[16];			// 32 bytes = 16 x 16 bits Registers
 
 		struct reg
 		{
@@ -349,7 +349,7 @@ class Si4703
 			RDSB_t			RDSB;		// Register 0x0D - 03
 			RDSC_t			RDSC;		// Register 0x0E - 04
 			RDSD_t			RDSD;		// Register 0x0F - 05
-
+										// ------------------
 			DEVICEID_t 		DEVICEID;	// Register 0x00 - 06
 			CHIPID_t		CHIPID;		// Register 0x01 - 07
 			POWERCFG_t 		POWERCFG;	// Register 0x02 - 08
