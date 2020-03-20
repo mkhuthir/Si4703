@@ -209,7 +209,7 @@ void printCurrentSettings()
    Serial.print(float(radio.getChannel())/10,2);
    Serial.print(" MHz | VOL:");
    Serial.print(radio.getVolume());
-   Serial.println("|");
+   Serial.println(" |");
 }
 
 //-------------------------------------------------------------------------------------------------------------
