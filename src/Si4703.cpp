@@ -282,7 +282,9 @@ int Si4703::setChannel(int freq)
   if (freq > bandEnd)    freq = bandEnd;    // check upper limit
   if (freq < bandStart)  freq = bandStart;  // check lower limit
 
-  // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
+  // Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
+  // Channel = (Freq-bandStart)/Spacing
+  
   shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / (bandSpacing/100);
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
