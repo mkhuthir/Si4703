@@ -29,7 +29,7 @@ const int LED1        = 5;            // LED1 pin
 const int rotaryPinA  = 2;            // encoder pin A
 const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
 
-const int BAND        = BAND_US_EU;   // Select band frequency range
+const int BAND        = BAND_JPW;   // Select band frequency range
 const int SPACE       = SPACE_100KHz; // Select band spacing
 const int DE          = DE_75us;      // Select de-emphasis
 
@@ -205,10 +205,11 @@ void printWelcome()
 //-------------------------------------------------------------------------------------------------------------
 void printCurrentSettings()
 {
-   Serial.print("Ch:");
+   Serial.print("| Ch:");
    Serial.print(float(radio.getChannel())/10,2);
    Serial.print(" MHz | VOL:");
-   Serial.println(radio.getVolume());
+   Serial.print(radio.getVolume());
+   Serial.println("|");
 }
 
 //-------------------------------------------------------------------------------------------------------------
