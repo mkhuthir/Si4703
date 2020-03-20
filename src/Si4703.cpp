@@ -154,18 +154,18 @@ void	Si4703::setRegion(int band,	  // Band Range
   switch (band)
   {
     case BAND_US_EU:      // 87.5–108 MHz (US / Europe, Default)
-      bandStart = 875;	  // Bottom of Band (MHz)
-      bandEnd		= 1080;		// Top of Band (MHz)
+      bandStart = 8750;  // Bottom of Band (kHz)
+      bandEnd		= 10800;	// Top of Band (kHz)
       break;
     
     case BAND_JPW:        // 76–108 MHz (Japan wide band)
-      bandStart = 760;	  // Bottom of Band (MHz)
-      bandEnd		= 1080;		// Top of Band (MHz)
+      bandStart = 7600;  // Bottom of Band (kHz)
+      bandEnd		= 10800;	// Top of Band (kHz)
       break;
     
     case BAND_JP:         // 76–90 MHz (Japan)
-      bandStart = 760;		// Bottom of Band (MHz)
-      bandEnd		= 900;		// Top of Band (MHz)
+      bandStart = 7600;	// Bottom of Band (kHz)
+      bandEnd		= 9000;	// Top of Band (kHz)
       break;
 
     default:
@@ -175,15 +175,15 @@ void	Si4703::setRegion(int band,	  // Band Range
   switch (space)
   {
     case SPACE_100KHz:    // 200 kHz (US / Australia, Default)
-      bandSpacing	= 100;	// Band Spacing (kHz)
+      bandSpacing	= 10;	// Band Spacing (kHz)
       break;
 
     case SPACE_200KHz:    // 100 kHz (Europe / Japan)
-      bandSpacing	= 200;	// Band Spacing (kHz)
+      bandSpacing	= 20;	// Band Spacing (kHz)
       break;
 
     case SPACE_50KHz:     // 50 kHz (Other)
-      bandSpacing	= 50;		// Band Spacing (kHz)
+      bandSpacing	= 5;		// Band Spacing (kHz)
       break;
     
     default:
@@ -268,8 +268,8 @@ int Si4703::getChannel()
 {
   getShadow();                                // Read the current register set
   
-  // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
-  return ((bandSpacing/100) * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
+  // Freq = Spacing * Channel + Bottom of Band.
+  return (bandSpacing * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -282,10 +282,10 @@ int Si4703::setChannel(int freq)
   if (freq > bandEnd)    freq = bandEnd;    // check upper limit
   if (freq < bandStart)  freq = bandStart;  // check lower limit
 
-  // Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
-  // Channel = (Freq-bandStart)/Spacing
-  
-  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / (bandSpacing/100);
+  // Freq     = Spacing * Channel + bandStart.
+  // Channel  = (Freq - bandStart) / Spacing
+
+  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / bandSpacing;
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
@@ -308,16 +308,14 @@ int Si4703::setChannel(int freq)
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::incChannel(void)
 {
-  setChannel(getChannel()+bandSpacing/100); // Increment frequency one band step
-  return getChannel();
+  return setChannel(getChannel() + bandSpacing); // Increment frequency one band step
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Decrement frequency one band step
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::decChannel(void)
 {
-  setChannel(getChannel()-bandSpacing/100); // Decrement frequency one band step
-  return getChannel();
+  return setChannel(getChannel() - bandSpacing); // Decrement frequency one band step
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set Seek Mode

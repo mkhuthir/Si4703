@@ -30,7 +30,7 @@ const int rotaryPinA  = 2;            // encoder pin A
 const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
 
 const int BAND        = BAND_US_EU;   // Select band frequency range
-const int SPACE       = SPACE_100KHz; // Select band spacing
+const int SPACE       = SPACE_50KHz; // Select band spacing
 const int DE          = DE_75us;      // Select de-emphasis
 
 const boolean UP      = true;
@@ -42,17 +42,17 @@ const boolean DOWN    = false;
 // Settings
 int       mute  = 0;   // mute value volume=0
 
-// Favourate Channels 0..9
-int       fav_0 = 876;   
-int       fav_1 = 882;   
-int       fav_2 = 914;  
-int       fav_3 = 922;   
-int       fav_4 = 939;  
-int       fav_5 = 944;   
-int       fav_6 = 950;  
-int       fav_7 = 976;   
-int       fav_8 = 1048;  
-int       fav_9 = 1074;   
+// Favourate Channels fav_0..fav_9 (kHz)
+int       fav_0 = 8760;   
+int       fav_1 = 8820;   
+int       fav_2 = 9140;  
+int       fav_3 = 9220;   
+int       fav_4 = 9390;  
+int       fav_5 = 9440;   
+int       fav_6 = 9500;  
+int       fav_7 = 9760;   
+int       fav_8 = 10480;  
+int       fav_9 = 10740;   
 
 //-------------------------------------------------------------------------------------------------------------
 // Volatile variables for use in Rotary Encoder Interrupt Routine
@@ -195,7 +195,7 @@ void printWelcome()
 void printCurrentSettings()
 {
    Serial.print("| Ch:");
-   Serial.print(float(radio.getChannel())/10,2);
+   Serial.print(float(radio.getChannel())/100,2);
    Serial.print(" MHz | VOL:");
    Serial.print(radio.getVolume());
    Serial.println(" |");
@@ -226,43 +226,43 @@ void printFavouriteList()
   Serial.println("List of Favourite Stations");
   
   Serial.print("0 - ");
-  Serial.print(float(fav_0)/10,2);
+  Serial.print(float(fav_0)/100,2);
   Serial.println(" MHz");
 
   Serial.print("1 - ");
-  Serial.print(float(fav_1)/10,2);
+  Serial.print(float(fav_1)/100,2);
   Serial.println(" MHz");
 
   Serial.print("2 - ");
-  Serial.print(float(fav_2)/10,2);
+  Serial.print(float(fav_2)/100,2);
   Serial.println(" MHz");
 
   Serial.print("3 - ");
-  Serial.print(float(fav_3)/10,2);
+  Serial.print(float(fav_3)/100,2);
   Serial.println(" MHz");
 
   Serial.print("4 - ");
-  Serial.print(float(fav_4)/10,2);
+  Serial.print(float(fav_4)/100,2);
   Serial.println(" MHz");
 
   Serial.print("5 - ");
-  Serial.print(float(fav_5)/10,2);
+  Serial.print(float(fav_5)/100,2);
   Serial.println(" MHz");
 
   Serial.print("6 - ");
-  Serial.print(float(fav_6)/10,2);
+  Serial.print(float(fav_6)/100,2);
   Serial.println(" MHz");
 
   Serial.print("7 - ");
-  Serial.print(float(fav_7)/10,2);
+  Serial.print(float(fav_7)/100,2);
   Serial.println(" MHz");
 
   Serial.print("8 - ");
-  Serial.print(float(fav_8)/10,2);
+  Serial.print(float(fav_8)/100,2);
   Serial.println(" MHz");
 
   Serial.print("9 - ");
-  Serial.print(float(fav_9)/10,2);
+  Serial.print(float(fav_9)/100,2);
   Serial.println(" MHz");
 
 }
