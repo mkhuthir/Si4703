@@ -46,22 +46,22 @@ static const uint8_t 	SKSNR_MIN		= 0b0001; // min (most stops)
 static const uint8_t 	SKSNR_MAX		= 0b1111; // max (fewest stops)
 
 // Softmute Attenuation
-static const uint8_t 	SMA_16dB		=0b00;	// Softmute Attenuation 16dB (default)
-static const uint8_t 	SMA_14dB		=0b01;	// Softmute Attenuation 14dB
-static const uint8_t 	SMA_12dB		=0b10;	// Softmute Attenuation 12dB
-static const uint8_t 	SMA_10dB		=0b11;	// Softmute Attenuation 10dB
+static const uint8_t 	SMA_16dB		= 0b00;	// Softmute Attenuation 16dB (default)
+static const uint8_t 	SMA_14dB		= 0b01;	// Softmute Attenuation 14dB
+static const uint8_t 	SMA_12dB		= 0b10;	// Softmute Attenuation 12dB
+static const uint8_t 	SMA_10dB		= 0b11;	// Softmute Attenuation 10dB
 
 // Softmute Attack/Recover Rate
-static const uint8_t 	SMRR_Fastest	=0b00;	// Softmute Attack/Recover Rate = Fastest
-static const uint8_t 	SMRR_Fast		=0b01;	// Softmute Attack/Recover Rate = Fast
-static const uint8_t 	SMRR_Slow		=0b10;	// Softmute Attack/Recover Rate = Slow
-static const uint8_t 	SMRR_Slowest	=0b11;	// Softmute Attack/Recover Rate = Slowest
+static const uint8_t 	SMRR_Fastest	= 0b00;	// Softmute Attack/Recover Rate = Fastest
+static const uint8_t 	SMRR_Fast		= 0b01;	// Softmute Attack/Recover Rate = Fast
+static const uint8_t 	SMRR_Slow		= 0b10;	// Softmute Attack/Recover Rate = Slow
+static const uint8_t 	SMRR_Slowest	= 0b11;	// Softmute Attack/Recover Rate = Slowest
 
 // Stereo/Mono Blend Level Adjustment
-static const uint8_t 	BLA_31_49		=0b00;	// 31–49 RSSI dBμV (default)
-static const uint8_t 	BLA_37_55		=0b00;	// 37–55 RSSI dBμV (+6 dB)
-static const uint8_t 	BLA_19_37		=0b00;	// 19–37 RSSI dBμV (–12 dB)
-static const uint8_t 	BLA_25_43		=0b00;	// 25–43 RSSI dBμV (–6 dB)
+static const uint8_t 	BLA_31_49		= 0b00;	// 31–49 RSSI dBμV (default)
+static const uint8_t 	BLA_37_55		= 0b00;	// 37–55 RSSI dBμV (+6 dB)
+static const uint8_t 	BLA_19_37		= 0b00;	// 19–37 RSSI dBμV (–12 dB)
+static const uint8_t 	BLA_25_43		= 0b00;	// 25–43 RSSI dBμV (–6 dB)
 
 //------------------------------------------------------------------------------------------------------------
 
@@ -353,14 +353,13 @@ class Si4703
 
 		struct reg
 		{
-
 			STATUSRSSI_t	STATUSRSSI;	// Register 0x0A - 00
 			READCHAN_t		READCHAN;	// Register 0x0B - 01
 			RDSA_t			RDSA;		// Register 0x0C - 02
 			RDSB_t			RDSB;		// Register 0x0D - 03
 			RDSC_t			RDSC;		// Register 0x0E - 04
 			RDSD_t			RDSD;		// Register 0x0F - 05
-										// ------------------
+			// ----------------------------------------------
 			DEVICEID_t 		DEVICEID;	// Register 0x00 - 06
 			CHIPID_t		CHIPID;		// Register 0x01 - 07
 			POWERCFG_t 		POWERCFG;	// Register 0x02 - 08
@@ -371,10 +370,7 @@ class Si4703
 			TEST1_t			TEST1;		// Register 0x07 - 13
 			TEST2_t			TEST2;		// Register 0x08 - 14
 			BOOTCONFIG_t	BOOTCONFIG;	// Register 0x09 - 15
-
-
 		} 			reg;
-
 	} shadow;							// There are 16 registers, each 16 bits large;
 };
 #endif
