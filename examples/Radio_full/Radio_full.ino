@@ -29,7 +29,7 @@ const int LED1        = 5;            // LED1 pin
 const int rotaryPinA  = 2;            // encoder pin A
 const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
 
-const int BAND        = BAND_JPW;   // Select band frequency range
+const int BAND        = BAND_US_EU;   // Select band frequency range
 const int SPACE       = SPACE_100KHz; // Select band spacing
 const int DE          = DE_75us;      // Select de-emphasis
 
@@ -237,43 +237,43 @@ void printFavouriteList()
   Serial.println("List of Favourite Stations");
   
   Serial.print("0 - ");
-  Serial.print(float(fav_0)/10,1);
+  Serial.print(float(fav_0)/10,2);
   Serial.println(" MHz");
 
   Serial.print("1 - ");
-  Serial.print(float(fav_1)/10,1);
+  Serial.print(float(fav_1)/10,2);
   Serial.println(" MHz");
 
   Serial.print("2 - ");
-  Serial.print(float(fav_2)/10,1);
+  Serial.print(float(fav_2)/10,2);
   Serial.println(" MHz");
 
   Serial.print("3 - ");
-  Serial.print(float(fav_3)/10,1);
+  Serial.print(float(fav_3)/10,2);
   Serial.println(" MHz");
 
   Serial.print("4 - ");
-  Serial.print(float(fav_4)/10,1);
+  Serial.print(float(fav_4)/10,2);
   Serial.println(" MHz");
 
   Serial.print("5 - ");
-  Serial.print(float(fav_5)/10,1);
+  Serial.print(float(fav_5)/10,2);
   Serial.println(" MHz");
 
   Serial.print("6 - ");
-  Serial.print(float(fav_6)/10,1);
+  Serial.print(float(fav_6)/10,2);
   Serial.println(" MHz");
 
   Serial.print("7 - ");
-  Serial.print(float(fav_7)/10,1);
+  Serial.print(float(fav_7)/10,2);
   Serial.println(" MHz");
 
   Serial.print("8 - ");
-  Serial.print(float(fav_8)/10,1);
+  Serial.print(float(fav_8)/10,2);
   Serial.println(" MHz");
 
   Serial.print("9 - ");
-  Serial.print(float(fav_9)/10,1);
+  Serial.print(float(fav_9)/10,2);
   Serial.println(" MHz");
 
 }
@@ -398,10 +398,7 @@ void processCommand()
   }
   else if (ch == 'r')
   {
-    Serial.println("RDS listening");
-    radio.readRDS(rdsBuffer, 15000);
-    Serial.print("RDS heard:");
-    Serial.println(rdsBuffer);      
+    // TODO:
   }
   else if (ch == 'i')
   {
