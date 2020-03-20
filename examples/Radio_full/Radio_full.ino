@@ -30,7 +30,7 @@ const int rotaryPinA  = 2;            // encoder pin A
 const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
 
 const int BAND        = BAND_US_EU;   // Select band frequency range
-const int SPACE       = SPACE_50KHz; // Select band spacing
+const int SPACE       = SPACE_100KHz; // Select band spacing
 const int DE          = DE_75us;      // Select de-emphasis
 
 const boolean UP      = true;
