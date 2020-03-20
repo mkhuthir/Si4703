@@ -139,7 +139,50 @@ void	setRegion(int band,	  // Band Range
                 int space,	// Band Spacing
                 int de)		  // De-Emphasis
 {
-  // TODO:
+  getShadow();                                // Read the current register set
+  shadow.reg.SYSCONFIG2.bits.SPACE  = space;  // Select Channel Spacing Type
+  shadow.reg.SYSCONFIG2.bits.BAND   = band;   // Select Band frequency range
+  shadow.reg.SYSCONFIG1.bits.DE     = de;     // Select de-emphasis
+  putShadow();                                // Write to registers
+	
+  switch (band)
+  {
+    case BAND_US_EU:      // 87.5–108 MHz (US / Europe, Default)
+      bandStart = 875;	  // Bottom of Band (MHz)
+      bandEnd		= 1080;		// Top of Band (MHz)
+      break;
+    
+    case BAND_JPW:        // 76–108 MHz (Japan wide band)
+      bandStart = 760;	  // Bottom of Band (MHz)
+      bandEnd		= 1080;		// Top of Band (MHz)
+      break;
+    
+    case BAND_JP:         // 76–90 MHz (Japan)
+      bandStart = 760;		// Bottom of Band (MHz)
+      bandEnd		= 900;		// Top of Band (MHz)
+      break;
+
+    default:
+      break;
+  }
+
+  switch (space)
+  {
+    case SPACE_100KHz:    // 200 kHz (US / Australia, Default)
+      bandSpacing	= 100;	// Band Spacing (kHz)
+      break;
+
+    case SPACE_200KHz:    // 100 kHz (Europe / Japan)
+      bandSpacing	= 200;	// Band Spacing (kHz)
+      break;
+
+    case SPACE_50KHz:     // 50 kHz (Other)
+      bandSpacing	= 50;		// Band Spacing (kHz)
+      break;
+    
+    default:
+      break;
+  }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Power Up Device
