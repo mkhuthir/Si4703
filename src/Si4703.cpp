@@ -196,6 +196,7 @@ void	Si4703::setRegion(int band,	  // Band Range
 void Si4703::powerUp()
 {
   si4703_init();
+  setRegion(_band,_space,_de);
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Power Down
@@ -268,7 +269,7 @@ int Si4703::getChannel()
   getShadow();                                // Read the current register set
   
   // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
-  return (bandSpacing * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
+  return ((bandSpacing/100) * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -282,7 +283,7 @@ int Si4703::setChannel(int freq)
   if (freq < bandStart)  freq = bandStart;  // check lower limit
 
   // Freq (MHz) = Spacing (MHz) * Channel + Bottom of Band (MHz).
-  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / bandSpacing;
+  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / (bandSpacing/100);
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
@@ -305,7 +306,7 @@ int Si4703::setChannel(int freq)
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::incChannel(void)
 {
-  setChannel(getChannel()+bandSpacing); // Increment frequency one band step
+  setChannel(getChannel()+bandSpacing/100); // Increment frequency one band step
   return getChannel();
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -313,7 +314,7 @@ int Si4703::incChannel(void)
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::decChannel(void)
 {
-  setChannel(getChannel()-bandSpacing); // Decrement frequency one band step
+  setChannel(getChannel()-bandSpacing/100); // Decrement frequency one band step
   return getChannel();
 }
 //-----------------------------------------------------------------------------------------------------------------------------------

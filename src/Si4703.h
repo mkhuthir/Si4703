@@ -85,13 +85,6 @@ class Si4703
     void	powerUp();				// Power Up Device
 	void	powerDown();			// Power Down Device to save power
 
-	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
-	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
-
-	void	setRegion(int band,		// Band Range
-					  int space,	// Band Spacing
-					  int de);		// De-Emphasis
-
 	int 	getChannel(void);		// Get 3 digit channel number
 	int		setChannel(int freq);	// Set 3 digit channel number
 	int		incChannel(void);		// Increment Channel Frequency one band step
@@ -118,26 +111,28 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_rstPin;	// Reset Pin
-	int  	_sdioPin;	// I2C Data IO Pin
-	int  	_sclkPin;	// I2C Clock Pin
-	int  	_intPin;	// Seek/Tune Complete and RDS interrupt Pin
-	int  	_band;		// Band Range
-  	int  	_space;		// Band Spacing
-  	int  	_de;		// De-Emphasis
+    int  	_rstPin;				// Reset Pin
+	int  	_sdioPin;				// I2C Data IO Pin
+	int  	_sclkPin;				// I2C Clock Pin
+	int  	_intPin;				// Seek/Tune Complete and RDS interrupt Pin
+	int  	_band;					// Band Range
+  	int  	_space;					// Band Spacing
+  	int  	_de;					// De-Emphasis
+	int		bandStart;				// Bottom of Band (MHz)
+	int		bandEnd;				// Top of Band (MHz)
+	int		bandSpacing;			// Band Spacing (MHz)
 
-	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
+	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
+	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
+	void 	si4703_init();			// init class
+	void	setRegion(int band,		// Band Range
+					  int space,	// Band Spacing
+					  int de);		// De-Emphasis
 
-	int		bandStart 	= 875;			// Bottom of Band (MHz)
-	int		bandEnd		= 1080;			// Top of Band (MHz)
-	int		bandSpacing	= 1;			// Band Spacing (MHz)
+	void	getShadow();			// Read registers to shadow 
+	byte 	putShadow();			// Write shadow to registers
 
-	void 	si4703_init();				// init class
-
-	void	getShadow();				// Read registers to shadow 
-	byte 	putShadow();				// Write shadow to registers
-
-	int 	seek(byte seekDirection);	// Seek next channel
+	int 	seek(byte seekDir);		// Seek next channel
 
 	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W
