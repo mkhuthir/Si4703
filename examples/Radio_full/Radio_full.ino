@@ -20,13 +20,19 @@
 //-------------------------------------------------------------------------------------------------------------
 // Global Constants (defines): these quantities don't change
 //-------------------------------------------------------------------------------------------------------------
-const int RST         = 4;  // radio reset pin
-const int SDIO        = A4; // radio data pin
-const int SCLK        = A5; // radio clock pin
-const int INT         = 6;  // radio interrupt pin
-const int LED1        = 5;  // LED1 pin
-const int rotaryPinA  = 2;  // encoder pin A
-const int rotaryPinB  = 3;  // encoder pin B. Note that rotaryPinC is connected to GND
+const int RST         = 4;            // radio reset pin
+const int SDIO        = A4;           // radio data pin
+const int SCLK        = A5;           // radio clock pin
+const int INT         = 6;            // radio interrupt pin
+const int LED1        = 5;            // LED1 pin
+
+const int rotaryPinA  = 2;            // encoder pin A
+const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
+
+const int BAND        = BAND_US_EU;   // Select band frequency range
+const int SPACE       = SPACE_100KHz; // Select band spacing
+const int DE          = DE_75us;      // Select de-emphasis
+
 const boolean UP      = true;
 const boolean DOWN    = false;
 //-------------------------------------------------------------------------------------------------------------
@@ -60,7 +66,7 @@ volatile boolean  rotaryUpdated   = false;
 //-------------------------------------------------------------------------------------------------------------
 // create radio instance
 //-------------------------------------------------------------------------------------------------------------
-Si4703 radio(RST, SDIO, SCLK, INT);
+Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
 
 //-------------------------------------------------------------------------------------------------------------
 // Arduino initial Setup
@@ -201,7 +207,7 @@ void printCurrentSettings()
 {
    Serial.print("Ch:");
    Serial.print(float(radio.getChannel())/10,2);
-   Serial.print(" MHz sVOL:");
+   Serial.print(" MHz | VOL:");
    Serial.println(radio.getVolume());
 }
 

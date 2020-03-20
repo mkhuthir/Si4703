@@ -72,7 +72,12 @@ class Si4703
     Si4703(	int rstPin, 			// Reset Pin
 			int sdioPin,			// I2C Data IO Pin
 			int sclkPin,			// I2C Clock Pin
-			int intPin);			// Seek/Tune Complete and RDS interrupt Pin
+			int intPin,				// Seek/Tune Complete and RDS interrupt Pin
+			int band,	  			// Band Range
+            int space,				// Band Spacing
+            int de		  			// De-Emphasis
+		   );
+			
 
 	int		getDeviceID();			// 
 	int		getChipID();			//
@@ -113,10 +118,13 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_rstPin;					// Reset Pin
-	int  	_sdioPin;					// I2C Data IO Pin
-	int  	_sclkPin;					// I2C Clock Pin
-	int  	_intPin;					// Seek/Tune Complete and RDS interrupt Pin
+    int  	_rstPin;	// Reset Pin
+	int  	_sdioPin;	// I2C Data IO Pin
+	int  	_sclkPin;	// I2C Clock Pin
+	int  	_intPin;	// Seek/Tune Complete and RDS interrupt Pin
+	int  	_band;		// Band Range
+  	int  	_space;		// Band Spacing
+  	int  	_de;		// De-Emphasis
 
 	// Freq (MHz) = Spacing (kHz) * Channel + Bottom of Band (MHz).
 
@@ -129,7 +137,7 @@ class Si4703
 	void	getShadow();				// Read registers to shadow 
 	byte 	putShadow();				// Write shadow to registers
 
-	int 	seek(byte seekDirection);
+	int 	seek(byte seekDirection);	// Seek next channel
 
 	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W

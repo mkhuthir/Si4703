@@ -10,16 +10,22 @@
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Si4703 Class Initialization
 //-----------------------------------------------------------------------------------------------------------------------------------
-Si4703::Si4703( int rstPin, 
-                int sdioPin,
-                int sclkPin,
-                int intPin
+Si4703::Si4703( int rstPin, // Reset Pin
+			          int sdioPin,// I2C Data IO Pin
+			          int sclkPin,// I2C Clock Pin
+			          int intPin,	// Seek/Tune Complete and RDS interrupt Pin
+			          int band,	  // Band Range
+                int space,	// Band Spacing
+                int de		  // De-Emphasis
               )
 {
-  _rstPin  = rstPin;  // Reset Pin
-  _sdioPin = sdioPin; // I2C Data IO Pin
-  _sclkPin = sclkPin; // I2C Clock Pin
-  _intPin  = intPin;  // Seek/Tune Complete Pin
+  _rstPin   = rstPin;   // Reset Pin
+  _sdioPin  = sdioPin;  // I2C Data IO Pin
+  _sclkPin  = sclkPin;  // I2C Clock Pin
+  _intPin   = intPin;   // Seek/Tune Complete Pin
+  _band     = band;	    // Band Range
+  _space    = space;    // Band Spacing
+  _de       =	de;	      // De-Emphasis
 
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -136,8 +142,8 @@ void Si4703::si4703_init()
 // Set FM Band Region 
 //-----------------------------------------------------------------------------------------------------------------------------------
 void	Si4703::setRegion(int band,	  // Band Range
-                int space,	// Band Spacing
-                int de)		  // De-Emphasis
+                        int space,	// Band Spacing
+                        int de)		  // De-Emphasis
 {
   getShadow();                                // Read the current register set
   shadow.reg.SYSCONFIG2.bits.SPACE  = space;  // Select Channel Spacing Type
