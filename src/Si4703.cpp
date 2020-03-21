@@ -324,24 +324,33 @@ int Si4703::getChannel()
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::setChannel(int freq)
 {
-
-  getShadow();                              // Read the current register set
   if (freq > _bandEnd)    freq = _bandEnd;    // check upper limit
   if (freq < _bandStart)  freq = _bandStart;  // check lower limit
 
   // Freq     = Spacing * Channel + bandStart.
   // Channel  = (Freq - bandStart) / Spacing
-
+  getShadow();                              // Read the current register set
   shadow.reg.CHANNEL.bits.CHAN  = (freq - _bandStart) / _bandSpacing;
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
-  while(_intPin == 1) {}	                  // Wait for interrupt indicating STC (Seek/Tune Complete)
+  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Select method Interrupt or STC
+  {
+    while(!getSTC())                                // Wait for the si4703 to set the STC
+    {
+      // you can show seek progress here
+      // TODO:
+    }
+  }
+else
+  {
+    // Wait for interrupt indicating STC (Seek/Tune Complete)
+    // TODO:
+  }
 
   getShadow();                              // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
   putShadow();                              // Write to registers
-
   while(getSTC());                          // Wait for the si4703 to clear the STC
 
   return getChannel();
@@ -375,21 +384,32 @@ bool Si4703::getSTC(void)
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::seek(byte seekDirection){
 
-  getShadow();                                    // Read the current register set
-  shadow.reg.POWERCFG.bits.SEEKUP =seekDirection; // Seek direction = UP/Down
-  shadow.reg.POWERCFG.bits.SEEK   =1;             // Start seek
-  putShadow();                                    // Write to registers
+  getShadow();                                      // Read the current register set
+  shadow.reg.POWERCFG.bits.SEEKUP = seekDirection;  // Seek direction = UP/Down
+  shadow.reg.POWERCFG.bits.SEEK   = 1;              // Start seek
+  putShadow();                                      // Write to registers
 
-  while(_intPin == 1) {}                          // Wait for interrupt indicating STC (Seek/Tune complete)
+  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Select method Interrupt or STC
+    {
+      while(!getSTC())                              // Wait for the si4703 to set the STC
+      {
+        // you can show seek progress here
+        // TODO:
+      }
+    }
+  else
+    {
+      // Wait for interrupt indicating STC (Seek/Tune Complete)
+      // TODO:
+    }
   
-  getShadow();                                    // Read the current register set
-  shadow.reg.CHANNEL.bits.TUNE  =0;               // Clear Tune bit
-  putShadow();                                    // Write to registers
-  
-  while(getSTC());                                // Wait for the si4703 to clear the STC
- 
-  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0); // SFBL is indicating we hit a band limit or failed to find a station
-  return getChannel();                            // return new frequency
+  getShadow();                                      // Read the current register set
+  shadow.reg.POWERCFG.bits.SEEK   = 0;              // Stop seek
+  putShadow();                                      // Write to registers
+  while(getSTC());                                  // Wait for the si4703 to clear the STC
+
+  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0);   // SFBL is indicating we hit a band limit or failed to find a station
+  return getChannel();                              // return new frequency
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
