@@ -99,13 +99,12 @@ void Si4703::si4703_init()
 
   // Start Configuration
   getShadow();                                      // Read the current register set
+  setRegion(_band,_space,_de);
+  setSeekMode();
 
   // PowerOn Configuration
   shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Powerup Enable
   shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
-  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
-  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
-  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
   shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
   shadow.reg.POWERCFG.bits.MONO     = 1;            // Disable MONO Mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
@@ -115,7 +114,6 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
   shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
   shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
-  shadow.reg.SYSCONFIG1.bits.DE     = 0;            // De-emphasis=75 μs. Used in USA (default)
   shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
   shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
   shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
@@ -124,13 +122,8 @@ void Si4703::si4703_init()
 
   // System Configuration 2
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
-  shadow.reg.SYSCONFIG2.bits.SPACE  = SPACE_100KHz; // Select Channel Spacing Type
-  shadow.reg.SYSCONFIG2.bits.BAND   = BAND_US_EU;   // 87.5–108 MHz (USA, Europe) (Default)
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // Min RSSI (default)
-  
+    
   // System Configuration 3
-  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
-  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
   shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
   shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
   shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
@@ -145,11 +138,9 @@ void	Si4703::setRegion(int band,	  // Band Range
                         int space,	// Band Spacing
                         int de)		  // De-Emphasis
 {
-  getShadow();                                // Read the current register set
   shadow.reg.SYSCONFIG2.bits.SPACE  = space;  // Select Channel Spacing Type
   shadow.reg.SYSCONFIG2.bits.BAND   = band;   // Select Band frequency range
   shadow.reg.SYSCONFIG1.bits.DE     = de;     // Select de-emphasis
-  putShadow();                                // Write to registers
 	
   switch (band)
   {
@@ -191,12 +182,24 @@ void	Si4703::setRegion(int band,	  // Band Range
   }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
+// Set Seek Mode
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::setSeekMode()
+{
+  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
+  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
+  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
+
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
 // Power Up Device
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::powerUp()
 {
   si4703_init();
-  setRegion(_band,_space,_de);
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Power Down
@@ -206,25 +209,55 @@ void Si4703::powerDown()
   // TODO:
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Audio Mute
-//-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::setMute(bool en)
-{
-  // TODO:
-}	
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Force Mono
+// Set Mono
 //-----------------------------------------------------------------------------------------------------------------------------------
 void	Si4703::setMono(bool en)
 {
-  // TODO:
+  getShadow();                            // Read the current register set
+  shadow.reg.POWERCFG.bits.MONO = en;     // 1 = Force Mono
+  putShadow();                            // Write to registers
 }	
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Extended Volume Range
+// Get Mono Status
+//-----------------------------------------------------------------------------------------------------------------------------------
+bool	Si4703::getMono(void)
+{
+  getShadow();                              // Read the current register set
+  return (shadow.reg.POWERCFG.bits.MONO);   // return status
+}	
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Set Audio Mute
+//-----------------------------------------------------------------------------------------------------------------------------------
+void	Si4703::setMute(bool en)
+{
+  getShadow();                              // Read the current register set
+  shadow.reg.POWERCFG.bits.DMUTE = en;      // 0=disabled (default)
+  putShadow();                              // Write to registers
+}	
+//-----------------------------------------------------------------------------------------------------------------------------------
+// get Audio Mute
+//-----------------------------------------------------------------------------------------------------------------------------------
+bool	Si4703::getMute(void)
+{
+  getShadow();                              // Read the current register set
+  return (shadow.reg.POWERCFG.bits.DMUTE);  // return status
+}	
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Set Extended Volume Range
 //-----------------------------------------------------------------------------------------------------------------------------------
 void	Si4703::setVolExt(bool en)
 {
-  // TODO:
+  getShadow();                              // Read the current register set
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = en;   // 0=disabled (default)
+  putShadow();                              // Write to registers
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Get Extended Volume Range
+//-----------------------------------------------------------------------------------------------------------------------------------
+bool	Si4703::getVolExt(void)
+{
+  getShadow();                               // Read the current register set
+  return (shadow.reg.SYSCONFIG3.bits.VOLEXT);// return status
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Get Current Volume
@@ -317,19 +350,7 @@ int Si4703::decChannel(void)
 {
   return setChannel(getChannel() - bandSpacing); // Decrement frequency one band step
 }
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Set Seek Mode
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::setSeekMode()
-{
-  getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
-  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
-  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
-  putShadow();                                      // Write to registers
 
-}
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Seeks the next available station
 // Returns freq if seek succeeded
@@ -376,7 +397,7 @@ int Si4703::seekDown()
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read RDS
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::readRDS(char* buffer, long timeout)
+void Si4703::readRDS(void)
 { 
   // TODO:
 }
@@ -410,7 +431,7 @@ void Si4703::readRDS(char* buffer, long timeout)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-//
+// Read Device ID
 //-----------------------------------------------------------------------------------------------------------------------------------
 	int 	Si4703::getDeviceID()
   {
@@ -418,7 +439,7 @@ void Si4703::readRDS(char* buffer, long timeout)
   }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-//
+// Read Chip ID
 //-----------------------------------------------------------------------------------------------------------------------------------
 	int		Si4703::getChipID()
   {

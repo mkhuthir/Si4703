@@ -90,21 +90,21 @@ class Si4703
 	int		incChannel(void);		// Increment Channel Frequency one band step
 	int		decChannel(void);		// Decrement Channel Frequency one band step
 	
-	void 	setSeekMode(void);		// Set Seek Mode
 	int 	seekUp(void); 			// Seeks up and returns the tuned channel or 0
 	int 	seekDown(void); 		// Seeks down and returns the tuned channel or 0
 
-	void	setMute(bool en);		// Audio Mute
-	void	setMono(bool en);		// Force Mono
-	void	setVolExt(bool en);		// Extended Volume Range
-
+	void	setMono(bool en);		// 1=Force Mono
+	bool	getMono(void);			// Get Mono status
+	void	setMute(bool en);		// 1=Audio Mute
+	bool	getMute(void);			// Get Mute Status
+	void	setVolExt(bool en);		// Set Extended Volume Range
+	bool	getVolExt(void);		// Get Extended Volume Range
 	int		getVolume(void);		// Get current Volume value
 	int		setVolume(int volume);	// Sets volume value 0 to 15
 	int		incVolume(void);		// Increment Volume
 	int		decVolume(void);		// Decrement Volume
 
-	void	readRDS(char* message,	// Reads RDS, message should be at least 9 chars, result will be null terminated.
-					long timeout);	// timeout in milliseconds
+	void	readRDS(void);			// Reads RDS, message should be at least 9 chars, result will be null terminated.
 
 	void	writeGPIO(int GPIO, 	// Write to GPIO1,GPIO2, and GPIO3
 					  int val); 	// values can be GPIO_Z, GPIO_I, GPIO_Low, and GPIO_High
@@ -122,16 +122,15 @@ class Si4703
 	int		bandEnd;				// Top of Band (MHz)
 	int		bandSpacing;			// Band Spacing (MHz)
 
+	void	getShadow();			// Read registers to shadow 
+	byte 	putShadow();			// Write shadow to registers
 	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
 	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
 	void 	si4703_init();			// init class
 	void	setRegion(int band,		// Band Range
 					  int space,	// Band Spacing
 					  int de);		// De-Emphasis
-
-	void	getShadow();			// Read registers to shadow 
-	byte 	putShadow();			// Write shadow to registers
-
+	void 	setSeekMode(void);		// Set Seek Mode
 	int 	seek(byte seekDir);		// Seek next channel
 
 	// I2C interface

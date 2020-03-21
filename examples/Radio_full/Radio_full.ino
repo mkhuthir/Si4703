@@ -42,9 +42,6 @@
 // Variables
 //-------------------------------------------------------------------------------------------------------------
 
-// Settings
-int       mute  = 0;   // mute value volume=0
-
 // Favourate Channels fav_0..fav_9 (kHz)
 int       fav_0 = 8760;   
 int       fav_1 = 8820;   
@@ -213,12 +210,13 @@ void printHelp()
 {
   Serial.println("0..9    Favourite stations");
   Serial.println("+ -     Volume (max 15)");
+  Serial.println("e       Enable/Disable Volume 30dB Ext");
   Serial.println("u d     Frequency up / down");
   Serial.println("n l     Channel Seek next / last");
   Serial.println("r       Listen for RDS Data (15 sec timeout)");
   Serial.println("i       Prints current settings");
   Serial.println("f       Prints Favourite stations list");
-  Serial.println("m       Mute/Unmute sound");
+  Serial.println("m       Mute/Unmute volume");
   Serial.println("h       Prints this help");
   Serial.println("Select a command:");
 }
@@ -330,6 +328,11 @@ void processCommand()
     radio.decVolume();
     printCurrentSettings();
   } 
+  else if (ch == 'e') 
+  {
+    radio.setVolExt(!radio.getVolExt());
+    printCurrentSettings();
+  } 
   else if (ch == '0')
   {
     radio.setChannel(fav_0);
@@ -404,9 +407,7 @@ void processCommand()
   }
   else if (ch == 'm')
   {
-    int temp  = radio.getVolume();  // Save the current volume in temp
-    radio.setVolume(mute);          // Set Volume
-    mute      = temp;               // Save last volume in mute
+    radio.setMute(!radio.getMute());
     printCurrentSettings();
   }
   else if (ch == 'h')
