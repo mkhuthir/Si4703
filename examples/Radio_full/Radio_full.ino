@@ -208,16 +208,22 @@ void printCurrentSettings()
 //-------------------------------------------------------------------------------------------------------------
 void printHelp()
 {
-  Serial.println("0..9    Favourite stations");
-  Serial.println("+ -     Volume (max 15)");
+
+  Serial.println("\n----------- Volume Control --------------");
+  Serial.println("+ -     inc/Dec Volume (max 15)");
   Serial.println("e       Enable/Disable Volume 30dB Ext");
+  Serial.println("m       Mute/Unmute volume");
+  Serial.println("s       Set Mono/Sterio");
+  Serial.println("----------- Tuneing -----------------------");
   Serial.println("u d     Frequency up / down");
   Serial.println("n l     Channel Seek next / last");
-  Serial.println("r       Listen for RDS Data (15 sec timeout)");
-  Serial.println("i       Prints current settings");
+  Serial.println("0..9    Favourite stations");
   Serial.println("f       Prints Favourite stations list");
-  Serial.println("m       Mute/Unmute volume");
+  Serial.println("----------- RDS & Info --------------------");
+  Serial.println("r       Listen for RDS Data");
+  Serial.println("i       Prints current settings");
   Serial.println("h       Prints this help");
+  Serial.println("-------------------------------------------");
   Serial.println("Select a command:");
 }
 
@@ -408,6 +414,11 @@ void processCommand()
   else if (ch == 'm')
   {
     radio.setMute(!radio.getMute());
+    printCurrentSettings();
+  }
+  else if (ch == 's')
+  {
+    radio.setMono(!radio.getMono());
     printCurrentSettings();
   }
   else if (ch == 'h')
