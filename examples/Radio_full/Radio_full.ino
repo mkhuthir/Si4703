@@ -10,31 +10,34 @@
 #include <Si4703.h> // library to control Silicon Labs' Si4703 FM Radio Receiver.
 #include <Wire.h>   // Used for I2C interface.
 #include <EEPROM.h> // To save configuration parameters such as channel and volume.
+
 //-------------------------------------------------------------------------------------------------------------
 // Defines
 //-------------------------------------------------------------------------------------------------------------
+
 // EEPROM Usage Map
 #define eeprom_chn_msb  1
 #define eeprom_chn_lsb  2
 #define eeprom_vol      3
-//-------------------------------------------------------------------------------------------------------------
-// Global Constants (defines): these quantities don't change
-//-------------------------------------------------------------------------------------------------------------
-const int RST         = 4;            // radio reset pin
-const int SDIO        = A4;           // radio data pin
-const int SCLK        = A5;           // radio clock pin
-const int INT         = 6;            // radio interrupt pin
-const int LED1        = 5;            // LED1 pin
 
-const int rotaryPinA  = 2;            // encoder pin A
-const int rotaryPinB  = 3;            // encoder pin B. Note that rotaryPinC is connected to GND
+// Used Pins
+#define RST         4       // Reset Pin
+#define SDIO        A4      // Serial Data I/O Pin
+#define SCLK        A5      // Serial Clock Pin
+#define INT         6       // Interrupt Pin
+#define LED1        5       // LED1 pin
+#define rotaryPinA  2       // encoder pin A
+#define rotaryPinB  3       // encoder pin B. Note that rotaryPinC is connected to GND
 
-const int BAND        = BAND_US_EU;   // Select band frequency range
-const int SPACE       = SPACE_100KHz; // Select band spacing
-const int DE          = DE_75us;      // Select de-emphasis
+// Select Region 
+#define BAND  BAND_US_EU    // Select band frequency range
+#define SPACE SPACE_100KHz  // Select band spacing
+#define DE    DE_75us       // Select de-emphasis
 
-const boolean UP      = true;
-const boolean DOWN    = false;
+// Direction
+#define UP    true
+#define DOWN  false
+
 //-------------------------------------------------------------------------------------------------------------
 // Variables
 //-------------------------------------------------------------------------------------------------------------
@@ -60,10 +63,12 @@ int       fav_9 = 10740;
 volatile int      rotaryLast      = 0b00;
 volatile boolean  rotaryDirection = UP;
 volatile boolean  rotaryUpdated   = false;
+
 //-------------------------------------------------------------------------------------------------------------
 // create radio instance
 //-------------------------------------------------------------------------------------------------------------
 Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
+
 //-------------------------------------------------------------------------------------------------------------
 // Arduino initial Setup
 //-------------------------------------------------------------------------------------------------------------

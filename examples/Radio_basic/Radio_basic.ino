@@ -15,8 +15,9 @@ void setup()
 {
   Serial.begin(115200);   // Start Terminal Port
   radio.powerUp();        // Power Up Device
-  radio.setVolume(5);     // Set initial volume 5
   radio.setChannel(9440); // Set initial frequency 94.4 Mhz
+  radio.setVolume(1);     // Set initial volume
+  
   displayHelp();          // Show Help Message
   displayInfo();          // Show current settings info
 

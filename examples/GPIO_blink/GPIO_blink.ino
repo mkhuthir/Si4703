@@ -1,18 +1,21 @@
 #include <Si4703.h>
 #include <Wire.h>
 
-int RST  = 4;   // Reset Pin
-int SDIO = A4;  // Serial Data I/O Pin
-int SCLK = A5;  // Serial Clock Pin
-int INT  = 3;   // Interrupt Pin
+#define RST   4            // Reset Pin
+#define SDIO  A4           // Serial Data I/O Pin
+#define SCLK  A5           // Serial Clock Pin
+#define INT   3            // Interrupt Pin
+#define BAND  BAND_US_EU   // Select band frequency range
+#define SPACE SPACE_100KHz // Select band spacing
+#define DE    DE_75us      // Select de-emphasis
 
-Si4703 radio(RST, SDIO, SCLK, INT);
+Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
 
 void setup()
 {
   radio.powerUp();
-  radio.setChannel(944);
-  radio.setVolume(5);
+  radio.setChannel(9440);
+  radio.setVolume(3);
 }
 
 void loop()
