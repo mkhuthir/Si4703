@@ -342,11 +342,7 @@ int Si4703::setChannel(int freq)
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
   putShadow();                              // Write to registers
 
-  //Wait for the si4703 to clear the STC
-  while(1) {
-    getShadow();                                  // Read the current register set
-    if(shadow.reg.STATUSRSSI.bits.STC== 0) break; //Tuning complete!
-  }
+  while(getSTC());                          // Wait for the si4703 to clear the STC
 
   return getChannel();
 }
@@ -364,7 +360,14 @@ int Si4703::decChannel(void)
 {
   return setChannel(getChannel() - _bandSpacing); // Decrement frequency one band step
 }
-
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Get STC status
+//-----------------------------------------------------------------------------------------------------------------------------------
+bool Si4703::getSTC(void)
+{
+  getShadow();                                  // Read the current register set
+  return(shadow.reg.STATUSRSSI.bits.STC);
+}
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Seeks the next available station
 // Returns freq if seek succeeded
@@ -383,11 +386,8 @@ int Si4703::seek(byte seekDirection){
   shadow.reg.CHANNEL.bits.TUNE  =0;               // Clear Tune bit
   putShadow();                                    // Write to registers
   
-  while(1) {                                      // Wait for the si4703 to clear the STC
-    getShadow();                                  // Read the current register set
-    if(shadow.reg.STATUSRSSI.bits.STC== 0) break; // Tuning complete!
-  }
-
+  while(getSTC());                                // Wait for the si4703 to clear the STC
+ 
   if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0); // SFBL is indicating we hit a band limit or failed to find a station
   return getChannel();                            // return new frequency
 }

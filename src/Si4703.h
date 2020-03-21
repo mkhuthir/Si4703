@@ -130,6 +130,7 @@ class Si4703
 	void	setRegion(int band,		// Band Range
 					  int space,	// Band Spacing
 					  int de);		// De-Emphasis
+	bool	getSTC(void);			// Get STC status
 	int 	seek(byte seekDir);		// Seek next channel
 
 	// I2C interface
