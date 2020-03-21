@@ -335,18 +335,18 @@ int Si4703::setChannel(int freq)
   putShadow();                              // Write to registers
 
   if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Select method Interrupt or STC
-  {
-    while(!getSTC())                                // Wait for the si4703 to set the STC
     {
-      // you can show seek progress here
+      while(!getSTC())                                // Wait for the si4703 to set the STC
+      {
+        // you can show seek progress here
+        // TODO:
+      }
+    }
+  else
+    {
+      // Wait for interrupt indicating STC (Seek/Tune Complete)
       // TODO:
     }
-  }
-else
-  {
-    // Wait for interrupt indicating STC (Seek/Tune Complete)
-    // TODO:
-  }
 
   getShadow();                              // Read the current register set
   shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
