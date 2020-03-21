@@ -64,52 +64,53 @@ void	Si4703::bus3Wire(void)
 //-----------------------------------------------------------------------------------------------------------------------------------
 // 2-Wire Control Interface (SCLCK, SDIO)
 //-----------------------------------------------------------------------------------------------------------------------------------
-
 void	Si4703::bus2Wire(void)		
 {
   // Set IO pins directions
   pinMode(_rstPin , OUTPUT);    // Reset pin
   pinMode(_sdioPin, OUTPUT);    // I2C data IO pin
-  pinMode(_intPin , OUTPUT);    // STC (search/tune complete) interrupt pin
+  pinMode(_intPin , OUTPUT);    // STC (search/tune complete)/RDS interrupt pin
 
   // Set communcation mode to 2-Wire
-  digitalWrite(_sdioPin,LOW);   // A low SDIO indicates a 2-wire interface
   digitalWrite(_rstPin ,LOW);   // Put Si4703 into reset
-  digitalWrite(_intPin ,HIGH);  // STC goes low on interrupt
-  delay(1);                     // Some delays while we allow pins to settle
+  digitalWrite(_sdioPin,LOW);   // A low SDIO indicates a 2-wire interface
+  digitalWrite(_intPin ,HIGH);  // pin goes low on interrupt
+  delay(1);                     // Delay to allow pins to settle
   digitalWrite(_rstPin ,HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                     // Allow Si4703 to come out of reset
   Wire.begin();                 // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
 }	
 //-----------------------------------------------------------------------------------------------------------------------------------
-// To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
-// The breakout board has SEN pulled high, but also has SDIO pulled high. Therefore, after a normal power up
-// The Si4703 will be in an unknown state. RST must be controlled
+// Power Up Device
 //-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::si4703_init() 
+void Si4703::powerUp()
 {
-  bus2Wire();                       // 2-Wire Control Interface (SCLCK, SDIO)
-
   // Enable Oscillator
-  getShadow();                      // Read the current register set
-  shadow.reg.TEST1.bits.XOSCEN = 1; // Enable the oscillator
-  putShadow();                      // Write to registers
-  delay(500);                       // Wait for oscillator to settle
+  getShadow();                            // Read the current register set
+  shadow.reg.TEST1.bits.XOSCEN = 1;       // Enable the oscillator
+  putShadow();                            // Write to registers
+  delay(500);                             // Wait for oscillator to settle
+
+  // Enable Device
+  getShadow();                            // Read the current register set
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;  // Powerup Enable=1
+  shadow.reg.POWERCFG.bits.DISABLE  = 0;  // Powerup Disable=0
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;  // Disable Mute
+  putShadow();                            // Write to registers
+  delay(110);                             // wait for max power up time
 
   // Start Configuration
   getShadow();                                      // Read the current register set
+
   setRegion(_band,_space,_de);
   setSeekMode();
 
   // PowerOn Configuration
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Powerup Enable
-  shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
   shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
   shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
-  shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Mute
-
+  
   // System Configuration 1
   shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
   shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
@@ -129,7 +130,28 @@ void Si4703::si4703_init()
   shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
 
   putShadow();                                      // Write to registers
-  delay(110);                                       // wait for max power up time
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Power Down
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::powerDown()
+{
+  getShadow();                                      // Read the current register set
+  shadow.reg.TEST1.bits.
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
+  putShadow();                                      // Write to registers
+}
+//-----------------------------------------------------------------------------------------------------------------------------------
+// To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
+// The breakout board has SEN pulled high, but also has SDIO pulled high. Therefore, after a normal power up
+// The Si4703 will be in an unknown state. RST must be controlled
+//-----------------------------------------------------------------------------------------------------------------------------------
+void Si4703::start() 
+{
+  bus2Wire();   // 2-Wire Control Interface (SCLCK, SDIO)
+  powerUp();    // Power Up device
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set FM Band Region 
@@ -194,20 +216,7 @@ void Si4703::setSeekMode()
   shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
   shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
 }
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Power Up Device
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::powerUp()
-{
-  si4703_init();
-}
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Power Down
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::powerDown()
-{
-  // TODO:
-}
+
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Set Mono
 //-----------------------------------------------------------------------------------------------------------------------------------

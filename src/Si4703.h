@@ -79,11 +79,15 @@ class Si4703
 		   );
 			
 
+
+
+	
+    void	powerUp();				// Power Up radio device
+	void	powerDown();			// Power Down radio device to save power
+	void 	start();				// start radio
+
 	int		getDeviceID();			// 
 	int		getChipID();			//
-	
-    void	powerUp();				// Power Up Device
-	void	powerDown();			// Power Down Device to save power
 
 	int 	getChannel(void);		// Get 3 digit channel number
 	int		setChannel(int freq);	// Set 3 digit channel number
@@ -126,7 +130,7 @@ class Si4703
 	byte 	putShadow();			// Write shadow to registers
 	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
 	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
-	void 	si4703_init();			// init class
+
 	void	setRegion(int band,		// Band Range
 					  int space,	// Band Spacing
 					  int de);		// De-Emphasis

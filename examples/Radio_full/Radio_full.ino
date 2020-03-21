@@ -77,7 +77,7 @@ void setup()
   pinMode(LED1, OUTPUT);      // LED1 pin is output
   digitalWrite(LED1, LOW);    // turn LED1 OFF
 
-  radio.powerUp();            // turns the module on
+  radio.start();              // start radio device
   read_EEPROM();              // load saved settings
 
   // Enable rotary encoder
