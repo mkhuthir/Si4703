@@ -89,12 +89,13 @@ class Si4703
 	int		setChannel(int freq);	// Set 3 digit channel number
 	int		incChannel(void);		// Increment Channel Frequency one band step
 	int		decChannel(void);		// Decrement Channel Frequency one band step
-	
 	int 	seekUp(void); 			// Seeks up and returns the tuned channel or 0
 	int 	seekDown(void); 		// Seeks down and returns the tuned channel or 0
+	int		getRSSI(void);			// Get RSSI current value
 
 	void	setMono(bool en);		// 1=Force Mono
 	bool	getMono(void);			// Get Mono status
+	bool	getST(void);			// Get Sterio Status
 	void	setMute(bool en);		// 1=Audio Mute
 	bool	getMute(void);			// Get Mute Status
 	void	setVolExt(bool en);		// Set Extended Volume Range
@@ -115,8 +116,8 @@ class Si4703
 	int  	_sdioPin;				// I2C Data IO Pin
 	int  	_sclkPin;				// I2C Clock Pin
 	int  	_intPin;				// Seek/Tune Complete and RDS interrupt Pin
-	int  	_band;					// Band Range
-  	int  	_space;					// Band Spacing
+	int  	_band;					// Band Range code
+  	int  	_space;					// Band Spacing code
   	int  	_de;					// De-Emphasis
 	int		_bandStart;				// Bottom of Band (MHz)
 	int		_bandEnd;				// Top of Band (MHz)

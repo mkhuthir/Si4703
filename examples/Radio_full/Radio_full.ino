@@ -198,10 +198,14 @@ void printCurrentSettings()
 {
    Serial.print("| Ch:");
    Serial.print(float(radio.getChannel())/100,2);
-   Serial.print(" MHz | VOL:");
+   Serial.print(" MHz | RSSI:");
+   Serial.print(radio.getRSSI());
+   Serial.print(" | VOL:");
    Serial.print(radio.getVolume());
    Serial.print(" | VolExt:");
    Serial.print(radio.getVolExt());
+   Serial.print(" | ST:");
+   Serial.print(radio.getST());
    Serial.print(" | DMute:");
    Serial.print(radio.getMute());
    Serial.print(" | Mono:");
