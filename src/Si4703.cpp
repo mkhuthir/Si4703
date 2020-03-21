@@ -99,49 +99,25 @@ void Si4703::powerUp()
   shadow.reg.POWERCFG.bits.DMUTE    = 1;  // Disable Mute
   putShadow();                            // Write to registers
   delay(110);                             // wait for max power up time
-
-  // Start Configuration
-  getShadow();                                      // Read the current register set
-
-  setRegion(_band,_space,_de);
-  setSeekMode();
-
-  // PowerOn Configuration
-  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
-  shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
-  
-  // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
-  shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
-  shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
-
-  // System Configuration 2
-  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
-    
-  // System Configuration 3
-  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
-  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
-  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
-
-  putShadow();                                      // Write to registers
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Power Down
 //-----------------------------------------------------------------------------------------------------------------------------------
 void Si4703::powerDown()
 {
-  getShadow();                                      // Read the current register set
-  shadow.reg.TEST1.bits.
-  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
-  putShadow();                                      // Write to registers
+  getShadow();                                // Read the current register set
+  shadow.reg.TEST1.bits.AHIZEN      = 1;      // LOUT/LOUT = High impedance
+
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z; // GPIO1 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z; // GPIO2 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z; // GPIO3 = High impedance (default)
+
+  shadow.reg.POWERCFG.bits.DMUTE    = 0;      // Disable Mute
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;      // PowerDown Enable=1
+  shadow.reg.POWERCFG.bits.DISABLE  = 1;      // PowerDown Disable=1
+  
+  putShadow();                                // Write to registers
+  delay(2);                                   // wait for max power down time
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
@@ -152,33 +128,75 @@ void Si4703::start()
 {
   bus2Wire();   // 2-Wire Control Interface (SCLCK, SDIO)
   powerUp();    // Power Up device
+
+  // Default Start Configuration
+  getShadow();                            // Read the current register set
+
+  // Select region band
+  setRegion(_band,_space,_de);                      // Select region band limits
+  shadow.reg.SYSCONFIG2.bits.SPACE  = _space;       // Select Channel Spacing Type
+  shadow.reg.SYSCONFIG2.bits.BAND   = _band;        // Select Band frequency range
+  shadow.reg.SYSCONFIG1.bits.DE     = _de;          // Select de-emphasis                          
+
+  // set DSMUTE mode
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
+  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
+  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
+
+  // set seek mode
+  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
+  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
+  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
+
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
+
+  // set RDS mode
+  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
+  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
+
+  // Enable Audio
+  shadow.reg.TEST1.bits.AHIZEN      = 0;            // Enable Audio
+  shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
+  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
+
+  // System Configuration 1
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
+  shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
+
+  // Disable GPIO
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
+
+  putShadow();                                      // Write to registers
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set FM Band Region 
+// Set FM Band Region limits and spacing
 //-----------------------------------------------------------------------------------------------------------------------------------
 void	Si4703::setRegion(int band,	  // Band Range
                         int space,	// Band Spacing
                         int de)		  // De-Emphasis
 {
-  shadow.reg.SYSCONFIG2.bits.SPACE  = space;  // Select Channel Spacing Type
-  shadow.reg.SYSCONFIG2.bits.BAND   = band;   // Select Band frequency range
-  shadow.reg.SYSCONFIG1.bits.DE     = de;     // Select de-emphasis
-	
   switch (band)
   {
     case BAND_US_EU:      // 87.5–108 MHz (US / Europe, Default)
-      bandStart = 8750;  // Bottom of Band (kHz)
-      bandEnd		= 10800;	// Top of Band (kHz)
+      _bandStart = 8750;  // Bottom of Band (kHz)
+      _bandEnd		= 10800;	// Top of Band (kHz)
       break;
     
     case BAND_JPW:        // 76–108 MHz (Japan wide band)
-      bandStart = 7600;  // Bottom of Band (kHz)
-      bandEnd		= 10800;	// Top of Band (kHz)
+      _bandStart = 7600;  // Bottom of Band (kHz)
+      _bandEnd		= 10800;	// Top of Band (kHz)
       break;
     
     case BAND_JP:         // 76–90 MHz (Japan)
-      bandStart = 7600;	// Bottom of Band (kHz)
-      bandEnd		= 9000;	// Top of Band (kHz)
+      _bandStart = 7600;	// Bottom of Band (kHz)
+      _bandEnd		= 9000;	// Top of Band (kHz)
       break;
 
     default:
@@ -188,33 +206,20 @@ void	Si4703::setRegion(int band,	  // Band Range
   switch (space)
   {
     case SPACE_100KHz:    // 200 kHz (US / Australia, Default)
-      bandSpacing	= 10;	// Band Spacing (kHz)
+      _bandSpacing	= 10;	// Band Spacing (kHz)
       break;
 
     case SPACE_200KHz:    // 100 kHz (Europe / Japan)
-      bandSpacing	= 20;	// Band Spacing (kHz)
+      _bandSpacing	= 20;	// Band Spacing (kHz)
       break;
 
     case SPACE_50KHz:     // 50 kHz (Other)
-      bandSpacing	= 5;		// Band Spacing (kHz)
+      _bandSpacing	= 5;		// Band Spacing (kHz)
       break;
     
     default:
       break;
   }
-}
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Set Seek Mode
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::setSeekMode()
-{
-  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
-  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
-  shadow.reg.POWERCFG.bits.SKMODE   = 1;            // Seek mode = Wrap
-
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = 0;            // 0x00 = min RSSI (default)
-  shadow.reg.SYSCONFIG3.bits.SKCNT  = SKCNT_DIS;    // disabled (default)
-  shadow.reg.SYSCONFIG3.bits.SKSNR  = SKSNR_DIS;    // disabled (default)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -311,7 +316,7 @@ int Si4703::getChannel()
   getShadow();                                // Read the current register set
   
   // Freq = Spacing * Channel + Bottom of Band.
-  return (bandSpacing * shadow.reg.READCHAN.bits.READCHAN + bandStart);  
+  return (_bandSpacing * shadow.reg.READCHAN.bits.READCHAN + _bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -321,13 +326,13 @@ int Si4703::setChannel(int freq)
 {
 
   getShadow();                              // Read the current register set
-  if (freq > bandEnd)    freq = bandEnd;    // check upper limit
-  if (freq < bandStart)  freq = bandStart;  // check lower limit
+  if (freq > _bandEnd)    freq = _bandEnd;    // check upper limit
+  if (freq < _bandStart)  freq = _bandStart;  // check lower limit
 
   // Freq     = Spacing * Channel + bandStart.
   // Channel  = (Freq - bandStart) / Spacing
 
-  shadow.reg.CHANNEL.bits.CHAN  = (freq - bandStart) / bandSpacing;
+  shadow.reg.CHANNEL.bits.CHAN  = (freq - _bandStart) / _bandSpacing;
   shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
   putShadow();                              // Write to registers
 
@@ -350,14 +355,14 @@ int Si4703::setChannel(int freq)
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::incChannel(void)
 {
-  return setChannel(getChannel() + bandSpacing); // Increment frequency one band step
+  return setChannel(getChannel() + _bandSpacing); // Increment frequency one band step
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Decrement frequency one band step
 //-----------------------------------------------------------------------------------------------------------------------------------
 int Si4703::decChannel(void)
 {
-  return setChannel(getChannel() - bandSpacing); // Decrement frequency one band step
+  return setChannel(getChannel() - _bandSpacing); // Decrement frequency one band step
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------

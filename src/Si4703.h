@@ -77,11 +77,7 @@ class Si4703
             int space,				// Band Spacing
             int de		  			// De-Emphasis
 		   );
-			
-
-
-
-	
+		
     void	powerUp();				// Power Up radio device
 	void	powerDown();			// Power Down radio device to save power
 	void 	start();				// start radio
@@ -122,19 +118,17 @@ class Si4703
 	int  	_band;					// Band Range
   	int  	_space;					// Band Spacing
   	int  	_de;					// De-Emphasis
-	int		bandStart;				// Bottom of Band (MHz)
-	int		bandEnd;				// Top of Band (MHz)
-	int		bandSpacing;			// Band Spacing (MHz)
+	int		_bandStart;				// Bottom of Band (MHz)
+	int		_bandEnd;				// Top of Band (MHz)
+	int		_bandSpacing;			// Band Spacing (MHz)
 
 	void	getShadow();			// Read registers to shadow 
 	byte 	putShadow();			// Write shadow to registers
 	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
 	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
-
 	void	setRegion(int band,		// Band Range
 					  int space,	// Band Spacing
 					  int de);		// De-Emphasis
-	void 	setSeekMode(void);		// Set Seek Mode
 	int 	seek(byte seekDir);		// Seek next channel
 
 	// I2C interface
