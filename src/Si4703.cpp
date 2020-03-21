@@ -106,7 +106,7 @@ void Si4703::si4703_init()
   shadow.reg.POWERCFG.bits.ENABLE   = 1;            // Powerup Enable
   shadow.reg.POWERCFG.bits.DISABLE  = 0;            // Powerup Disable
   shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
-  shadow.reg.POWERCFG.bits.MONO     = 1;            // Disable MONO Mode
+  shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
   shadow.reg.POWERCFG.bits.DMUTE    = 1;            // Disable Mute
 
@@ -231,7 +231,7 @@ bool	Si4703::getMono(void)
 void	Si4703::setMute(bool en)
 {
   getShadow();                              // Read the current register set
-  shadow.reg.POWERCFG.bits.DMUTE = en;      // 0=disabled (default)
+  shadow.reg.POWERCFG.bits.DMUTE = en;      // 0= Mute disabled
   putShadow();                              // Write to registers
 }	
 //-----------------------------------------------------------------------------------------------------------------------------------

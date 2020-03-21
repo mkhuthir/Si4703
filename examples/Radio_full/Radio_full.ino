@@ -200,31 +200,13 @@ void printCurrentSettings()
    Serial.print(float(radio.getChannel())/100,2);
    Serial.print(" MHz | VOL:");
    Serial.print(radio.getVolume());
+   Serial.print(" | Ext:");
+   Serial.print(radio.getVolExt());
+   Serial.print(" | Mute:");
+   Serial.print(radio.getMute());
+   Serial.print(" | Mono:");
+   Serial.print(radio.getMono());
    Serial.println(" |");
-}
-
-//-------------------------------------------------------------------------------------------------------------
-// Display Help on commands.
-//-------------------------------------------------------------------------------------------------------------
-void printHelp()
-{
-
-  Serial.println("\n----------- Volume Control --------------");
-  Serial.println("+ -     inc/Dec Volume (max 15)");
-  Serial.println("e       Enable/Disable Volume 30dB Ext");
-  Serial.println("m       Mute/Unmute volume");
-  Serial.println("s       Set Mono/Sterio");
-  Serial.println("----------- Tuneing -----------------------");
-  Serial.println("u d     Frequency up / down");
-  Serial.println("n l     Channel Seek next / last");
-  Serial.println("0..9    Favourite stations");
-  Serial.println("f       Prints Favourite stations list");
-  Serial.println("----------- RDS & Info --------------------");
-  Serial.println("r       Listen for RDS Data");
-  Serial.println("i       Prints current settings");
-  Serial.println("h       Prints this help");
-  Serial.println("-------------------------------------------");
-  Serial.println("Select a command:");
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -275,6 +257,31 @@ void printFavouriteList()
   Serial.println(" MHz");
 
 }
+
+//-------------------------------------------------------------------------------------------------------------
+// Display Help on commands.
+//-------------------------------------------------------------------------------------------------------------
+void printHelp()
+{
+
+  Serial.println("\n----------- Volume Control --------------");
+  Serial.println("+ -     inc/Dec Volume (max 15)");
+  Serial.println("e       Enable/Disable Volume 30dB Ext");
+  Serial.println("m       Mute/Unmute volume");
+  Serial.println("s       Set Mono/Sterio");
+  Serial.println("----------- Tuneing -----------------------");
+  Serial.println("u d     Frequency up / down");
+  Serial.println("n l     Channel Seek next / last");
+  Serial.println("0..9    Favourite stations");
+  Serial.println("f       Prints Favourite stations list");
+  Serial.println("----------- RDS & Info --------------------");
+  Serial.println("r       Listen for RDS Data");
+  Serial.println("i       Prints current settings");
+  Serial.println("h       Prints this help");
+  Serial.println("-------------------------------------------");
+  Serial.println("Select a command:");
+}
+
 //-------------------------------------------------------------------------------------------------------------
 // Process a command from serial terminal
 //-------------------------------------------------------------------------------------------------------------
@@ -284,26 +291,31 @@ void processCommand()
   char ch = Serial.read();
   Serial.print(" ");
   
-  if (ch == 'n') 
+  if (ch == '+') 
   {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.seekUp();
-    write_EEPROM();                    // Save channel to EEPROM
+    radio.incVolume();
     printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
   } 
-  else if (ch == 'l') 
+  else if (ch == '-') 
   {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.seekDown();
-    write_EEPROM();                    // Save channel to EEPROM
+    radio.decVolume();
     printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
   } 
+  else if (ch == 'e') 
+  {
+    radio.setVolExt(!radio.getVolExt()); // flip status
+    printCurrentSettings();
+  } 
+  else if (ch == 'm')
+  {
+    radio.setMute(!radio.getMute()); // flip status
+    printCurrentSettings();
+  }
+  else if (ch == 's')
+  {
+    radio.setMono(!radio.getMono()); // flip status
+    printCurrentSettings();
+  }
   else if (ch == 'u') 
   {
     digitalWrite(LED1, LOW);           // turn LED1 OFF
@@ -324,20 +336,25 @@ void processCommand()
     digitalWrite(LED1, HIGH);          // When done turn LED1 On
     radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
   } 
-  else if (ch == '+') 
+  else if (ch == 'n') 
   {
-    radio.incVolume();
+    digitalWrite(LED1, LOW);           // turn LED1 OFF
+    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+    radio.seekUp();
+    write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
+    digitalWrite(LED1, HIGH);          // When done turn LED1 On
+    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
   } 
-  else if (ch == '-') 
+  else if (ch == 'l') 
   {
-    radio.decVolume();
+    digitalWrite(LED1, LOW);           // turn LED1 OFF
+    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+    radio.seekDown();
+    write_EEPROM();                    // Save channel to EEPROM
     printCurrentSettings();
-  } 
-  else if (ch == 'e') 
-  {
-    radio.setVolExt(!radio.getVolExt());
-    printCurrentSettings();
+    digitalWrite(LED1, HIGH);          // When done turn LED1 On
+    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
   } 
   else if (ch == '0')
   {
@@ -407,19 +424,9 @@ void processCommand()
   {
     printCurrentSettings();
   }
-    else if (ch == 'f')
+  else if (ch == 'f')
   {
     printFavouriteList();
-  }
-  else if (ch == 'm')
-  {
-    radio.setMute(!radio.getMute());
-    printCurrentSettings();
-  }
-  else if (ch == 's')
-  {
-    radio.setMono(!radio.getMono());
-    printCurrentSettings();
   }
   else if (ch == 'h')
   {
