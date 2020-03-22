@@ -13,7 +13,7 @@ Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
 
 void setup()
 {
-  radio.powerUp();
+  radio.start();
   radio.setChannel(9440);
   radio.setVolume(3);
 }
@@ -21,10 +21,12 @@ void setup()
 void loop()
 {
 
-radio.writeGPIO(GPIO1, GPIO_High);  // turn LED2 ON
-delay(300);
+  radio.writeGPIO(GPIO1, GPIO_High);  // turn LED1 ON
+  radio.writeGPIO(GPIO2, GPIO_Low);   // turn LED2 OFF
+  delay(300);
 
-radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-delay(300);
+  radio.writeGPIO(GPIO1, GPIO_Low);   // turn LED1 OFF
+  radio.writeGPIO(GPIO2, GPIO_High);  // turn LED2 ON
+  delay(300);
 
 }

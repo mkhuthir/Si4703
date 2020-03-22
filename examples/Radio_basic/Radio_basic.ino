@@ -14,7 +14,7 @@ Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
 void setup()
 {
   Serial.begin(115200);   // Start Terminal Port
-  radio.powerUp();        // Power Up Device
+  radio.start();          // Power Up Device
   radio.setChannel(9440); // Set initial frequency 94.4 Mhz
   radio.setVolume(1);     // Set initial volume
   
@@ -61,11 +61,21 @@ void loop()
 
 void displayInfo()
 {
-   Serial.print("| Ch:");
-   Serial.print(float(radio.getChannel())/100,2);
-   Serial.print(" MHz | VOL:");
-   Serial.print(radio.getVolume());
-   Serial.println(" |");
+  Serial.print("| Ch:");
+  Serial.print(float(radio.getChannel())/100,2);
+  Serial.print(" MHz | RSSI:");
+  Serial.print(radio.getRSSI());
+  Serial.print(" | VOL:");
+  Serial.print(radio.getVolume());
+  Serial.print(" | VolExt:");
+  Serial.print(radio.getVolExt());
+  Serial.print(" | ST:");
+  Serial.print(radio.getST());
+  Serial.print(" | DMute:");
+  Serial.print(radio.getMute());
+  Serial.print(" | Mono:");
+  Serial.print(radio.getMono());
+  Serial.println(" |");
 
 }
 
