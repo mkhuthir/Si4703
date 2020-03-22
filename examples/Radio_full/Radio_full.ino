@@ -36,9 +36,9 @@
 
 // Seek Settings
 #define SKMODE  SKMODE_STOP // Stop when reaching band limit
-#define SEEKTH  00          // Seek RSSI Threshold
-#define SKCNT   SKCNT_DIS   // Clicks Number Threshold
-#define SKSNR   SKSNR_DIS   // Signal/Noise Ratio
+#define SEEKTH  25          // Seek RSSI Threshold
+#define SKCNT   SKCNT_MAX   // Clicks Number Threshold
+#define SKSNR   SKSNR_MAX   // Signal/Noise Ratio
 
 // Direction
 #define UP    true
