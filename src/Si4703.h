@@ -35,6 +35,10 @@ static const uint8_t 	GPIO_I			= 0b01;	// GPIO1-Reserved, GPIO2-STC/RDS int, or 
 static const uint8_t 	GPIO_Low		= 0b10;	// Low output (GND level)
 static const uint8_t 	GPIO_High		= 0b11;	// High output (VIO level)
 
+// Seek Mode
+static const uint8_t 	SKMODE_WRAP		= 0b1;	// Wrap when reaching band limit
+static const uint8_t 	SKMODE_STOP		= 0b0;	// Stop when reaching band limit
+
 // Seek FM Impulse Detection Threshold
 static const uint8_t 	SKCNT_DIS		= 0b0000; // disabled (default)
 static const uint8_t 	SKCNT_MAX		= 0b0001; // max (most stops)
@@ -75,7 +79,11 @@ class Si4703
 			int intPin,				// Seek/Tune Complete and RDS interrupt Pin
 			int band,	  			// Band Range
             int space,				// Band Spacing
-            int de		  			// De-Emphasis
+            int de,		  			// De-Emphasis
+			int skmode,				// Seek Mode
+			int seekth,				// Seek Threshold
+			int skcnt,				// Seek Clicks Number Threshold
+			int sksnr				// Seek Signal/Noise Ratio
 		   );
 		
     void	powerUp();				// Power Up radio device
@@ -112,26 +120,30 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int  	_rstPin;				// Reset Pin
-	int  	_sdioPin;				// I2C Data IO Pin
-	int  	_sclkPin;				// I2C Clock Pin
-	int  	_intPin;				// Seek/Tune Complete and RDS interrupt Pin
-	int  	_band;					// Band Range code
-  	int  	_space;					// Band Spacing code
-  	int  	_de;					// De-Emphasis
-	int		_bandStart;				// Bottom of Band (MHz)
-	int		_bandEnd;				// Top of Band (MHz)
-	int		_bandSpacing;			// Band Spacing (MHz)
+    int _rstPin;				// Reset Pin
+	int _sdioPin;				// I2C Data IO Pin
+	int _sclkPin;				// I2C Clock Pin
+	int _intPin;				// Seek/Tune Complete and RDS interrupt Pin
+	int _band;					// Band Range code
+  	int _space;					// Band Spacing code
+  	int _de;					// De-Emphasis
+	int	_bandStart;				// Bottom of Band (MHz)
+	int	_bandEnd;				// Top of Band (MHz)
+	int	_bandSpacing;			// Band Spacing (MHz)
+	int _skmode;				// Seek Mode
+	int _seekth;				// Seek Threshold
+	int _skcnt;					// Seek Clicks Number Threshold
+	int _sksnr;					// Seek Signal/Noise Ratio
 
-	void	getShadow();			// Read registers to shadow 
-	byte 	putShadow();			// Write shadow to registers
-	void	bus3Wire(void);			// 3-Wire Control Interface (SCLK, SEN, SDIO)
-	void	bus2Wire(void);			// 2-Wire Control Interface (SCLCK, SDIO)
-	void	setRegion(int band,		// Band Range
-					  int space,	// Band Spacing
-					  int de);		// De-Emphasis
-	bool	getSTC(void);			// Get STC status
-	int 	seek(byte seekDir);		// Seek next channel
+	void	getShadow();		// Read registers to shadow 
+	byte 	putShadow();		// Write shadow to registers
+	void	bus3Wire(void);		// 3-Wire Control Interface (SCLK, SEN, SDIO)
+	void	bus2Wire(void);		// 2-Wire Control Interface (SCLCK, SDIO)
+	void	setRegion(int band,	// Band Range
+					  int space,// Band Spacing
+					  int de);	// De-Emphasis
+	bool	getSTC(void);		// Get STC status
+	int 	seek(byte seekDir);	// Seek next channel
 
 	// I2C interface
 	static const int  		I2C_ADDR		= 0x10; // I2C address of Si4703 - note that the Wire function assumes non-left-shifted I2C address, not 0b.0010.000W

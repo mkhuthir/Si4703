@@ -34,6 +34,12 @@
 #define SPACE SPACE_100KHz  // Select band spacing
 #define DE    DE_75us       // Select de-emphasis
 
+// Seek Settings
+#define SKMODE  SKMODE_STOP // Stop when reaching band limit
+#define SEEKTH  00          // Seek RSSI Threshold
+#define SKCNT   SKCNT_DIS   // Clicks Number Threshold
+#define SKSNR   SKSNR_DIS   // Signal/Noise Ratio
+
 // Direction
 #define UP    true
 #define DOWN  false
@@ -64,7 +70,7 @@ volatile boolean  rotaryUpdated   = false;
 //-------------------------------------------------------------------------------------------------------------
 // create radio instance
 //-------------------------------------------------------------------------------------------------------------
-Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
+Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE, SKMODE, SEEKTH, SKCNT, SKSNR);
 
 //-------------------------------------------------------------------------------------------------------------
 // Arduino initial Setup
@@ -208,7 +214,7 @@ void printCurrentSettings()
    Serial.print(radio.getST());
    Serial.print(" | DMute:");
    Serial.print(radio.getMute());
-   Serial.print(" | Mono:");
+   Serial.print(" | DMono:");
    Serial.print(radio.getMono());
    Serial.println(" |");
 }
