@@ -35,7 +35,7 @@
 #define DE    DE_75us       // Select de-emphasis
 
 // Seek Settings
-#define SKMODE  SKMODE_STOP // Stop when reaching band limit
+#define SKMODE  SKMODE_WRAP // Stop when reaching band limit
 #define SEEKTH  25          // Seek RSSI Threshold
 #define SKCNT   SKCNT_MAX   // Clicks Number Threshold
 #define SKSNR   SKSNR_MAX   // Signal/Noise Ratio

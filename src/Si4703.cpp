@@ -30,7 +30,7 @@ Si4703::Si4703( int rstPin, // Reset Pin
   _band     = band;	    // Band Range
   _space    = space;    // Band Spacing
   _de       =	de;	      // De-Emphasis
-  _skmode   =	skmode;   // Seek Mode
+  _skmode   =	skmode;   // Seek Mode Wrap/Stop
 	_seekth   =	seekth;   // Seek Threshold
 	_skcnt    =	skcnt;    // Seek Clicks Number Threshold
 	_sksnr    =	sksnr;	  // Seek Signal/Noise Ratio
@@ -155,10 +155,10 @@ void Si4703::start()
   // set seek mode
   shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
   shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
-  shadow.reg.POWERCFG.bits.SKMODE   = _skmode;      // Seek mode = Wrap
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = _seekth;      // 0x00 = min RSSI (default)
-  shadow.reg.SYSCONFIG3.bits.SKCNT  = _skcnt;       // disabled (default)
-  shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // disabled (default)
+  shadow.reg.POWERCFG.bits.SKMODE   = _skmode;      // Seek mode Wrap/Stop
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = _seekth;      // Seek Threshold
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = _skcnt;       // Seek Clicks Number Threshold
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // Seek Signal/Noise Ratio
 
   // set RDS mode
   shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
