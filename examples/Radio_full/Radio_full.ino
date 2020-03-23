@@ -134,9 +134,9 @@ void write_EEPROM()
 void read_EEPROM()
 {
   // Read channel value
-  int MSB = EEPROM.read(eeprom_chn_msb); // load the msb into one 8-bit register
-  int LSB = EEPROM.read(eeprom_chn_lsb); // load the lsb into one 8-bit register
-  radio.setChannel((MSB << 8)|LSB);              // concatenate the lsb and msb
+  int MSB = EEPROM.read(eeprom_chn_msb);  // load the msb into one 8-bit register
+  int LSB = EEPROM.read(eeprom_chn_lsb);  // load the lsb into one 8-bit register
+  radio.setChannel((MSB << 8)|LSB);       // concatenate the lsb and msb
   
   // Read Volume
   radio.setVolume(EEPROM.read(eeprom_vol));
