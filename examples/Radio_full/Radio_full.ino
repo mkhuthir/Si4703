@@ -153,16 +153,16 @@ void updateRotary()
   int pattern = (rotaryLast << 2) | rotaryCurrent;  // adding it to the previous encoded value
 
   if(pattern == 0b1101 || pattern == 0b0100 || pattern == 0b0010 || pattern == 0b1011)
-  {
-    rotaryDirection = DOWN;
-    rotaryUpdated   = true;
-  }
+    {
+      rotaryDirection = DOWN;
+      rotaryUpdated   = true;
+    }
   
   if(pattern == 0b1110 || pattern == 0b0111 || pattern == 0b0001 || pattern == 0b1000)
-  {
-    rotaryDirection = UP;
-    rotaryUpdated   = true;
-  }
+    {
+      rotaryDirection = UP;
+      rotaryUpdated   = true;
+    }
   
   rotaryLast = rotaryCurrent; //store current rotary AB values for next time
 
@@ -176,13 +176,13 @@ void updateChannel()
     radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
 
     if(rotaryDirection == UP)
-    {
-      radio.incChannel();
-    }
+      {
+        radio.incChannel();
+      }
     else if(rotaryDirection == DOWN)
-    {
-      radio.decChannel();
-    }
+      {
+        radio.decChannel();
+      }
     
     printCurrentSettings();     // Print channel info
     rotaryUpdated = false;      //Clear flag
@@ -302,151 +302,151 @@ void processCommand()
   Serial.print(" ");
   
   if (ch == '+') 
-  {
-    radio.incVolume();
-    printCurrentSettings();
-  } 
+    {
+      radio.incVolume();
+      printCurrentSettings();
+    } 
   else if (ch == '-') 
-  {
-    radio.decVolume();
-    printCurrentSettings();
-  } 
+    {
+      radio.decVolume();
+      printCurrentSettings();
+    } 
   else if (ch == 'e') 
-  {
-    radio.setVolExt(!radio.getVolExt()); // flip status
-    printCurrentSettings();
-  } 
+    {
+      radio.setVolExt(!radio.getVolExt()); // flip status
+      printCurrentSettings();
+    } 
   else if (ch == 'm')
-  {
-    radio.setMute(!radio.getMute()); // flip status
-    printCurrentSettings();
-  }
+    {
+      radio.setMute(!radio.getMute()); // flip status
+      printCurrentSettings();
+    }
   else if (ch == 's')
-  {
-    radio.setMono(!radio.getMono()); // flip status
-    printCurrentSettings();
-  }
+    {
+      radio.setMono(!radio.getMono()); // flip status
+      printCurrentSettings();
+    }
   else if (ch == 'u') 
-  {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.incChannel();
-    write_EEPROM();                    // Save channel to EEPROM
-    printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
-  } 
+    {
+      digitalWrite(LED1, LOW);           // turn LED1 OFF
+      radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+      radio.incChannel();
+      write_EEPROM();                    // Save channel to EEPROM
+      printCurrentSettings();
+      digitalWrite(LED1, HIGH);          // When done turn LED1 On
+      radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
+    } 
   else if (ch == 'd') 
-  {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.decChannel();
-    write_EEPROM();                    // Save channel to EEPROM
-    printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
-  } 
+    {
+      digitalWrite(LED1, LOW);           // turn LED1 OFF
+      radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+      radio.decChannel();
+      write_EEPROM();                    // Save channel to EEPROM
+      printCurrentSettings();
+      digitalWrite(LED1, HIGH);          // When done turn LED1 On
+      radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
+    } 
   else if (ch == 'n') 
-  {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.seekUp();
-    write_EEPROM();                    // Save channel to EEPROM
-    printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
-  } 
+    {
+      digitalWrite(LED1, LOW);           // turn LED1 OFF
+      radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+      radio.seekUp();
+      write_EEPROM();                    // Save channel to EEPROM
+      printCurrentSettings();
+      digitalWrite(LED1, HIGH);          // When done turn LED1 On
+      radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
+    } 
   else if (ch == 'l') 
-  {
-    digitalWrite(LED1, LOW);           // turn LED1 OFF
-    radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-    radio.seekDown();
-    write_EEPROM();                    // Save channel to EEPROM
-    printCurrentSettings();
-    digitalWrite(LED1, HIGH);          // When done turn LED1 On
-    radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
-  } 
+    {
+      digitalWrite(LED1, LOW);           // turn LED1 OFF
+      radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
+      radio.seekDown();
+      write_EEPROM();                    // Save channel to EEPROM
+      printCurrentSettings();
+      digitalWrite(LED1, HIGH);          // When done turn LED1 On
+      radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
+    } 
   else if (ch == '0')
-  {
-    radio.setChannel(fav_0);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_0);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '1')
-  {
-    radio.setChannel(fav_1);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_1);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '2')
-  {
-    radio.setChannel(fav_2);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_2);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '3')
-  {
-    radio.setChannel(fav_3);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_3);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '4')
-  {
-    radio.setChannel(fav_4);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_4);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '5')
-  {
-    radio.setChannel(fav_5);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_5);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '6')
-  {
-    radio.setChannel(fav_6);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_6);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '7')
-  {
-    radio.setChannel(fav_7);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_7);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '8')
-  {
-    radio.setChannel(fav_8);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_8);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == '9')
-  {
-    radio.setChannel(fav_9);
-    write_EEPROM();             // Save channel to EEPROM
-    printCurrentSettings();
-  }
+    {
+      radio.setChannel(fav_9);
+      write_EEPROM();             // Save channel to EEPROM
+      printCurrentSettings();
+    }
   else if (ch == 'r')
-  {
-    // TODO:
-  }
+    {
+      // TODO:
+    }
   else if (ch == 'i')
-  {
-    printCurrentSettings();
-  }
+    {
+      printCurrentSettings();
+    }
   else if (ch == 'f')
-  {
-    printFavouriteList();
-  }
+    {
+      printFavouriteList();
+    }
   else if (ch == 'h')
-  {
-    printHelp();
-  }
+    {
+      printHelp();
+    }
   else
-  {
-    Serial.print("Unknown command:'");
-    Serial.print(ch);
-    Serial.print("'");
-    Serial.println(" send 'h' for help.");
-  }
+    {
+      Serial.print("Unknown command:'");
+      Serial.print(ch);
+      Serial.print("'");
+      Serial.println(" send 'h' for help.");
+    }
 }
