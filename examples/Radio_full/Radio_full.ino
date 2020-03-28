@@ -298,35 +298,37 @@ void printHelp()
 void processCommand()
 {
   
-  char ch = Serial.read();
-  Serial.print(" ");
+  char ch = Serial.read();        // Read command
+  Serial.print(" ");              // print single space after reading a command
   
-  if (ch == '+') 
+  
+  if (ch == '+')                  // Increment Volume (max 15)
     {
       radio.incVolume();
       printCurrentSettings();
-    } 
-  else if (ch == '-') 
+    }
+  else if (ch == '-')             // Decrement Volume (min 0)
     {
       radio.decVolume();
       printCurrentSettings();
-    } 
-  else if (ch == 'e') 
+    }
+  
+  else if (ch == 'e')             // Enable/Disable Volume 30dB Ext
     {
       radio.setVolExt(!radio.getVolExt()); // flip status
       printCurrentSettings();
     } 
-  else if (ch == 'm')
+  else if (ch == 'm')             // Mute/Unmute volume
     {
       radio.setMute(!radio.getMute()); // flip status
       printCurrentSettings();
     }
-  else if (ch == 's')
+  else if (ch == 's')             // Set Mono/Sterio"
     {
       radio.setMono(!radio.getMono()); // flip status
       printCurrentSettings();
     }
-  else if (ch == 'u') 
+  else if (ch == 'u')             // Tune Frequency up
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
@@ -336,7 +338,7 @@ void processCommand()
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 
-  else if (ch == 'd') 
+  else if (ch == 'd')             // Tune Frequency down
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
@@ -346,7 +348,7 @@ void processCommand()
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 
-  else if (ch == 'n') 
+  else if (ch == 'n')             // Channel Seek next
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
@@ -356,7 +358,7 @@ void processCommand()
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 
-  else if (ch == 'l') 
+  else if (ch == 'l')             // Channel Seek last
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
@@ -366,83 +368,83 @@ void processCommand()
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 
-  else if (ch == '0')
+  else if (ch == '0')             // Tune to favorite channel 0
     {
       radio.setChannel(fav_0);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '1')
+  else if (ch == '1')             // Tune to favorite channel 1
     {
       radio.setChannel(fav_1);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '2')
+  else if (ch == '2')             // Tune to favorite channel 2
     {
       radio.setChannel(fav_2);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '3')
+  else if (ch == '3')             // Tune to favorite channel 3
     {
       radio.setChannel(fav_3);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '4')
+  else if (ch == '4')             // Tune to favorite channel 4
     {
       radio.setChannel(fav_4);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '5')
+  else if (ch == '5')             // Tune to favorite channel 5
     {
       radio.setChannel(fav_5);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '6')
+  else if (ch == '6')             // Tune to favorite channel 6
     {
       radio.setChannel(fav_6);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '7')
+  else if (ch == '7')             // Tune to favorite channel 7
     {
       radio.setChannel(fav_7);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '8')
+  else if (ch == '8')             // Tune to favorite channel 8
     {
       radio.setChannel(fav_8);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == '9')
+  else if (ch == '9')             // Tune to favorite channel 9
     {
       radio.setChannel(fav_9);
       write_EEPROM();             // Save channel to EEPROM
       printCurrentSettings();
     }
-  else if (ch == 'r')
+  else if (ch == 'r')             // Listen for RDS Data
     {
       // TODO:
     }
-  else if (ch == 'i')
+  else if (ch == 'i')             // Print current settings
     {
       printCurrentSettings();
     }
-  else if (ch == 'f')
+  else if (ch == 'f')             // List favorite channels
     {
       printFavouriteList();
     }
-  else if (ch == 'h')
+  else if (ch == 'h')             // Print help
     {
       printHelp();
     }
-  else
+  else                            // Unknown commands
     {
       Serial.print("Unknown command:'");
       Serial.print(ch);

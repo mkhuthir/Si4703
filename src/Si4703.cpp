@@ -410,8 +410,8 @@ int Si4703::seek(byte seekDirection){
   putShadow();                                      // Write to registers
   while(getSTC());                                  // Wait for the si4703 to clear the STC
 
-  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0);   // SFBL is indicating we hit a band limit or failed to find a station
-  return getChannel();                              // return new frequency
+  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0);   // Failure: SFBL is indicating we hit a band limit or failed to find a station
+  return getChannel();                              // Success: return new frequency
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
