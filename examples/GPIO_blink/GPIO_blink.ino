@@ -1,15 +1,24 @@
 #include <Si4703.h>
 #include <Wire.h>
 
+// Used Pins
 #define RST   4            // Reset Pin
 #define SDIO  A4           // Serial Data I/O Pin
 #define SCLK  A5           // Serial Clock Pin
 #define INT   3            // Interrupt Pin
-#define BAND  BAND_US_EU   // Select band frequency range
-#define SPACE SPACE_100KHz // Select band spacing
-#define DE    DE_75us      // Select de-emphasis
 
-Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE);
+// Select Region 
+#define BAND  BAND_US_EU    // Select band frequency range
+#define SPACE SPACE_100KHz  // Select band spacing
+#define DE    DE_75us       // Select de-emphasis
+
+// Seek Settings
+#define SKMODE  SKMODE_STOP // Stop when reaching band limit
+#define SEEKTH  00          // Seek RSSI Threshold
+#define SKCNT   SKCNT_DIS   // Clicks Number Threshold
+#define SKSNR   SKSNR_DIS   // Signal/Noise Ratio
+
+Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE, SKMODE, SEEKTH, SKCNT, SKSNR);
 
 void setup()
 {
