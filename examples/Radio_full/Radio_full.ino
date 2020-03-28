@@ -355,7 +355,7 @@ void processCommand()
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
       if (!radio.seekUp()) 
         {
-          Serial.println("| Error: Seek failure/Band limit reached!!");
+          Serial.println("| Error: Seek failure or band limit reached!!");
         }
       else
         {
@@ -371,7 +371,7 @@ void processCommand()
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
       if (!radio.seekDown())
         {
-          Serial.println("| Error: Seek failure/Band limit reached!!");
+          Serial.println("| Error: Seek failure or band limit reached!!");
         }
       else
         {
