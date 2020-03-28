@@ -98,7 +98,7 @@ class Si4703
 
 	int		getBandStart();			// Get Band Start Frequency
 	int		getBandEnd();			// Get Band End Frequency
-	int		getBandStep();			// Get Band Step
+	int		getBandSpace();			// Get Band Spacing
 
 	int		getRSSI(void);			// Get RSSI current value
 

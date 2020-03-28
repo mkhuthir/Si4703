@@ -10,6 +10,7 @@ void setup()
   radio.setChannel(8760); // Set frequency
   radio.setVolume(1);     // Set volume
 
+  
   Serial.print("Part Number\t:0x");
   Serial.println(radio.getPN(), HEX);
 
@@ -23,7 +24,19 @@ void setup()
   Serial.println(radio.getREV(),HEX);
 
   Serial.print("Firmware Version:0x");
-  Serial.println(radio.getFIRMWARE(),HEX);  
+  Serial.println(radio.getFIRMWARE(),HEX);
+
+  Serial.print("\nBand Start\t:");
+  Serial.print(float(radio.getBandStart())/100,2);
+  Serial.println(" MHz");
+
+  Serial.print("Band End\t:");
+  Serial.print(float(radio.getBandEnd())/100,2);
+  Serial.println(" MHz");
+
+  Serial.print("Band SPace\t:");
+  Serial.print(float(radio.getBandSpace())/100,2);
+  Serial.println(" MHz");
 }
 
 void loop()
