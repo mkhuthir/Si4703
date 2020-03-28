@@ -36,9 +36,10 @@
 
 // Seek Settings
 #define SKMODE  SKMODE_STOP // Stop when reaching band limit
-#define SEEKTH  25          // Seek RSSI Threshold
-#define SKCNT   SKCNT_MAX   // Clicks Number Threshold
+#define SEEKTH  24          // Seek RSSI Threshold
 #define SKSNR   SKSNR_MAX   // Signal/Noise Ratio
+#define SKCNT   SKCNT_MIN   // Clicks Number Threshold
+
 
 // Direction
 #define UP    true
@@ -352,9 +353,15 @@ void processCommand()
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-      if (!radio.seekUp()) Serial.println("Error!!");
-      write_EEPROM();                    // Save channel to EEPROM
-      printCurrentSettings();
+      if (!radio.seekUp()) 
+        {
+          Serial.println("| Error: Seek failure/Band limit reached!!");
+        }
+      else
+        {
+          write_EEPROM();                    // Save channel to EEPROM
+          printCurrentSettings();
+        }
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 
@@ -362,9 +369,15 @@ void processCommand()
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-      if (!radio.seekDown()) Serial.println("Error!!");
-      write_EEPROM();                    // Save channel to EEPROM
-      printCurrentSettings();
+      if (!radio.seekDown())
+        {
+          Serial.println("| Error: Seek failure/Band limit reached!!");
+        }
+      else
+        {
+          write_EEPROM();                    // Save channel to EEPROM
+          printCurrentSettings();
+        }
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
       radio.writeGPIO(GPIO1, GPIO_High); // turn LED2 ON
     } 

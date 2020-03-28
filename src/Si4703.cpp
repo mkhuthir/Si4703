@@ -395,7 +395,8 @@ int Si4703::seek(byte seekDirection){
     {
       while(!getSTC())                              // Wait for the si4703 to set the STC
       {
-        // you can show seek progress here
+        delay(40);
+        // you can show READCHAN value as a seek progress here
         // TODO:
       }
     }
@@ -406,11 +407,12 @@ int Si4703::seek(byte seekDirection){
     }
   
   getShadow();                                      // Read the current register set
+  bool sfbl = shadow.reg.STATUSRSSI.bits.SFBL;      // Save SFBL status
   shadow.reg.POWERCFG.bits.SEEK   = 0;              // Stop seek
   putShadow();                                      // Write to registers
   while(getSTC());                                  // Wait for the si4703 to clear the STC
 
-  if(shadow.reg.STATUSRSSI.bits.SFBL)  return(0);   // Failure: SFBL is indicating we hit a band limit or failed to find a station
+  if(sfbl)  return(0);   // Failure: SFBL is indicating we hit a band limit or failed to find a station
   return getChannel();                              // Success: return new frequency
 }
 

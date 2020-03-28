@@ -36,18 +36,18 @@ static const uint8_t 	GPIO_Low		= 0b10;	// Low output (GND level)
 static const uint8_t 	GPIO_High		= 0b11;	// High output (VIO level)
 
 // Seek Mode
-static const uint8_t 	SKMODE_WRAP		= 0b1;	// Wrap when reaching band limit
-static const uint8_t 	SKMODE_STOP		= 0b0;	// Stop when reaching band limit
+static const uint8_t 	SKMODE_WRAP		= 0b0;	// Wrap when reaching band limit
+static const uint8_t 	SKMODE_STOP		= 0b1;	// Stop when reaching band limit
+
+// Seek SNR Threshold
+static const uint8_t 	SKSNR_DIS		= 0b0000; // disabled (default)
+static const uint8_t 	SKSNR_MIN		= 0b0001; // min (most stops)
+static const uint8_t 	SKSNR_MAX		= 0b0111; // max (fewest stops)
 
 // Seek FM Impulse Detection Threshold
 static const uint8_t 	SKCNT_DIS		= 0b0000; // disabled (default)
 static const uint8_t 	SKCNT_MAX		= 0b0001; // max (most stops)
 static const uint8_t 	SKCNT_MIN		= 0b1111; // min (fewest stops)
-
-// Seek SNR Threshold
-static const uint8_t 	SKSNR_DIS		= 0b0000; // disabled (default)
-static const uint8_t 	SKSNR_MIN		= 0b0001; // min (most stops)
-static const uint8_t 	SKSNR_MAX		= 0b1111; // max (fewest stops)
 
 // Softmute Attenuation
 static const uint8_t 	SMA_16dB		= 0b00;	// Softmute Attenuation 16dB (default)
