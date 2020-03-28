@@ -389,7 +389,7 @@ int Si4703::seek(byte seekDirection){
   getShadow();                                      // Read the current register set
   shadow.reg.POWERCFG.bits.SEEKUP = seekDirection;  // Seek direction = UP/Down
   shadow.reg.POWERCFG.bits.SEEK   = 1;              // Start seek
-  putShadow();                                      // Write to registers
+  putShadow();                                      // Write to registers to start seeking
 
   if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Select method Interrupt or STC
     {
