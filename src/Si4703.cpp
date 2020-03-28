@@ -76,12 +76,10 @@ void	Si4703::bus2Wire(void)
   // Set IO pins directions
   pinMode(_rstPin , OUTPUT);    // Reset pin
   pinMode(_sdioPin, OUTPUT);    // I2C data IO pin
-  pinMode(_intPin , OUTPUT);    // STC (search/tune complete)/RDS interrupt pin  // FIXME:
-
+  
   // Set communcation mode to 2-Wire
   digitalWrite(_rstPin ,LOW);   // Put Si4703 into reset
   digitalWrite(_sdioPin,LOW);   // A low SDIO indicates a 2-wire interface
-  digitalWrite(_intPin ,HIGH);  // pin goes low on interrupt // FIXME:
   delay(1);                     // Delay to allow pins to settle
   digitalWrite(_rstPin ,HIGH);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
   delay(1);                     // Allow Si4703 to come out of reset

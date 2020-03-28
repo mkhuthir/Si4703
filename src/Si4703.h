@@ -73,17 +73,17 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int rstPin, 			// Reset Pin
-			int sdioPin,			// I2C Data IO Pin
-			int sclkPin,			// I2C Clock Pin
-			int intPin,				// Seek/Tune Complete and RDS interrupt Pin
-			int band,	  			// Band Range
-            int space,				// Band Spacing
-            int de,		  			// De-Emphasis
-			int skmode,				// Seek Mode
-			int seekth,				// Seek Threshold
-			int skcnt,				// Seek Clicks Number Threshold
-			int sksnr				// Seek Signal/Noise Ratio
+    Si4703(	int rstPin	= 4,            // Reset Pin
+			int sdioPin	= A4,           // I2C Data IO Pin
+			int sclkPin	= A5,           // I2C Clock Pin
+			int intPin	= 0,	        // Seek/Tune Complete and RDS interrupt Pin
+			int band	= BAND_US_EU, 	// Band Range
+            int space	= SPACE_100KHz,	// Band Spacing
+            int de		= DE_75us,		// De-Emphasis
+			int skmode	= SKMODE_STOP,	// Seek Mode
+			int seekth	= 24,	        // Seek Threshold
+			int skcnt	= SKSNR_MAX,    // Seek Clicks Number Threshold
+			int sksnr	= SKCNT_MIN     // Seek Signal/Noise Ratio
 		   );
 		
     void	powerUp();				// Power Up radio device
