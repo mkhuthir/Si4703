@@ -90,20 +90,30 @@ class Si4703
 	void	powerDown();			// Power Down radio device to save power
 	void 	start();				// start radio
 
-	int		getDeviceID();			// 
-	int		getChipID();			//
+	int		getPN();				// Get DeviceID:Part Number
+	int		getMFGID();				// Get DeviceID:Manufacturer ID
+	int		getREV();				// Get ChipID:Chip Version
+	int		getDEV();				// Get ChipID:Device
+	int		getFIRMWARE();			// Get ChipID:Firmware Version
+
+	int		getBandStart();			// Get Band Start Frequency
+	int		getBandEnd();			// Get Band End Frequency
+	int		getBandStep();			// Get Band Step
+
+	int		getRSSI(void);			// Get RSSI current value
 
 	int 	getChannel(void);		// Get 3 digit channel number
 	int		setChannel(int freq);	// Set 3 digit channel number
 	int		incChannel(void);		// Increment Channel Frequency one band step
 	int		decChannel(void);		// Decrement Channel Frequency one band step
+	
 	int 	seekUp(void); 			// Seeks up and returns the tuned channel or 0
 	int 	seekDown(void); 		// Seeks down and returns the tuned channel or 0
-	int		getRSSI(void);			// Get RSSI current value
 
 	void	setMono(bool en);		// 1=Force Mono
 	bool	getMono(void);			// Get Mono status
 	bool	getST(void);			// Get Sterio Status
+
 	void	setMute(bool en);		// 1=Audio Mute
 	bool	getMute(void);			// Get Mute Status
 	void	setVolExt(bool en);		// Set Extended Volume Range
