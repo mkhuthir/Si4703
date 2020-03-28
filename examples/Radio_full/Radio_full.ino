@@ -352,7 +352,7 @@ void processCommand()
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-      radio.seekUp();
+      if (!radio.seekUp()) Serial.println("Error!!");
       write_EEPROM();                    // Save channel to EEPROM
       printCurrentSettings();
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
@@ -362,7 +362,7 @@ void processCommand()
     {
       digitalWrite(LED1, LOW);           // turn LED1 OFF
       radio.writeGPIO(GPIO1, GPIO_Low);  // turn LED2 OFF
-      radio.seekDown();
+      if (!radio.seekDown()) Serial.println("Error!!");
       write_EEPROM();                    // Save channel to EEPROM
       printCurrentSettings();
       digitalWrite(LED1, HIGH);          // When done turn LED1 On
