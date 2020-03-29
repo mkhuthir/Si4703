@@ -21,25 +21,9 @@
 #define eeprom_vol      3
 
 // Used Pins
-#define RST         4       // Reset Pin
-#define SDIO        A4      // Serial Data I/O Pin
-#define SCLK        A5      // Serial Clock Pin
-#define INT         6       // Interrupt Pin
 #define LED1        5       // LED1 pin
 #define rotaryPinA  2       // encoder pin A
 #define rotaryPinB  3       // encoder pin B. Note that rotaryPinC is connected to GND
-
-// Select Region 
-#define BAND  BAND_US_EU    // Select band frequency range
-#define SPACE SPACE_100KHz  // Select band spacing
-#define DE    DE_75us       // Select de-emphasis
-
-// Seek Settings
-#define SKMODE  SKMODE_STOP // Stop when reaching band limit
-#define SEEKTH  24          // Seek RSSI Threshold
-#define SKSNR   SKSNR_MAX   // Signal/Noise Ratio
-#define SKCNT   SKCNT_MIN   // Clicks Number Threshold
-
 
 // Direction
 #define UP    true
@@ -71,7 +55,7 @@ volatile boolean  rotaryUpdated   = false;
 //-------------------------------------------------------------------------------------------------------------
 // create radio instance
 //-------------------------------------------------------------------------------------------------------------
-Si4703 radio(RST, SDIO, SCLK, INT, BAND, SPACE, DE, SKMODE, SEEKTH, SKCNT, SKSNR);
+Si4703 radio;
 
 //-------------------------------------------------------------------------------------------------------------
 // Arduino initial Setup

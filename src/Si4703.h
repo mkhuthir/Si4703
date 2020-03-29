@@ -95,7 +95,7 @@ class Si4703
 				int skcnt 	= SKSNR_MAX,    // Seek Clicks Number Threshold
 				int sksnr	= SKCNT_MIN,    // Seek Signal/Noise Ratio
                 int agcd	= 0				// AGC disable
-              )
+    		);
 		
     void	powerUp();				// Power Up radio device
 	void	powerDown();			// Power Down radio device to save power
