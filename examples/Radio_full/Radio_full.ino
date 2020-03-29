@@ -83,8 +83,8 @@ void setup()
 
   // Display info
   printWelcome();
-  printCurrentSettings();
   printHelp();
+  printCurrentSettings();
   
 }
 //-------------------------------------------------------------------------------------------------------------
@@ -181,6 +181,33 @@ void updateChannel()
 void printWelcome()
 {
   Serial.println("\nWelcome...");
+  
+  Serial.print("\nPart Number\t:0x");
+  Serial.println(radio.getPN(), HEX);
+
+  Serial.print("Manufacturer ID\t:0x");
+  Serial.println(radio.getMFGID(),HEX);
+
+  Serial.print("Device\t\t:0x");
+  Serial.println(radio.getDEV(),HEX);
+
+  Serial.print("Chip Version\t:0x");
+  Serial.println(radio.getREV(),HEX);
+
+  Serial.print("Firmware Version:0x");
+  Serial.println(radio.getFIRMWARE(),HEX);
+
+  Serial.print("\nBand Start\t:");
+  Serial.print(float(radio.getBandStart())/100,2);
+  Serial.println(" MHz");
+
+  Serial.print("Band End\t:");
+  Serial.print(float(radio.getBandEnd())/100,2);
+  Serial.println(" MHz");
+
+  Serial.print("Band SPace\t:");
+  Serial.print(float(radio.getBandSpace())/100,2);
+  Serial.println(" MHz");
 }
 //-------------------------------------------------------------------------------------------------------------
 // Display current settings such as channel and volume.
