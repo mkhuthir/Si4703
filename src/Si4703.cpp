@@ -21,6 +21,7 @@ Si4703::Si4703( int rstPin    = 4,            // Reset Pin
 			          int seekth    = 24,	          // Seek Threshold
 			          int skcnt 	  = SKSNR_MAX,    // Seek Clicks Number Threshold
 			          int sksnr		  = SKCNT_MIN     // Seek Signal/Noise Ratio
+                int agcd	    = 0				      // AGC disable
               )
 {
   _rstPin   = rstPin;   // Reset Pin
@@ -34,6 +35,7 @@ Si4703::Si4703( int rstPin    = 4,            // Reset Pin
 	_seekth   =	seekth;   // Seek Threshold
 	_skcnt    =	skcnt;    // Seek Clicks Number Threshold
 	_sksnr    =	sksnr;	  // Seek Signal/Noise Ratio
+  _agcd     = agcd;      // AGC disable
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read the entire register set (0x00 - 0x0F) to Shadow

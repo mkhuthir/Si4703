@@ -40,14 +40,14 @@ static const uint8_t 	SKMODE_WRAP		= 0b0;	// Wrap when reaching band limit
 static const uint8_t 	SKMODE_STOP		= 0b1;	// Stop when reaching band limit
 
 // Seek SNR Threshold
-static const uint8_t 	SKSNR_DIS		= 0b0000; // disabled (default)
-static const uint8_t 	SKSNR_MIN		= 0b0001; // min (most stops)
-static const uint8_t 	SKSNR_MAX		= 0b0111; // max (fewest stops)
+static const uint8_t 	SKSNR_DIS		= 0x0; // disabled (default) (Values are 0x0 to 0xF)
+static const uint8_t 	SKSNR_MIN		= 0x1; // min value (most stops)
+static const uint8_t 	SKSNR_MAX		= 0xF; // max value (fewest stops)
 
 // Seek FM Impulse Detection Threshold
-static const uint8_t 	SKCNT_DIS		= 0b0000; // disabled (default)
-static const uint8_t 	SKCNT_MAX		= 0b0001; // max (most stops)
-static const uint8_t 	SKCNT_MIN		= 0b1111; // min (fewest stops)
+static const uint8_t 	SKCNT_DIS		= 0x0; // disabled (default) (Values are 0x0 to 0xF)
+static const uint8_t 	SKCNT_MAX		= 0x1; // max value (most stops)
+static const uint8_t 	SKCNT_MIN		= 0xF; // min value (fewest stops)
 
 // Softmute Attenuation
 static const uint8_t 	SMA_16dB		= 0b00;	// Softmute Attenuation 16dB (default)
@@ -63,9 +63,9 @@ static const uint8_t 	SMRR_Slowest	= 0b11;	// Softmute Attack/Recover Rate = Slo
 
 // Stereo/Mono Blend Level Adjustment
 static const uint8_t 	BLA_31_49		= 0b00;	// 31–49 RSSI dBμV (default)
-static const uint8_t 	BLA_37_55		= 0b00;	// 37–55 RSSI dBμV (+6 dB)
-static const uint8_t 	BLA_19_37		= 0b00;	// 19–37 RSSI dBμV (–12 dB)
-static const uint8_t 	BLA_25_43		= 0b00;	// 25–43 RSSI dBμV (–6 dB)
+static const uint8_t 	BLA_37_55		= 0b01;	// 37–55 RSSI dBμV (+6 dB)
+static const uint8_t 	BLA_19_37		= 0b10;	// 19–37 RSSI dBμV (–12 dB)
+static const uint8_t 	BLA_25_43		= 0b11;	// 25–43 RSSI dBμV (–6 dB)
 
 //------------------------------------------------------------------------------------------------------------
 
@@ -83,7 +83,8 @@ class Si4703
 			int skmode	= SKMODE_STOP,	// Seek Mode
 			int seekth	= 24,	        // Seek Threshold
 			int skcnt	= SKSNR_MAX,    // Seek Clicks Number Threshold
-			int sksnr	= SKCNT_MIN     // Seek Signal/Noise Ratio
+			int sksnr	= SKCNT_MIN,    // Seek Signal/Noise Ratio
+			int agcd	= 0				// AGC disable
 		   );
 		
     void	powerUp();				// Power Up radio device
@@ -144,6 +145,7 @@ class Si4703
 	int _seekth;				// Seek Threshold
 	int _skcnt;					// Seek Clicks Number Threshold
 	int _sksnr;					// Seek Signal/Noise Ratio
+	int _agcd;					// AGC disable
 
 	void	getShadow();		// Read registers to shadow 
 	byte 	putShadow();		// Write shadow to registers
