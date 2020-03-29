@@ -53,7 +53,7 @@ volatile boolean  rotaryDirection = UP;
 volatile boolean  rotaryUpdated   = false;
 
 //-------------------------------------------------------------------------------------------------------------
-// create radio instance
+// create radio instance using default settings
 //-------------------------------------------------------------------------------------------------------------
 Si4703 radio;
 
