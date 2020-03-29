@@ -141,26 +141,32 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    
+    // MCU Pins Selection
 	int _rstPin;				// Reset Pin
 	int _sdioPin;				// I2C Data IO Pin
 	int _sclkPin;				// I2C Clock Pin
 	int _intPin;				// Seek/Tune Complete and RDS interrupt Pin
 
+	// Band Settings
 	int _band;					// Band Range code
   	int _space;					// Band Spacing code
   	int _de;					// De-Emphasis
-
 	int	_bandStart;				// Bottom of Band (MHz)
 	int	_bandEnd;				// Top of Band (MHz)
 	int	_bandSpacing;			// Band Spacing (MHz)
 
+	// RDS Settings
+
+	// Tune Settings
+
+	// Seek Settings
 	int _skmode;				// Seek Mode
 	int _seekth;				// Seek Threshold
 	int _skcnt;					// Seek Clicks Number Threshold
 	int _sksnr;					// Seek Signal/Noise Ratio
 	int _agcd;					// AGC disable
 
+	// Private Functions
 	void	getShadow();		// Read registers to shadow 
 	byte 	putShadow();		// Write shadow to registers
 	void	bus3Wire(void);		// 3-Wire Control Interface (SCLK, SEN, SDIO)
