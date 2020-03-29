@@ -14,23 +14,30 @@ Si4703::Si4703( int rstPin    = 4,            // Reset Pin
 			          int sdioPin   = A4,           // I2C Data IO Pin
 			          int sclkPin   = A5,           // I2C Clock Pin
 			          int intPin    = 0,	          // Seek/Tune Complete and RDS interrupt Pin
+
 			          int band      = BAND_US_EU,	  // Band Range
                 int space     = SPACE_100KHz,	// Band Spacing
                 int de        = DE_75us,		  // De-Emphasis
+
 			          int skmode    = SKMODE_STOP,	// Seek Mode
 			          int seekth    = 24,	          // Seek Threshold
 			          int skcnt 	  = SKSNR_MAX,    // Seek Clicks Number Threshold
-			          int sksnr		  = SKCNT_MIN     // Seek Signal/Noise Ratio
+			          int sksnr		  = SKCNT_MIN,    // Seek Signal/Noise Ratio
                 int agcd	    = 0				      // AGC disable
               )
 {
+  // MCU Pins Selection
   _rstPin   = rstPin;   // Reset Pin
   _sdioPin  = sdioPin;  // I2C Data IO Pin
   _sclkPin  = sclkPin;  // I2C Clock Pin
   _intPin   = intPin;   // Seek/Tune Complete Pin
+
+  // Band Settings
   _band     = band;	    // Band Range
   _space    = space;    // Band Spacing
   _de       =	de;	      // De-Emphasis
+
+  // Seek Settings
   _skmode   =	skmode;   // Seek Mode Wrap/Stop
 	_seekth   =	seekth;   // Seek Threshold
 	_skcnt    =	skcnt;    // Seek Clicks Number Threshold
@@ -157,6 +164,7 @@ void Si4703::start()
   shadow.reg.SYSCONFIG2.bits.SEEKTH = _seekth;      // Seek Threshold
   shadow.reg.SYSCONFIG3.bits.SKCNT  = _skcnt;       // Seek Clicks Number Threshold
   shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // Seek Signal/Noise Ratio
+  shadow.reg.SYSCONFIG1.bits.AGCD   = _agcd;        // AGC Disable
 
   // set RDS mode
   shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt

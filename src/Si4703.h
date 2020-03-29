@@ -77,9 +77,11 @@ class Si4703
 			int sdioPin	= A4,           // I2C Data IO Pin
 			int sclkPin	= A5,           // I2C Clock Pin
 			int intPin	= 0,	        // Seek/Tune Complete and RDS interrupt Pin
+			
 			int band	= BAND_US_EU, 	// Band Range
             int space	= SPACE_100KHz,	// Band Spacing
             int de		= DE_75us,		// De-Emphasis
+
 			int skmode	= SKMODE_STOP,	// Seek Mode
 			int seekth	= 24,	        // Seek Threshold
 			int skcnt	= SKSNR_MAX,    // Seek Clicks Number Threshold
