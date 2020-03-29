@@ -10,15 +10,23 @@
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Si4703 Class Initialization
 //-----------------------------------------------------------------------------------------------------------------------------------
-Si4703::Si4703( int rstPin    = 4,            // Reset Pin
+Si4703::Si4703( 
+                // MCU Pins Selection
+                int rstPin    = 4,            // Reset Pin
 			          int sdioPin   = A4,           // I2C Data IO Pin
 			          int sclkPin   = A5,           // I2C Clock Pin
 			          int intPin    = 0,	          // Seek/Tune Complete and RDS interrupt Pin
 
+                // Band Settings
 			          int band      = BAND_US_EU,	  // Band Range
                 int space     = SPACE_100KHz,	// Band Spacing
                 int de        = DE_75us,		  // De-Emphasis
+                
+                // RDS Settings
 
+                // Tune Settings
+
+                // Seek Settings
 			          int skmode    = SKMODE_STOP,	// Seek Mode
 			          int seekth    = 24,	          // Seek Threshold
 			          int skcnt 	  = SKSNR_MAX,    // Seek Clicks Number Threshold
@@ -156,10 +164,8 @@ void Si4703::start()
   shadow.reg.SYSCONFIG2.bits.BAND   = _band;        // Select Band frequency range
   shadow.reg.SYSCONFIG1.bits.DE     = _de;          // Select de-emphasis                          
 
-  // Set Softmute mode
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
-  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
-  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
+  // Set Tune
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
 
   // Set seek mode
   shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
@@ -178,13 +184,15 @@ void Si4703::start()
   // Set Audio
   shadow.reg.TEST1.bits.AHIZEN      = 0;            // Enable Audio
   shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
-  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
-  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
   shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
-
-  // Set Tune
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
+  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
   
+  // Set Softmute mode
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
+  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
+  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
+
   // Set GPIOs
   shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)

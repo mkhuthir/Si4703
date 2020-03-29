@@ -73,21 +73,29 @@ class Si4703
 {
 //------------------------------------------------------------------------------------------------------------
   public:
-    Si4703(	int rstPin	= 4,            // Reset Pin
-			int sdioPin	= A4,           // I2C Data IO Pin
-			int sclkPin	= A5,           // I2C Clock Pin
-			int intPin	= 0,	        // Seek/Tune Complete and RDS interrupt Pin
-			
-			int band	= BAND_US_EU, 	// Band Range
-            int space	= SPACE_100KHz,	// Band Spacing
-            int de		= DE_75us,		// De-Emphasis
+    Si4703(	                
+				// MCU Pins Selection
+                int rstPin  = 4,            // Reset Pin
+				int sdioPin = A4,           // I2C Data IO Pin
+				int sclkPin = A5,           // I2C Clock Pin
+				int intPin  = 0,	        // Seek/Tune Complete and RDS interrupt Pin
 
-			int skmode	= SKMODE_STOP,	// Seek Mode
-			int seekth	= 24,	        // Seek Threshold
-			int skcnt	= SKSNR_MAX,    // Seek Clicks Number Threshold
-			int sksnr	= SKCNT_MIN,    // Seek Signal/Noise Ratio
-			int agcd	= 0				// AGC disable
-		   );
+                // Band Settings
+				int band    = BAND_US_EU,	// Band Range
+                int space   = SPACE_100KHz,	// Band Spacing
+                int de      = DE_75us,		// De-Emphasis
+                
+                // RDS Settings
+
+                // Tune Settings
+
+                // Seek Settings
+				int skmode  = SKMODE_STOP,	// Seek Mode
+				int seekth  = 24,	        // Seek Threshold
+				int skcnt 	= SKSNR_MAX,    // Seek Clicks Number Threshold
+				int sksnr	= SKCNT_MIN,    // Seek Signal/Noise Ratio
+                int agcd	= 0				// AGC disable
+              )
 		
     void	powerUp();				// Power Up radio device
 	void	powerDown();			// Power Down radio device to save power
