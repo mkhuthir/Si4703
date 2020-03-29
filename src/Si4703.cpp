@@ -37,12 +37,16 @@ Si4703::Si4703( int rstPin    = 4,            // Reset Pin
   _space    = space;    // Band Spacing
   _de       =	de;	      // De-Emphasis
 
+  // RDS Settings
+
+  // Tune Settings
+
   // Seek Settings
   _skmode   =	skmode;   // Seek Mode Wrap/Stop
 	_seekth   =	seekth;   // Seek Threshold
 	_skcnt    =	skcnt;    // Seek Clicks Number Threshold
 	_sksnr    =	sksnr;	  // Seek Signal/Noise Ratio
-  _agcd     = agcd;      // AGC disable
+  _agcd     = agcd;     // AGC disable
 }
 //-----------------------------------------------------------------------------------------------------------------------------------
 // Read the entire register set (0x00 - 0x0F) to Shadow
@@ -152,12 +156,12 @@ void Si4703::start()
   shadow.reg.SYSCONFIG2.bits.BAND   = _band;        // Select Band frequency range
   shadow.reg.SYSCONFIG1.bits.DE     = _de;          // Select de-emphasis                          
 
-  // set DSMUTE mode
+  // Set Softmute mode
   shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
   shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
   shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
 
-  // set seek mode
+  // Set seek mode
   shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
   shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
   shadow.reg.POWERCFG.bits.SKMODE   = _skmode;      // Seek mode Wrap/Stop
@@ -166,23 +170,22 @@ void Si4703::start()
   shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // Seek Signal/Noise Ratio
   shadow.reg.SYSCONFIG1.bits.AGCD   = _agcd;        // AGC Disable
 
-  // set RDS mode
-  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Disable RDS Interrupt
-  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode = Standard
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable RDS
+  // Set RDS mode
+  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Enable/Disable RDS Interrupt
+  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode Standard/Verbose
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable/Disable RDS
 
-  // Enable Audio
+  // Set Audio
   shadow.reg.TEST1.bits.AHIZEN      = 0;            // Enable Audio
   shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
   shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
   shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
-
-  // System Configuration 1
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
-  shadow.reg.SYSCONFIG1.bits.AGCD   = 0;            // AGC enable
   shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
 
-  // Disable GPIO
+  // Set Tune
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
+  
+  // Set GPIOs
   shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
   shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)

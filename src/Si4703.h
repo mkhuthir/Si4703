@@ -133,16 +133,20 @@ class Si4703
 
 //------------------------------------------------------------------------------------------------------------
   private:
-    int _rstPin;				// Reset Pin
+    
+	int _rstPin;				// Reset Pin
 	int _sdioPin;				// I2C Data IO Pin
 	int _sclkPin;				// I2C Clock Pin
 	int _intPin;				// Seek/Tune Complete and RDS interrupt Pin
+
 	int _band;					// Band Range code
   	int _space;					// Band Spacing code
   	int _de;					// De-Emphasis
+
 	int	_bandStart;				// Bottom of Band (MHz)
 	int	_bandEnd;				// Top of Band (MHz)
 	int	_bandSpacing;			// Band Spacing (MHz)
+
 	int _skmode;				// Seek Mode
 	int _seekth;				// Seek Threshold
 	int _skcnt;					// Seek Clicks Number Threshold
