@@ -205,7 +205,7 @@ void printWelcome()
   Serial.print(float(radio.getBandEnd())/100,2);
   Serial.println(" MHz");
 
-  Serial.print("Band SPace\t:");
+  Serial.print("Band Space\t:");
   Serial.print(float(radio.getBandSpace())/100,2);
   Serial.println(" MHz");
 }
