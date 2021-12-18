@@ -1,0 +1,23 @@
+{
+    "name": "Si4703",
+    "version": "1.4.1",
+    "description": "Library to control Si4703 FM receiver chip",
+    "keywords": "Si4703, FM, Radio",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/mkhuthir/Si4703"
+    },
+    "authors":
+    [
+      {
+        "name": "Muthanna Al-Wahash",
+        "email": "mkhuthir@gmail.com",
+        "url": "https://github.com/mkhuthir"
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/mkhuthir/Si4703",
+    "frameworks": "*",
+    "platforms": "*"
+  }

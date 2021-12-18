@@ -1,0 +1,40 @@
+#######################################
+# Syntax Coloring Map For Si4703
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+Si4703	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+powerOn	KEYWORD2
+setChannel	KEYWORD2
+seekUp	KEYWORD2
+seekDown	KEYWORD2
+setVolume	KEYWORD2
+getVolume	KEYWORD2
+readRDS	KEYWORD2
+writeGPIO	KEYWORD2
+######################################
+# Constants (LITERAL1)
+#######################################
+
+BAND_USEU	LITERAL1
+BAND_JPW	LITERAL1
+BAND_JP	LITERAL1
+
+SPACE_200KHz	LITERAL1
+SPACE_100KHz	LITERAL1
+SPACE_50KHz	LITERAL1
+
+GPIO1	LITERAL1
+GPIO2	LITERAL1
+GPIO3	LITERAL1
+
+GPIO_Z	LITERAL1
+GPIO_I	LITERAL1
+GPIO_Low	LITERAL1
+GPIO_High	LITERAL1
