@@ -97,8 +97,8 @@ class Si4703
                 int agcd	= 0				// AGC disable
     		);
 		
-    void	powerUp();				// Power Up radio device
-	void	powerDown();			// Power Down radio device to save power
+    	void	powerUp();				// Power Up radio device
+	void	powerDown();				// Power Down radio device to save power
 	void 	start();				// start radio
 
 	int		getPN();				// Get DeviceID:Part Number
